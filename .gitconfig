@@ -1,0 +1,20 @@
+[user]
+    user = user
+    email = user@gmail.com
+[alias]
+    st = status
+    ci = commit
+    co = checkout
+    save = stash save
+    pop  = stash pop
+    lg = log --pretty=oneline --abbrev-commit --graph --decorate
+    lc = !git oneline ORIG_HEAD.. --stat --no-merges
+    undo = !git reset --soft HEAD^
+    amend = commit --amend
+[color]
+    ui = true
+[push]
+    default = current
+[core]
+    autocrlf = input
+    fileMode = false

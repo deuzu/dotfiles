@@ -1,0 +1,76 @@
+#!/bin/bash
+# https://coderwall.com/p/ew-_jg/git-commit-message-redmine
+
+regex="^#[0-9]+\ -"
+var=`head -n 1 $1`
+ERROR_MSG="Commit need to be \"#ID - message\""
+AUTH_MSG="Cannot access Redmine. Check redmine.host and redmine.apikey configs."
+ISSUE_MSG="Cannot reach Redmine issue"
+
+# Applying colors
+if test -n "$(tput colors)" && test $(tput colors) -ge 8; then
+    ERROR_MSG="$(tput setab 1)$ERROR_MSG$(tput sgr0)"
+    AUTH_MSG="$(tput setab 1)$AUTH_MSG$(tput sgr0)"
+    ISSUE_MSG="$(tput setab 1)$ISSUE_MSG$(tput sgr0)"
+fi
+
+function info {
+  echo >&2 $1
+}
+
+function debug {
+  debug=false
+  if $debug
+  then
+    echo >&2 $1
+  fi
+}
+
+if [[ "$var" =~ $regex ]]
+then
+  debug "Commit message: OK"
+else
+  # Define format  message forfirst line in commit message
+  info "$ERROR_MSG"
+  exit 1
+fi
+
+# Retrieving Redmine infos
+issue_id=`echo $var | sed 's/\#\([0-9]*\).*/\1/'`
+redmine_host=$(git config redmine.host)
+redmine_apikey=$(git config redmine.apikey)
+
+# Checking Redmine host and api key
+status=$(curl -I --silent -k -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: $redmine_apikey" "$redmine_host/issues" | head -n 1 | cut -d$' ' -f2)
+
+if [[ $status != 200 ]]
+then
+    echo "$AUTH_MSG"
+    exit 1;
+fi
+
+# Checking Redmine issue
+issue=$(curl --silent -k -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: $redmine_apikey" "$redmine_host/issues/$issue_id.json")
+
+if [[ $issue_id != `echo $issue | jq '.issue.id'` ]]
+then
+    echo "$ISSUE_MSG $redmine_host/$issue_id"
+    exit 1;
+fi
+
+jq=true
+command -v jq >/dev/null 2>&1 || { echo >&2 "jq is optionnal to display issue informations. Feel free to install it : aptitude install jq"; jq=false; }
+
+if [[ $jq == true ]]
+then
+    # Displaying Redmine issue info
+    echo ""
+    echo "Issue ==========================="
+    echo "  refs:        $redmine_host/issues/$issue_id"
+    echo "  number:      "`echo $issue | jq '.issue.id'`
+    echo "  status:      "`echo $issue | jq '.issue.status.name'`
+    echo "  priority:    "`echo $issue | jq '.issue.priority.name'`
+    echo "  create from: "`echo $issue | jq '.issue.author.name'`
+    echo "  assigned to: "`echo $issue | jq '.issue.assigned_to.name'`
+    echo ""
+fi

@@ -1,6 +1,4 @@
 #!/bin/bash
-# When commiting it checks the Redmine issue number and its validity
-# then displays some informations
 # https://coderwall.com/p/ew-_jg/git-commit-message-redmine
 
 regex="^[0-9]+\ -"
@@ -52,27 +50,37 @@ then
 fi
 
 # Checking Redmine issue
-issue=$(curl --silent -k -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: $redmine_apikey" "$redmine_host/issues/$issue_id.json")
-
-if [[ $issue_id != `echo $issue | jq '.issue.id'` ]]
-then
-    echo "$ISSUE_MSG $redmine_host/$issue_id"
-    exit 1;
-fi
-
 jq=true
 command -v jq >/dev/null 2>&1 || { echo >&2 "jq is optionnal to display issue informations. Feel free to install it : aptitude install jq"; jq=false; }
 
 if [[ $jq == true ]]
 then
-    # Displaying Redmine issue info
-    echo ""
-    echo "Issue ==========================="
-    echo "  refs:        $redmine_host/issues/$issue_id"
-    echo "  number:      "`echo $issue | jq '.issue.id'`
-    echo "  status:      "`echo $issue | jq '.issue.status.name'`
-    echo "  priority:    "`echo $issue | jq '.issue.priority.name'`
-    echo "  create from: "`echo $issue | jq '.issue.author.name'`
-    echo "  assigned to: "`echo $issue | jq '.issue.assigned_to.name'`
-    echo ""
+    issue=$(curl --silent -k -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: $redmine_apikey" "$redmine_host/issues/$issue_id.json")
+
+    if [[ $issue_id != `echo $issue | jq '.issue.id'` ]]
+    then
+        echo "$ISSUE_MSG $redmine_host/issues/$issue_id"
+        exit 1;
+    fi
+
+
+        # Displaying Redmine issue info
+        echo ""
+        echo "Issue ==========================="
+        echo "  refs:        $redmine_host/issues/$issue_id"
+        echo "  number:      "`echo $issue | jq '.issue.id'`
+        echo "  status:      "`echo $issue | jq '.issue.status.name'`
+        echo "  priority:    "`echo $issue | jq '.issue.priority.name'`
+        echo "  create from: "`echo $issue | jq '.issue.author.name'`
+        echo "  assigned to: "`echo $issue | jq '.issue.assigned_to.name'`
+        echo ""
+    fi
+else
+    issue_status=$(curl -I --silent -k -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: $redmine_apikey" "$redmine_host/issues/$issue_id" | head -n 1 | cut -d$' ' -f2)
+
+    if [[ $issue_status != 200 ]]
+    then
+        echo "$ISSUE_MSG $redmine_host/issues/$issue_id"
+        exit 1;
+    fi
 fi

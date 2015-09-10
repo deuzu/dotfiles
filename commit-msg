@@ -1,5 +1,10 @@
 #!/bin/bash
 # https://coderwall.com/p/ew-_jg/git-commit-message-redmine
+# Validates if the commit message contains a Redmine issue ID
+# ...and display some informations when validated
+# configuration :
+#     git config redmine.host "https://redmine.exemple.com"
+#     git config redmine.host "0123456789101112131415"
 
 regex="^[0-9]+\ -"
 var=`head -n 1 $1`

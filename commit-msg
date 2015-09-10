@@ -1,9 +1,11 @@
 #!/bin/bash
+# When commiting it checks the Redmine issue number and its validity
+# then displays some informations
 # https://coderwall.com/p/ew-_jg/git-commit-message-redmine
 
-regex="^#[0-9]+\ -"
+regex="^[0-9]+\ -"
 var=`head -n 1 $1`
-ERROR_MSG="Commit need to be \"#ID - message\""
+ERROR_MSG="Commit need to be \"ID - message\""
 AUTH_MSG="Cannot access Redmine. Check redmine.host and redmine.apikey configs."
 ISSUE_MSG="Cannot reach Redmine issue"
 
@@ -36,7 +38,7 @@ else
 fi
 
 # Retrieving Redmine infos
-issue_id=`echo $var | sed 's/\#\([0-9]*\).*/\1/'`
+issue_id=`echo $var | sed 's/\([0-9]*\).*/\1/'`
 redmine_host=$(git config redmine.host)
 redmine_apikey=$(git config redmine.apikey)
 

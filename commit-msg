@@ -58,32 +58,30 @@ fi
 jq=true
 command -v jq >/dev/null 2>&1 || { echo >&2 "jq is optionnal to display issue informations. Feel free to install it : aptitude install jq"; jq=false; }
 
-if [[ $jq == true ]]
+if [[ $jq == true ]];
 then
     issue=$(curl --silent -k -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: $redmine_apikey" "$redmine_host/issues/$issue_id.json")
 
-    if [[ $issue_id != `echo $issue | jq '.issue.id'` ]]
+    if [[ $issue_id != `echo $issue | jq '.issue.id'` ]];
     then
         echo "$ISSUE_MSG $redmine_host/issues/$issue_id"
         exit 1;
     fi
 
-
-        # Displaying Redmine issue info
-        echo ""
-        echo "Issue ==========================="
-        echo "  refs:        $redmine_host/issues/$issue_id"
-        echo "  number:      "`echo $issue | jq '.issue.id'`
-        echo "  status:      "`echo $issue | jq '.issue.status.name'`
-        echo "  priority:    "`echo $issue | jq '.issue.priority.name'`
-        echo "  create from: "`echo $issue | jq '.issue.author.name'`
-        echo "  assigned to: "`echo $issue | jq '.issue.assigned_to.name'`
-        echo ""
-    fi
+    # Displaying Redmine issue info
+    echo ""
+    echo "Issue ==========================="
+    echo "  refs:        $redmine_host/issues/$issue_id"
+    echo "  number:      "`echo $issue | jq '.issue.id'`
+    echo "  status:      "`echo $issue | jq '.issue.status.name'`
+    echo "  priority:    "`echo $issue | jq '.issue.priority.name'`
+    echo "  create from: "`echo $issue | jq '.issue.author.name'`
+    echo "  assigned to: "`echo $issue | jq '.issue.assigned_to.name'`
+    echo ""
 else
     issue_status=$(curl -I --silent -k -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: $redmine_apikey" "$redmine_host/issues/$issue_id" | head -n 1 | cut -d$' ' -f2)
 
-    if [[ $issue_status != 200 ]]
+    if [[ $issue_status != 200 ]];
     then
         echo "$ISSUE_MSG $redmine_host/issues/$issue_id"
         exit 1;

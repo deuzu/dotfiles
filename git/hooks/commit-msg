@@ -1,89 +1,104 @@
-#!/bin/bash
-# https://coderwall.com/p/ew-_jg/git-commit-message-redmine
-# Validates if the commit message contains a Redmine issue ID
-# ...and display some informations when validated
-# configuration :
-#     git config redmine.host "https://redmine.exemple.com"
-#     git config redmine.host "0123456789101112131415"
+#!/usr/bin/php
+<?php
 
-regex="^[0-9]+\ -"
-var=`head -n 1 $1`
-ERROR_MSG="Commit need to be \"ID - message\""
-AUTH_MSG="Cannot access Redmine. Check redmine.host and redmine.apikey configs."
-ISSUE_MSG="Cannot reach Redmine issue"
+/*
+ * https://coderwall.com/p/ew-_jg/git-commit-message-redmine
+ * Validates if the commit message contains a Redmine issue ID
+ * ...and display some informations when validated
+ * configuration :
+ *     git config redmine.host "https://redmine.exemple.com"
+ *     git config redmine.host "0123456789101112131415"
+*/
 
-# Applying colors
-if test -n "$(tput colors)" && test $(tput colors) -ge 8; then
-    ERROR_MSG="$(tput setab 1)$ERROR_MSG$(tput sgr0)"
-    AUTH_MSG="$(tput setab 1)$AUTH_MSG$(tput sgr0)"
-    ISSUE_MSG="$(tput setab 1)$ISSUE_MSG$(tput sgr0)"
-fi
+$message = strtok(file_get_contents($argv[1]), "\n");
+$issueId = getIssueId($message);
+displayIssue($issueId);
 
-function info {
-  echo >&2 $1
+exit(0);
+
+
+/**
+ * Get the issue ID
+ * if no issue ID found exit the script
+ *
+ * @param string $message
+ *
+ * @return string The issue ID
+ */
+function getIssueId($message)
+{
+    $regex        = "/([0-9]+)+( |-){1}/";
+    $errorMessage = decorateLine("Commit need to be \"ID - message\"", 41);
+
+    if (!preg_match($regex, $message, $matches)) {
+        echo $errorMessage;
+
+        exit(1);
+    }
+
+    return $matches[1];
 }
 
-function debug {
-  debug=false
-  if $debug
-  then
-    echo >&2 $1
-  fi
+/**
+ * Display information about the issue
+ * if no issue found exit the script
+ *
+ * @param string $issueId
+ */
+function displayIssue($issueId)
+{
+    $redmineHost        = exec('git config redmine.host');
+    $redmineApikey      = exec('git config redmine.apikey');
+    $issueUrl           = sprintf('%s/issues/%s.json', $redmineHost, $issueId);
+    $curlErrorMessage   = decorateLine('Please enable cURL before trying to commit.', 41);
+    $issueErrorMessage  = decorateLine(sprintf("The issue #%s cannot be found with the URL %s.", $issueId, $issueUrl), 41);
+    $issueErrorMessage .= decorateLine('Check your redmine.host and redmine.apikey values.', 41);
+
+    if (!function_exists('curl_version')) {
+        echo $curlErrorMessage;
+
+        exit(1);
+    }
+
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $issueUrl);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'X-Redmine-API-Key: ' . $redmineApikey
+    ]);
+    $curlResponse = curl_exec($curl);
+    curl_close($curl);
+
+    $issue = json_decode($curlResponse, true);
+
+    if (!$issue) {
+        echo $issueErrorMessage;
+
+        exit(1);
+    }
+
+    // Displaying Redmine issue info
+    echo "\n";
+    echo "\nIssue ===========================";
+    echo "\n  refs:        " . $issueUrl;
+    echo "\n  number:      " . $issueId;
+    echo "\n  status:      " . $issue['issue']['status']['name'];
+    echo "\n  priority:    " . $issue['issue']['priority']['name'];
+    echo "\n  create from: " . $issue['issue']['author']['name'];
+    echo "\n  assigned to: " . $issue['issue']['assigned_to']['name'];
+    echo "\n\n";
 }
 
-if [[ "$var" =~ $regex ]]
-then
-  debug "Commit message: OK"
-else
-  # Define format  message forfirst line in commit message
-  info "$ERROR_MSG"
-  exit 1
-fi
-
-# Retrieving Redmine infos
-issue_id=`echo $var | sed 's/\([0-9]*\).*/\1/'`
-redmine_host=$(git config redmine.host)
-redmine_apikey=$(git config redmine.apikey)
-
-# Checking Redmine host and api key
-status=$(curl -I --silent -k -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: $redmine_apikey" "$redmine_host/issues" | head -n 1 | cut -d$' ' -f2)
-
-if [[ $status != 200 ]]
-then
-    echo "$AUTH_MSG"
-    exit 1;
-fi
-
-# Checking Redmine issue
-jq=true
-command -v jq >/dev/null 2>&1 || { echo >&2 "jq is optionnal to display issue informations. Feel free to install it : aptitude install jq"; jq=false; }
-
-if [[ $jq == true ]];
-then
-    issue=$(curl --silent -k -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: $redmine_apikey" "$redmine_host/issues/$issue_id.json")
-
-    if [[ $issue_id != `echo $issue | jq '.issue.id'` ]];
-    then
-        echo "$ISSUE_MSG $redmine_host/issues/$issue_id"
-        exit 1;
-    fi
-
-    # Displaying Redmine issue info
-    echo ""
-    echo "Issue ==========================="
-    echo "  refs:        $redmine_host/issues/$issue_id"
-    echo "  number:      "`echo $issue | jq '.issue.id'`
-    echo "  status:      "`echo $issue | jq '.issue.status.name'`
-    echo "  priority:    "`echo $issue | jq '.issue.priority.name'`
-    echo "  create from: "`echo $issue | jq '.issue.author.name'`
-    echo "  assigned to: "`echo $issue | jq '.issue.assigned_to.name'`
-    echo ""
-else
-    issue_status=$(curl -I --silent -k -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: $redmine_apikey" "$redmine_host/issues/$issue_id" | head -n 1 | cut -d$' ' -f2)
-
-    if [[ $issue_status != 200 ]];
-    then
-        echo "$ISSUE_MSG $redmine_host/issues/$issue_id"
-        exit 1;
-    fi
-fi
+/**
+ * Decorate astring for console output
+ *
+ * @param string  $line
+ * @param integer $colorCode
+ *
+ * @return string
+ */
+function decorateLine($line, $colorCode)
+{
+    return sprintf("\33[%sm%s\33[0m\n", $colorCode, $line);
+}

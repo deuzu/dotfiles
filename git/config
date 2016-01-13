@@ -4,7 +4,11 @@
 [alias]
     st = status
     ci = commit
+    cm = commit -m
     co = checkout
+    cp = cherry-pick
+    rb = rebase
+    pur = pull --rebase
     save = stash save
     pop  = stash pop
     lg = log --pretty=oneline --abbrev-commit --graph --decorate

@@ -22,3 +22,4 @@
 [core]
     autocrlf = input
     fileMode = false
+    editor = vim

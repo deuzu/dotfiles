@@ -15,6 +15,7 @@
     lc = !git oneline ORIG_HEAD.. --stat --no-merges
     undo = !git reset --soft HEAD^
     amend = commit --amend
+    erf = commit --amend --no-edit
 [color]
     ui = true
 [push]

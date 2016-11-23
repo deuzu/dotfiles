@@ -19,6 +19,7 @@ set nowrap
 set guifont=Monospace\ 14
 set textwidth=0 
 set wrapmargin=0
+syntax on
 
 " Coding
 set shiftround

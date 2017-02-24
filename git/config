@@ -5,17 +5,17 @@
     st = status
     ci = commit
     cm = commit -m
+    amend = commit --amend
+    erf = commit --amend --no-edit
     co = checkout
     cp = cherry-pick
     rb = rebase
+    rbc = rebase --continue
     pur = pull --rebase
-    save = stash save
     pop  = stash pop
     lg = log --pretty=oneline --abbrev-commit --graph --decorate
     lc = !git oneline ORIG_HEAD.. --stat --no-merges
     undo = !git reset --soft HEAD^
-    amend = commit --amend
-    erf = commit --amend --no-edit
 [color]
     ui = true
 [push]

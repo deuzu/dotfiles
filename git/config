@@ -24,3 +24,5 @@
     autocrlf = input
     fileMode = false
     editor = vim
+[remote "origin"]
+    prune = true

@@ -120,8 +120,5 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# rvm PATH
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-# Phpstorm PATH
-export PATH="$PATH:/opt/phpstorm/bin"
+source <(kubectl completion bash)
+source <(k completion bash)

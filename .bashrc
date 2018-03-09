@@ -122,3 +122,5 @@ fi
 
 source <(kubectl completion bash)
 source <(k completion bash)
+
+export PATH="$PATH:$HOME/bin:$HOME/.config/composer/vendor/bin"

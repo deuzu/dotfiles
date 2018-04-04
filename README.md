@@ -10,7 +10,7 @@ curl https://raw.githubusercontent.com/deuzu/home-config/master/git/config > ~/.
 # Bash config files
 curl https://raw.githubusercontent.com/deuzu/home-config/master/.bashrc > ~/.bashrc
 curl https://raw.githubusercontent.com/deuzu/home-config/master/.bash_aliases > ~/.bash_aliases
-curl https://raw.githubusercontent.com/deuzu/home-config/master/.bash_aliases > ~/.bash_completion
+curl https://raw.githubusercontent.com/deuzu/home-config/master/.bash_completion > ~/.bash_completion
 
 # Scripts
 curl https://raw.githubusercontent.com/deuzu/home-config/master/bin > ~/bin/

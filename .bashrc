@@ -49,7 +49,7 @@ parse_k8s_current_config () {
 }
 
 PS1_PWD="$RED\w$NC"
-PS1_EXTRAS="\e[1;36m\$(parse_git_branch) | \$(parse_k8s_current_config)\e[m"
+PS1_EXTRAS="$CYAN\$(parse_git_branch) $WHITE| $PURPLE\$(parse_k8s_current_config)$NC"
 PS1="$PS1_PWD\n$PS1_EXTRAS\n${debian_chroot:+($debian_chroot)}\$ "
 
 # enable programmable completion features (you don't need to enable

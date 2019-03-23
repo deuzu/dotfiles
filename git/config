@@ -5,6 +5,7 @@
     st = status
     ci = commit
     cm = commit -m
+    cme = commit --allow-empty -m
     amend = commit --amend
     erf = commit --amend --no-edit
     co = checkout

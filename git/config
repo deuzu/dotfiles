@@ -17,6 +17,7 @@
     lg = log --pretty=oneline --abbrev-commit --graph --decorate
     lc = !git oneline ORIG_HEAD.. --stat --no-merges
     undo = !git reset --soft HEAD^
+    pf = push --force-with-lease
 [color]
     ui = true
 [push]

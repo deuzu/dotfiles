@@ -1,6 +1,10 @@
 # home-config
 Config files for linux home
 
+## Prerequisites
+
+TODO
+
 ## Setup
 
 ```bash

@@ -11,6 +11,7 @@
     cp = cherry-pick
     rb = rebase
     rbc = rebase --continue
+    rba = rebase --abort
     pur = pull --rebase
     pop  = stash pop
     lg = log --pretty=oneline --abbrev-commit --graph --decorate

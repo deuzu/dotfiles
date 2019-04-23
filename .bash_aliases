@@ -6,3 +6,4 @@ alias preview="fzf --preview 'bat --color \"always\" {}'"
 alias top='sudo htop'
 alias du="ncdu -rr -x --exclude .git --exclude node_modules"
 alias help='tldr'
+alias grep='grep --color'

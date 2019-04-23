@@ -1,3 +1,4 @@
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 
@@ -35,21 +36,38 @@ NC='\[\033[0m\]'
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+  debian_chroot=$(cat /etc/debian_chroot)
 fi
 
+PS1_PWD="$RED\w$NC"
+PS1_EXTRAS=""
+
 # Get Git current branch
-parse_git_branch () {
+if [ -x "$(command -v git)" ] && [ -d .git ]; then
+  parse_git_branch () {
     echo git::$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-}
+  }
+  PS1_EXTRAS="$PS1_EXTRAS$CYAN\$(parse_git_branch)"
+fi;
+
 
 # Get Kubernetes current config if on a git project
-parse_k8s_current_config () {
+if [ -x "$(command -v kubectl)" ] && [ -d .git ]; then
+  parse_k8s_current_config () {
     echo k8s::$(kubectl config current-context)
-}
+  }
+  PS1_EXTRAS="$PS1_EXTRAS $WHITE| $PURPLE\$(parse_k8s_current_config)"
+fi;
 
-PS1_PWD="$RED\w$NC"
-PS1_EXTRAS="$CYAN\$(parse_git_branch) $WHITE| $PURPLE\$(parse_k8s_current_config)$NC"
+# Get AWS current config if on a git project
+if [ -x "$(command -v _awsp)" ] && [ -d .git ]; then
+  parse_aws_current_config () {
+    echo aws::${AWS_PROFILE:=default}
+  }
+  PS1_EXTRAS="$PS1_EXTRAS $WHITE| $GREEN\$(parse_aws_current_config)"
+fi;
+
+PS1_EXTRAS="$PS1_EXTRAS$NC"
 PS1="$PS1_PWD\n$PS1_EXTRAS\n${debian_chroot:+($debian_chroot)}\$ "
 
 # enable programmable completion features (you don't need to enable
@@ -58,75 +76,6 @@ PS1="$PS1_PWD\n$PS1_EXTRAS\n${debian_chroot:+($debian_chroot)}\$ "
 if [ -f /etc/bash_completion ]; then
   . /etc/bash_completion
 fi
-
-extract () {
-   if [ -f $1 ] ; then
-       case $1 in
-           *.tar.bz2)   tar xjf $1        ;;
-           *.tar.gz)    tar xzf $1     ;;
-           *.bz2)       bunzip2 $1       ;;
-           *.rar)       rar x $1     ;;
-           *.gz)        gunzip $1     ;;
-           *.tar)       tar xf $1        ;;
-           *.tbz2)      tar xjf $1      ;;
-           *.tgz)       tar xzf $1       ;;
-           *.zip)       unzip $1     ;;
-           *.Z)         uncompress $1  ;;
-           *.7z)        7z x $1    ;;
-           *)           echo "'$1' cannot be extracted via extract()" ;;
-       esac
-   else
-       echo "'$1' is not a valid file"
-   fi
-}
-
-#netinfo - shows network information for your system
-netinfo () {
-  echo "--------------- Network Information ---------------"
-  /sbin/ifconfig | awk /'inet addr/ {print $2}'
-  /sbin/ifconfig | awk /'Bcast/ {print $3}'
-  /sbin/ifconfig | awk /'inet addr/ {print $4}'
-  /sbin/ifconfig | awk /'HWaddr/ {print $4,$5}'
-  myip=`lynx -dump -hiddenlinks=ignore -nolist http://checkip.dyndns.org:8245/ | sed '/^$/d; s/^[ ]*//g; s/[ ]*$//g' `
-  echo "${myip}"
-  echo "---------------------------------------------------"
-}
-
-#dirsize - finds directory sizes and lists them for the current directory
-dirsize () {
-  du -shx * .[a-zA-Z0-9_]* 2> /dev/null | \
-  egrep '^ *[0-9.]*[MG]' | sort -n > /tmp/list
-  egrep '^ *[0-9.]*M' /tmp/list
-  egrep '^ *[0-9.]*G' /tmp/list
-  rm -rf /tmp/list
-}
-
-#copy and go to dir
-cpg () {
-  if [ -d "$2" ];then
-    cp $1 $2 && cd $2
-  else
-    cp $1 $2
-  fi
-}
-
-#move and go to dir
-mvg () {
-  if [ -d "$2" ];then
-    mv $1 $2 && cd $2
-  else
-    mv $1 $2
-  fi
-}
-
-# Samuel Maftoul Ninjatism
-up() {
-  local x='';
-  for i in $(seq ${1:-1});
-    do x="$x../";
-  done;
-  cd $x;
-}
 
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then
@@ -138,12 +87,24 @@ if [ -f ~/.bash_exports ]; then
     . ~/.bash_exports
 fi
 
-# The fuck
-eval $(thefuck --alias)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# kubectl
-source <(kubectl completion bash)
-source <(k completion bash)
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[ -f /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash ] && . /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[ -f /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash ] && . /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash
+# tabtab source for slss package
+# uninstall by removing these lines or running `tabtab uninstall slss`
+[ -f /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.bash ] && . /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.bash
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/opt/google-cloud-sdk/path.bash.inc' ]; then . '/opt/google-cloud-sdk/path.bash.inc'; fi
 
-# AWS
-complete -C '/usr/bin/aws_completer' aws
+# The next line enables shell command completion for gcloud.
+if [ -f '/opt/google-cloud-sdk/completion.bash.inc' ]; then . '/opt/google-cloud-sdk/completion.bash.inc'; fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+

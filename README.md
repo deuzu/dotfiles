@@ -13,7 +13,6 @@ curl https://raw.githubusercontent.com/deuzu/home-config/master/.bash_aliases > 
 curl https://raw.githubusercontent.com/deuzu/home-config/master/.bash_completion > ~/.bash_completion
 
 # Scripts
-curl https://raw.githubusercontent.com/deuzu/home-config/master/bin > ~/bin/
 curl https://raw.githubusercontent.com/deuzu/home-config/master/bin/github-release-note > ~/bin/github-release-note
 curl https://raw.githubusercontent.com/deuzu/home-config/master/bin/kubectl-exec > ~/bin/kubectl-exec
 curl https://raw.githubusercontent.com/deuzu/home-config/master/bin/kubectl-grep > ~/bin/kubectl-grep

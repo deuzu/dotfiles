@@ -86,25 +86,3 @@ fi
 if [ -f ~/.bash_exports ]; then
     . ~/.bash_exports
 fi
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[ -f /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash ] && . /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[ -f /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash ] && . /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash
-# tabtab source for slss package
-# uninstall by removing these lines or running `tabtab uninstall slss`
-[ -f /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.bash ] && . /home/ftouya/.nvm/versions/node/v11.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.bash
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/opt/google-cloud-sdk/path.bash.inc' ]; then . '/opt/google-cloud-sdk/path.bash.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/opt/google-cloud-sdk/completion.bash.inc' ]; then . '/opt/google-cloud-sdk/completion.bash.inc'; fi
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-

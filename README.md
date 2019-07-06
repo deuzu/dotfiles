@@ -3,12 +3,12 @@ Config files for linux home
 
 ## Prerequisites
 
-- `apt install git httpie jq htop ncdu`
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- `apt install git httpie jq htop ncdu vim`
 - [bat](https://github.com/sharkdp/bat#installation)
 - [prettyping](https://github.com/denilsonsa/prettyping#installation)
 - [fzf](https://github.com/junegunn/fzf#installation)
-- [n node version manager](https://github.com/tj/n)
+- [nvm](https://github.com/nvm-sh/nvm#installation-and-update)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
 - [gcloud cli](https://cloud.google.com/sdk/docs/#install_the_latest_cloud_tools_version_cloudsdk_current_version)
 - `npm install -g awsp`

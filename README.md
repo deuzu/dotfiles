@@ -3,7 +3,16 @@ Config files for linux home
 
 ## Prerequisites
 
-TODO
+- `apt install git httpie jq htop ncdu`
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [bat](https://github.com/sharkdp/bat#installation)
+- [prettyping](https://github.com/denilsonsa/prettyping#installation)
+- [fzf](https://github.com/junegunn/fzf#installation)
+- [n node version manager](https://github.com/tj/n)
+- [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
+- [gcloud cli](https://cloud.google.com/sdk/docs/#install_the_latest_cloud_tools_version_cloudsdk_current_version)
+- `npm install -g awsp`
+- `npm install -g tldr`
 
 ## Setup
 
@@ -15,16 +24,3 @@ curl https://raw.githubusercontent.com/deuzu/home-config/master/git/config > ~/.
 curl https://raw.githubusercontent.com/deuzu/home-config/master/.bashrc > ~/.bashrc
 curl https://raw.githubusercontent.com/deuzu/home-config/master/.bash_aliases > ~/.bash_aliases
 curl https://raw.githubusercontent.com/deuzu/home-config/master/.bash_completion > ~/.bash_completion
-
-# Scripts
-curl https://raw.githubusercontent.com/deuzu/home-config/master/bin/github-release-note > ~/bin/github-release-note
-curl https://raw.githubusercontent.com/deuzu/home-config/master/bin/kubectl-exec > ~/bin/kubectl-exec
-curl https://raw.githubusercontent.com/deuzu/home-config/master/bin/kubectl-grep > ~/bin/kubectl-grep
-curl https://raw.githubusercontent.com/deuzu/home-config/master/bin/kubectl-secret > ~/bin/kubectl-secret
-chmod -R +x ~/bin
-
-# vim
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-curl https://raw.githubusercontent.com/deuzu/home-config/master/.vimrc > ~/.vimrc
-vim +PluginInstall +qall
-```

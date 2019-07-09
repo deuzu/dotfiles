@@ -7,6 +7,7 @@ Config files for linux home
 - [bat](https://github.com/sharkdp/bat#installation)
 - [prettyping](https://github.com/denilsonsa/prettyping#installation)
 - [fzf](https://github.com/junegunn/fzf#installation)
+- [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy#install)
 - [nvm](https://github.com/nvm-sh/nvm#installation-and-update)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)

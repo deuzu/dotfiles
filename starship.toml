@@ -1,0 +1,98 @@
+add_newline = true
+
+format = """
+$username\
+$hostname\
+$shlvl\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$hg_branch\
+$kubernetes\
+$docker_context\
+$package\
+$cmake\
+$dart\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$helm\
+$java\
+$julia\
+$nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$purescript\
+$python\
+$ruby\
+$rust\
+$swift\
+$terraform\
+$zig\
+$nix_shell\
+$conda\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$env_var\
+$crystal\
+$cmd_duration\
+$custom\
+$line_break\
+$lua\
+$jobs\
+$battery\
+$time\
+$status\
+$character"""
+
+[battery]
+disabled = true
+
+[cmd_duration]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[git_branch]
+symbol = " "
+format = "[$symbol$branch]($style) "
+
+[git_status]
+disabled = true
+
+[kubernetes]
+style= "blue bold"
+format = '[$symbol$context]($style)'
+disabled = false
+
+[nodejs]
+disabled = true
+
+[package]
+disabled = true
+
+[php]
+disabled = true
+
+[rust]
+disabled = true
+
+[terraform]
+disabled = true
+
+[hostname]
+disabled = false
+format = '$ssh_symbol'
+ssh_symbol = '🌐'
+
+[username]
+disabled = true

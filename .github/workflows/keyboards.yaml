@@ -1,12 +1,11 @@
 name: keyboards
 
 on:
-  push: ~
-    # branches:
-    #   # - main
-    #   - v2
-    # paths:
-    #   - keyboards
+  push:
+    branches-ignore:
+      - 'main'
+    paths:
+      - 'keyboards/**'
 jobs:
   build:
     runs-on: ubuntu-latest

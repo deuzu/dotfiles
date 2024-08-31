@@ -33,9 +33,9 @@ enum custom_keycodes {
 };
 
 const uint16_t PROGMEM gaming_on[] = { KC_M, KC_K, COMBO_END };
-const uint16_t PROGMEM gaming_off[] = { KC_O, KC_P, COMBO_END };
+const uint16_t PROGMEM gaming_off[] = { KC_C, KC_V, COMBO_END };
 const uint16_t PROGMEM qwerty_on[] = { KC_D, KC_J, COMBO_END };
-const uint16_t PROGMEM qwerty_off[] = { KC_O, KC_P, COMBO_END };
+const uint16_t PROGMEM qwerty_off[] = { KC_V, KC_B, COMBO_END };
 
 combo_t key_combos[COMBO_COUNT] = {
   COMBO(gaming_on, TO(_GAM)),
@@ -48,7 +48,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
      * ISRT LAYOUT
      *
-     * reboot the keyboard by pressing Y + Q
      * activate GAMING by pressing M + K
      * activate QWERTY by pressing D + J
      *
@@ -208,13 +207,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //-------------------------------------------------------------------              -------------------------------------------------------------------//
          XXXXXXX,    XXXXXXX,    XXXXXXX,    XXXXXXX,    XXXXXXX,    XXXXXXX,              XXXXXXX,     KC_F1,     KC_F2,      KC_F3,      KC_F4,      XXXXXXX,
         //-------------------------------------------------------------------              -------------------------------------------------------------------//
-                                             XXXXXXX,    XXXXXXX,   XXXXXXX,               KC_ENT,      KC_TAB,    KC_DEL
+                                              XXXXXXX,    XXXXXXX,   XXXXXXX,              KC_ENT,      KC_TAB,    KC_DEL
     ),
 
     /*
      * GAMING 1 LAYOUT
      *
-     * activate ISRT by pressing O + P
+     * activate ISRT by pressing C + V
      *
      *               ┌────────┬────────┬────────┬────────┬────────┬────────┐              ┌────────┬────────┬────────┬────────┬────────┬────────┐
      *               │ Esc    │ Tab    │ Q      │ W      │ E      │ R      │              │ T      │ Y      │ ↑      │ I      │ O      │ P      │
@@ -270,7 +269,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
      * QWERTY LAYOUT
      *
-     * activate ISRT by pressing O + P
+     * activate ISRT by pressing V + B
      *
      *               ┌────────┬────────┬────────┬────────┬────────┬────────┐              ┌────────┬────────┬────────┬────────┬────────┬────────┐
      *               │        │ Q      │ W      │ E      │ R      │ T      │              │ Y      │ U      │ I      │ O      │ P      │        │

@@ -1,0 +1,19 @@
+{
+  imports = [
+      ./age.nix
+      ./bluetooth.nix
+      ./eternal-terminal.nix
+      ./gnome.nix
+      ./i18n.nix
+      ./mosh.nix
+      ./networking.nix
+      ./nixos.nix
+      ./overlays.nix
+      ./printing.nix
+      ./sops.nix
+      ./sound.nix
+      ./ssh.nix
+      ./tuigreet.nix
+      ./users.nix
+  ];
+}

@@ -1,0 +1,17 @@
+#define COMBO_COUNT 5
+
+#ifdef CAPS_WORD_ENABLE
+// #   define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
+#   define CAPS_WORD_TOGGLE_KEY
+#   define CAPS_WORD_IDLE_TIMEOUT 5000
+#endif
+
+#define MK_3_SPEED
+#define MK_C_OFFSET_UNMOD1
+#define MK_C_INTERVAL_UNMOD16
+#define MK_C_OFFSET_01
+#define MK_C_INTERVAL_064
+#define MK_C_OFFSET_14
+#define MK_C_INTERVAL_116
+#define MK_C_OFFSET_232
+#define MK_C_INTERVAL_216

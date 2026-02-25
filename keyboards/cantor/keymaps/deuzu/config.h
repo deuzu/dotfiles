@@ -1,0 +1,19 @@
+#define NO_USB_STARTUP_CHECK
+
+#define COMBO_COUNT 5
+
+#ifdef CAPS_WORD_ENABLE
+// #   define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
+#   define CAPS_WORD_TOGGLE_KEY
+#   define CAPS_WORD_IDLE_TIMEOUT 5000
+#endif
+
+#define MK_3_SPEED
+#define MK_C_OFFSET_UNMOD	1
+#define MK_C_INTERVAL_UNMOD	16
+#define MK_C_OFFSET_0	1
+#define MK_C_INTERVAL_0	64
+#define MK_C_OFFSET_1	4
+#define MK_C_INTERVAL_1	16
+#define MK_C_OFFSET_2	32
+#define MK_C_INTERVAL_2	16

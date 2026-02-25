@@ -1,0 +1,4 @@
+secrets.* filter=git-crypt diff=git-crypt
+*.secrets.* filter=git-crypt diff=git-crypt
+**/goose/config.yaml filter=git-crypt diff=git-crypt
+**/goose/recipes/** filter=git-crypt diff=git-crypt

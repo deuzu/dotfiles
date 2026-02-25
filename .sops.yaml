@@ -1,0 +1,27 @@
+keys:
+  - &user_ftouya age1w2zp6nruj87g5t4jss4fkz542ehpp9g33ra7rh3wwv52dksa8qsq8aqt0k
+  - &host_workstation age1pjz4fw4ug8hgfptwx5lsqu8nh063m6zwuy7ea3nnr0653w3jrpqqlvnq37
+  - &host_homewsl age1rxl0uq6vrexjwx2yu0ermru0a7myp8m9mxfekkvmlmznwwggdpvsxqaftz
+
+creation_rules:
+  - path_regex: nixos/hosts/workstation/secrets.yaml$
+    key_groups:
+      - age:
+        - *user_ftouya
+        - *host_workstation
+  - path_regex: nixos/hosts/workstation/users/ftouya.secrets.yaml$
+    key_groups:
+      - age:
+        - *user_ftouya
+        - *host_workstation
+  - path_regex: nixos/hosts/home-wsl/secrets.yaml$
+    key_groups:
+      - age:
+        - *user_ftouya
+        - *host_homewsl
+  
+  - path_regex: nixos/hosts/home-wsl/users/ftouya.secrets.yaml$
+    key_groups:
+      - age:
+        - *user_ftouya
+        - *host_homewsl

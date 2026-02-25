@@ -1,0 +1,41 @@
+name: keyboards
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+    paths:
+      - 'keyboards/**'
+jobs:
+  build-cantor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: d3adb5/build-qmk-fw@v1
+        with:
+          keyboard: cantor
+          keymap: deuzu
+          local-keymap-path: keyboards/cantor/keymaps/deuzu
+          output-dir: keyboards/build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qmk-firmware-cantor-deuzu
+          path: keyboards/build
+
+  build-piantor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: d3adb5/build-qmk-fw@v1
+        with:
+          keyboard: beekeeb/piantor_pro
+          keymap: deuzu
+          local-keymap-path: keyboards/piantor/keymaps/deuzu
+          output-dir: keyboards/build
+          # controller: rp2040_ce
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qmk-firmware-piantor-deuzu
+          path: keyboards/build

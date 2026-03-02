@@ -44,6 +44,7 @@ in
             "http" = "ask";
             "nix-rebuild *" = "ask";
             "git push *" = "ask";
+            "git commit *" = "ask";
             "docker push *" = "ask";
             "terraform apply *" = "ask";
             "packer build *" = "ask";
@@ -52,7 +53,7 @@ in
         };
         tui = {
           scroll_acceleration = {
-            enabled = true;
+            enabled = false;
           };
         };
         server = {

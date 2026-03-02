@@ -151,6 +151,9 @@ in
                 ":set mouse false"
                 ":set mouse true"
               ];
+              C-e = [
+                ":sh zellij run -n Sops -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- sops edit %{buffer_name}"
+              ];
               # [goto] definition other window
               g.o = "@<C-w>o<C-w>vgd";
             };

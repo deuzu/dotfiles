@@ -10,3 +10,5 @@ permission:
   webfetch: "ask"
   websearch: "ask"
 ---
+
+Do not use tools unless explicitly asked.

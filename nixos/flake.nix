@@ -42,9 +42,15 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    agent-skills.url = "github:Kyure-A/agent-skills-nix";
+    anthropic-skills = {
+      url = "github:anthropics/skills";
+      flake = false;
+    };
   };
 
-  outputs = { nixpkgs, flake-utils, home-manager, nixos-wsl, sops-nix, ... } @inputs:
+  outputs = { nixpkgs, flake-utils, home-manager, nixos-wsl, sops-nix, agent-skills, ... } @inputs:
     {
       nixosConfigurations =
         let
@@ -64,7 +70,8 @@
                   backupFileExtension = "backup";
                   extraSpecialArgs = { inherit inputs system; };
                   users.${user} = import ./hosts/${host}/users/${user}.nix;
-                  sharedModules = [ sops-nix.homeManagerModules.sops ];
+                  sharedModules = [ sops-nix.homeManagerModules.sops agent-skills.homeManagerModules.default ];
+
                 };
               }
             ] ++ extraModules;

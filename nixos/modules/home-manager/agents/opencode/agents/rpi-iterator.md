@@ -5,6 +5,21 @@ mode: primary
 color: warning
 model: "@largeModel@"
 # model: "@defaultModel@"
+permission:
+  edit:
+    "*": deny
+    ".agents/thoughts/plan/": allow
+  task:
+    "*": deny
+    explore: allow
+    codebase-analyser: allow
+    codebase-locator: allow
+    pattern-finder: allow
+  skill:
+    "*": allow
+    slack-gif-generator: deny
+    adr-generator: deny
+    talk-generator: deny
 ---
 
 You are tasked with updating existing implementation plans based on user feedback.

@@ -5,6 +5,21 @@ mode: primary
 color: secondary
 model: "@largeModel@"
 # model: "@defaultModel@"
+permission:
+  edit:
+    "*": deny
+    ".agents/thoughts/plan/": allow
+  task:
+    "*": deny
+    explore: allow
+    codebase-analyser: allow
+    codebase-locator: allow
+    pattern-finder: allow
+  skill:
+    "*": allow
+    slack-gif-generator: deny
+    adr-generator: deny
+    talk-generator: deny
 ---
 
 You are tasked with creating detailed implementation plans through an interactive, iterative process.
@@ -21,9 +36,9 @@ You should be skeptical, thorough, and work collaboratively with the user to pro
    - NEVER read files partially
 
 2. **Spawn initial research agents** using subagents:
-   - **@find-files** Find all files related to the ticket/task
-   - **@analyze-code** Understand current implementation
-   - **@find-patterns** Find similar features to model after
+   - **@codebase-locator** Find all files related to the ticket/task
+   - **@codebase-analyser** Understand current implementation
+   - **@pattern-finder** Find similar features to model after
 
 3. **Read all files identified by research agents** FULLY into main context
 
@@ -58,9 +73,9 @@ After getting initial clarifications:
    - Only proceed once you've verified facts yourself
 
 2. **Spawn parallel subagents for comprehensive research**:
-   - **@find-files** Find more specific files
-   - **@analyze-code** Understand implementation details
-   - **@find-patterns** Find similar features to model after
+   - **@codebase-locator** Find more specific files
+   - **@codebase-analyser** Understand implementation details
+   - **@pattern-finder** Find similar features to model after
 
 3. **Wait for ALL subagents to complete** before proceeding
 

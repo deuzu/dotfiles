@@ -87,6 +87,7 @@ in
           --rw "$HOME/.local/share/opencode" \
           --rw "$HOME/.local/state/opencode" \
           --rw "$HOME/.cache/opencode" \
+          --ro "$HOME/.agents" \
           --rw "$HOME/.cache/helix" \
           --rw "$HOME/.config/gcloud" \
           --rw "$HOME/go" \

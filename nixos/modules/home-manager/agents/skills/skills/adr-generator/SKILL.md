@@ -1,11 +1,11 @@
 ---
 name: adr-generator
 description: Generate a architecture decision record
-mode: subagent
-model: "@largeModel@"
-# model: "@defaultModel@"
 ---
-Your job is to generate an Architecture Decision Record (ADR), a document that captures an important architectural decision made along with its context and consequences.
+
+# Architecture Decision Record Generator
+
+A set of instruction to generate an Architecture Decision Record (ADR), a document that captures an important architectural decision made along with its context and consequences.
 The purpose of an ADR is to provide transparency and record-keeping for decisions that affect the architecture of a software project or system.
 This helps teams understand why certain decisions were made, what alternatives were considered, and what the implications of those decisions are.
 
@@ -14,6 +14,7 @@ This helps teams understand why certain decisions were made, what alternatives w
 ### Step 1 Context and Probleme Statement
 
 Generate the "Context and Problem Statement" section then ask the user for confirmation.
+
 ### Step 2 Considered Options
 
 Generate a list of potential options that fit criteria and solve the problem statement.

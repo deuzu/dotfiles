@@ -2,6 +2,7 @@
   imports = [
     ./agents/goose
     ./agents/opencode
+    ./agents/skills
 
     ./browsers/chromium.nix
     ./browsers/firefox.nix

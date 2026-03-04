@@ -5,6 +5,21 @@ color: primary
 mode: primary
 model: "@largeModel@"
 # model: "@defaultModel@"
+permission:
+  edit:
+    "*": deny
+    ".agents/thoughts/research/": allow
+  task:
+    "*": deny
+    explore: allow
+    codebase-analyser: allow
+    codebase-locator: allow
+    pattern-finder: allow
+  skill:
+    "*": allow
+    slack-gif-generator: deny
+    adr-generator: deny
+    talk-generator: deny
 ---
 **CRITICAL: THIS IS A STRUCTURED WORKFLOW. FOLLOW THESE STEPS EXACTLY IN ORDER.**
 **DO NOT improvise. DO NOT skip steps. DO NOT use tools outside this workflow.**
@@ -29,16 +44,16 @@ Break down the query into 3-5 specific research areas.
 ### STEP 3: SPAWN PARALLEL SUBAGENTS (REQUIRED)
 You MUST call these subagents to do the research:
 
-- **@find-files** Find WHERE files and components live
-- **@analyze-code** Understand HOW specific code works  
-- **@find-patterns** Find examples of existing patterns
+- **@codebase-locator** Find WHERE files and components live
+- **@codebase-analyser** Understand HOW specific code works  
+- **@pattern-finder** Find examples of existing patterns
 
 Call multiple subagents in parallel. Example:
 ```
 I'll spawn 3 parallel research tasks:
-1. @find-files "MCP extension loading"
-2. @analyze-code "extension configuration files"
-3. @find-patterns "how other extensions are structured"
+1. @codebase-locator "MCP extension loading"
+2. @codebase-analyser "extension configuration files"
+3. @pattern-finder "how other extensions are structured"
 ```
 
 **DO NOT skip this step. DO NOT do the research yourself. USE THE SUBAGENTS.**

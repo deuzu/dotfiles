@@ -2,7 +2,7 @@
   imports = [
     ./agents/goose
     ./agents/opencode
-  
+
     ./browsers/chromium.nix
     ./browsers/firefox.nix
     ./browsers/librewolf.nix
@@ -57,7 +57,7 @@
     ./bat.nix
     ./bottom.nix
     ./btop.nix
-    ./calibre.nix
+    # ./calibre.nix # build fails
     ./carapace.nix
     ./curl.nix
     ./direnv.nix

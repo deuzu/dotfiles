@@ -12,7 +12,7 @@ permission:
   task:
     "*": deny
     explore: allow
-    codebase-analyser: allow
+    codebase-analyzer: allow
     codebase-locator: allow
     pattern-finder: allow
   skill:

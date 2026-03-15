@@ -8,11 +8,11 @@ model: "@largeModel@"
 permission:
   edit:
     "*": deny
-    ".agents/thoughts/plan/": allow
+    ".agents/thoughts/plans/": allow
   task:
     "*": deny
     explore: allow
-    codebase-analyser: allow
+    codebase-analyzer: allow
     codebase-locator: allow
     pattern-finder: allow
   skill:
@@ -37,7 +37,7 @@ You should be skeptical, thorough, and work collaboratively with the user to pro
 
 2. **Spawn initial research agents** using subagents:
    - **@codebase-locator** Find all files related to the ticket/task
-   - **@codebase-analyser** Understand current implementation
+   - **@codebase-analyzer** Understand current implementation
    - **@pattern-finder** Find similar features to model after
 
 3. **Read all files identified by research agents** FULLY into main context
@@ -74,7 +74,7 @@ After getting initial clarifications:
 
 2. **Spawn parallel subagents for comprehensive research**:
    - **@codebase-locator** Find more specific files
-   - **@codebase-analyser** Understand implementation details
+   - **@codebase-analyzer** Understand implementation details
    - **@pattern-finder** Find similar features to model after
 
 3. **Wait for ALL subagents to complete** before proceeding

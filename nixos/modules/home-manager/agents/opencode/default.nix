@@ -36,19 +36,20 @@ in
         permission = {
           bash = {
             "*" = "allow";
-            "ssh" = "deny";
-            "sops" = "deny";
-            "git-crypt" = "deny";
-            "psql" = "ask";
-            "curl" = "ask";
-            "http" = "ask";
-            "nix-rebuild *" = "ask";
-            "git push *" = "ask";
-            "git commit *" = "ask";
-            "docker push *" = "ask";
-            "terraform apply *" = "ask";
-            "packer build *" = "ask";
-            "kubectl apply *" = "ask";
+            "env*" = "deny";
+            "ssh*" = "deny";
+            "sops*" = "deny";
+            "git-crypt*" = "deny";
+            "psql*" = "ask";
+            "curl*" = "ask";
+            "http*" = "ask";
+            "nix-rebuild*" = "ask";
+            "git push*" = "ask";
+            "git commit*" = "ask";
+            "docker push*" = "ask";
+            "terraform*" = "ask";
+            "packer*" = "ask";
+            "kubectl*" = "ask";
           };
         };
         tui = {
@@ -90,7 +91,9 @@ in
           --ro "$HOME/.agents" \
           --rw "$HOME/.cache/helix" \
           --rw "$HOME/.config/gcloud" \
+          --ro "$HOME/.config/gh" \
           --rw "$HOME/go" \
+          --rw "$HOME/.npm" \
           --rwx "$HOME/.tenv" \
           --ro "$HOME/.terraform.d" \
           --rwx /tmp \

@@ -6,13 +6,24 @@ mode: primary
 model: "@largeModel@"
 # model: "@defaultModel@"
 permission:
+  read: allow
+  grep: allow
+  glob: allow
+  list: allow
+  todowrite: allow
+  todoread: allow
+  webfetch: deny
+  bash:
+    "*": deny
+    "git rev-parse HEAD": allow
+    "git branch --show-current": allow
   edit:
     "*": deny
     ".agents/thoughts/research/": allow
   task:
     "*": deny
     explore: allow
-    codebase-analyser: allow
+    codebase-analyzer: allow
     codebase-locator: allow
     pattern-finder: allow
   skill:
@@ -45,14 +56,14 @@ Break down the query into 3-5 specific research areas.
 You MUST call these subagents to do the research:
 
 - **@codebase-locator** Find WHERE files and components live
-- **@codebase-analyser** Understand HOW specific code works  
+- **@codebase-analyzer** Understand HOW specific code works  
 - **@pattern-finder** Find examples of existing patterns
 
 Call multiple subagents in parallel. Example:
 ```
 I'll spawn 3 parallel research tasks:
 1. @codebase-locator "MCP extension loading"
-2. @codebase-analyser "extension configuration files"
+2. @codebase-analyzer "extension configuration files"
 3. @pattern-finder "how other extensions are structured"
 ```
 

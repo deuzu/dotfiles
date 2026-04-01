@@ -47,11 +47,15 @@ in
             "git push*" = "ask";
             "git commit*" = "ask";
             "docker push*" = "ask";
+            "gcloud*" = "ask";
             "terraform*" = "ask";
             "packer*" = "ask";
             "kubectl*" = "ask";
           };
         };
+        # plugins = [
+        #   "@mohak34/opencode-notifier@latest"
+        # ];
         tui = {
           scroll_acceleration = {
             enabled = false;

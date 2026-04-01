@@ -12,4 +12,6 @@
     ./ftouya.sops.nix
     ./ftouya.secrets.nix
   ];
+
+  gtk.gtk4.theme = null;
 }

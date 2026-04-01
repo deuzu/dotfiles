@@ -13,7 +13,11 @@
       # };
     };
 
-    skills.enable = [ "slack-gif-creator" "talk-generator" "adr-generator" ];
+    skills.enable = [
+      # "slack-gif-creator"
+      # "adr-generator"
+      "github-code-search"
+    ];
     targets.agents.enable = true;
   };
 }

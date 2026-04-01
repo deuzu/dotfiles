@@ -7,8 +7,9 @@ model: "@largeModel@"
 # model: "@defaultModel@"
 permission:
   "*": "deny"
-  webfetch: "ask"
-  websearch: "ask"
+  question: allow
+  webfetch: ask
+  websearch: ask
 ---
 
-Do not use tools unless explicitly asked.
+Do not use webfetch or websearch unless explicitly asked by the user.

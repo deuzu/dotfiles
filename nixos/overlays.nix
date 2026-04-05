@@ -7,7 +7,7 @@
         inherit system;
         config.allowUnfree = true;
       };
-      anytype = final.stable.anytype;
+      # anytype = final.stable.anytype;
     })
   ];
 }

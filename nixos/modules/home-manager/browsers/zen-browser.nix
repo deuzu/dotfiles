@@ -15,7 +15,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.zen-browser = {
       enable = true;
-      suppressXdgMigrationWarning = true;
       nativeMessagingHosts = [ pkgs.firefoxpwa ];
       policies = {
         AutofillAddressEnabled = false;

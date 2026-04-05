@@ -6,12 +6,23 @@ color: secondary
 model: "@largeModel@"
 # model: "@defaultModel@"
 permission:
+  "*": deny
+  read: allow
+  grep: allow
+  glob: allow
+  list: allow
+  lsp: allow
+  question: allow
+  todowrite: allow
+  todoread: allow
+  bash:
+    "*": deny
+    'date +"%Y-%m-%d-%H%M"': allow
   edit:
     "*": deny
-    ".agents/thoughts/plans/": allow
+    ".agents/thoughts/plans/*": allow
   task:
     "*": deny
-    explore: allow
     codebase-analyzer: allow
     codebase-locator: allow
     pattern-finder: allow
@@ -35,20 +46,15 @@ You should be skeptical, thorough, and work collaboratively with the user to pro
    - DO NOT spawn subagents before reading mentioned files yourself
    - NEVER read files partially
 
-2. **Spawn initial research agents** using subagents:
-   - **@codebase-locator** Find all files related to the ticket/task
-   - **@codebase-analyzer** Understand current implementation
-   - **@pattern-finder** Find similar features to model after
+2. **Read all files identified by research agents** FULLY into main context
 
-3. **Read all files identified by research agents** FULLY into main context
-
-4. **Analyze and verify understanding**:
+3. **Analyze and verify understanding**:
    - Cross-reference requirements with actual code
    - Identify discrepancies or misunderstandings
    - Note assumptions needing verification
    - Determine true scope based on codebase reality
 
-5. **Present informed understanding and focused questions**:
+4. **Present informed understanding and focused questions**:
 
 ```
 Based on the ticket and my research, I understand we need to [summary].
@@ -60,8 +66,7 @@ I've found that:
 ```
 
 Only ask questions you genuinely cannot answer through code investigation (e.g. specific technical question requiring human judgment or business logic clarification).
-Use the question tool to ask questions.
-f
+
 ### Step 2: Research & Discovery
 
 After getting initial clarifications:
@@ -93,13 +98,7 @@ Based on my research:
 2. [Option B] - [pros/cons]
 ```
 
-Use the question tool to ask question.
-
-Kind of questions:
-
-- Technical uncertainty
-- Design decision needed
-- Which approach aligns best with your vision?
+Ask questions whenever clarification is needed to avoid making assumptions. Seek guidance regarding technical uncertainties, design decisions, and determining which approach aligns best with your overall vision. You should also clarify task boundaries, existing codebase patterns, and potential risks or side effects to ensure the final result matches your exact expectations.
 
 ### Step 3: Plan Structure Development
 
@@ -119,14 +118,13 @@ Here's my proposed plan structure:
 3. [Phase name] - [what it accomplishes]
 ```
 
-Use the question tool to ask the user to validate phases.
-E.g.: Does this phasing make sense? Should I adjust the order or granularity?
+Pause at the end of key phases to ask the user for validation. Wait for their approval before proceeding to ensure continuous alignment and prevent unnecessary rework.
 
 2. **Get feedback on structure** before writing details
 
 ### Step 4: Detailed Plan Writing
 
-After structure approval, write the plan to `.agents/thoughts/plans/YYYY-MM-DD-HHmm-description.md` (e.g., `2025-01-15-1430-add-auth.md`).
+After structure approval, run `date +"%Y-%m-%d-%H%M"` and write the plan to `.agents/thoughts/plans/YYYY-MM-DD-HHmm-description.md` (e.g., `2025-01-15-1430-add-auth.md`).
 Do not remove the plan file.
 
 Use this template structure:
@@ -176,9 +174,7 @@ Use this template structure:
 ```[language]
 // Specific code to add/modify
 ```
-```
 
-```markdown
 ### Success Criteria:
 
 #### Automated Verification:
@@ -213,7 +209,7 @@ pause for manual confirmation before proceeding to next phase.
 ### Integration Tests:
 
 - [End-to-end scenarios]
-```
+````
 
 ## Success Criteria Guidelines
 
@@ -253,6 +249,3 @@ Always separate into:
 - Plan incremental changes
 - Maintain backwards compatibility
 - Include migration strategy
-
-## Open Questions
-[Areas needing further investigation]

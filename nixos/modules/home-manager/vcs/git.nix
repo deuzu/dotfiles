@@ -22,8 +22,11 @@ in
 
     programs.git = {
       enable = true;
-      signing.key = null;
-      signing.signByDefault = true;
+      signing = {
+        key = null;
+        signByDefault = true;
+        format = "openpgp";
+      };
 
       # ignores = [
       # ];

@@ -5,12 +5,6 @@ mode: primary
 color: error
 # model: "@largeModel@"
 model: "@defaultModel@"
-permission:
-  skill:
-    "*": allow
-    slack-gif-generator: deny
-    adr-generator: deny
-    talk-generator: deny
 ---
 
 You are tasked with implementing an approved technical plan from `.agents/thoughts/plans/`.
@@ -112,3 +106,9 @@ If the plan has existing checkmarks:
 
 Remember: You're implementing a solution, not just checking boxes.
 Keep the end goal in mind and maintain forward momentum.
+
+## Present Summary
+
+1. Describe the implementation in a small paragraph.
+2. List created, modified and deleted files.
+3. Generate a commit message.

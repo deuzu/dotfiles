@@ -13,6 +13,13 @@ in
     programs.opencode = {
       enable = true;
       settings = {
+        autoupdate = false;
+        share = "disabled";
+        tui = {
+          scroll_acceleration = {
+            enabled = false;
+          };
+        };
         model = env.OPENCODE_MODEL;
         # small_model = "";
         provider = {
@@ -24,6 +31,11 @@ in
           openai = {
             options = {
               apiKey = "{env:OPENAI_API_KEY}";
+            };
+          };
+          mistral = {
+            options = {
+              apiKey = "{env:MISTRAL_API_KEY}";
             };
           };
         };
@@ -56,15 +68,9 @@ in
         # plugins = [
         #   "@mohak34/opencode-notifier@latest"
         # ];
-        tui = {
-          scroll_acceleration = {
-            enabled = false;
-          };
-        };
         server = {
           mdns = true;
         };
-        share = "disabled";
       };
     };
 
@@ -82,6 +88,14 @@ in
     home.packages = [
       (pkgs.writeShellScriptBin "ai" ''
         mkdir -p "$HOME/.config/opencode"
+        mkdir -p "$HOME/.config/gcloud-aiagent"
+        export CLOUDSDK_CONFIG="$HOME/.config/gcloud-aiagent"
+
+        if [ -n "$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE" ] && [ -f "$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE" ]; then
+          export GOOGLE_APPLICATION_CREDENTIALS="$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE"
+          export CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE="$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE"
+          gcloud auth activate-service-account --key-file="$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE"
+        fi
 
         exec ${pkgs.landrun}/bin/landrun \
           --best-effort \
@@ -94,7 +108,7 @@ in
           --rw "$HOME/.cache/opencode" \
           --ro "$HOME/.agents" \
           --rw "$HOME/.cache/helix" \
-          --rw "$HOME/.config/gcloud" \
+          --rw "$HOME/.config/gcloud-aiagent" \
           --ro "$HOME/.config/gh" \
           --rw "$HOME/go" \
           --rw "$HOME/.npm" \
@@ -118,6 +132,10 @@ in
           --env OPENCODE_MODEL \
           --env OPENCODE_PLAN_MODEL \
           --env OPENCODE_ENABLE_EXA \
+          --env CLOUDSDK_CONFIG \
+          --env GOOGLE_APPLICATION_CREDENTIALS \
+          --env CLOUDSDK_ACTIVE_CONFIG_NAME \
+          --env CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE \
           opencode "$@"
       '')
     ];

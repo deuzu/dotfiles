@@ -44,6 +44,11 @@ in
           };
           "shared_among \"normal\" \"locked\"" = {
             "bind \"Alt f\"" = { ToggleFloatingPanes = { }; };
+            "bind \"Alt Left\"" = { MoveFocusOrTab = "Left"; };
+            "bind \"Alt Right\"" = { MoveFocusOrTab = "Right"; };
+            "bind \"Alt Down\"" = { MoveFocus = "Down"; };
+            "bind \"Alt Up\"" = { MoveFocus = "Up"; };
+            "bind \"Alt n\"" = { NewPane = {}; };
           };
         };
       };

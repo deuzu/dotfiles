@@ -7,7 +7,10 @@
         inherit system;
         config.allowUnfree = true;
       };
-      # anytype = final.stable.anytype;
+      anytype = (import inputs.nixpkgs-anytype {
+        inherit system;
+        config.allowUnfree = true;
+      }).anytype;
     })
   ];
 }

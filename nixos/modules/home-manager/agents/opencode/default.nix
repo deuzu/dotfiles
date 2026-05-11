@@ -47,22 +47,25 @@ in
         keybinds = { };
         permission = {
           bash = {
-            "*" = "allow";
+            "*" = "ask";
             "env*" = "deny";
             "ssh*" = "deny";
             "sops*" = "deny";
             "git-crypt*" = "deny";
-            "psql*" = "ask";
-            "curl*" = "ask";
-            "http*" = "ask";
-            "nix-rebuild*" = "ask";
-            "git push*" = "ask";
-            "git commit*" = "ask";
-            "docker push*" = "ask";
-            "gcloud*" = "ask";
-            "terraform*" = "ask";
-            "packer*" = "ask";
-            "kubectl*" = "ask";
+            "gpg*" = "deny";
+            "terraform fmt*" = "allow";
+            "terraform validate*" = "allow";
+            "kubectl*" = "allow";
+            "gcloud*" = "allow";
+            "jq*" = "allow";
+            "echo*" = "allow";
+            "cat*" = "allow";
+            "head*" = "allow";
+            "less*" = "allow";
+            "tail*" = "allow";
+            "ls*" = "allow";
+            "grep*" = "allow";
+            "rg*" = "allow";
           };
         };
         # plugins = [
@@ -87,7 +90,12 @@ in
 
     home.packages = [
       (pkgs.writeShellScriptBin "ai" ''
-        mkdir -p "$HOME/.config/opencode"
+        # if [[ "$PWD" != "$HOME/Projects/"* ]]; then
+        #   echo "🚨 Security Error: Refusing to run opencode from $PWD."
+        #   echo "For security reasons, this agent can only be executed from within $HOME/Projects/..."
+        #   exit 1
+        # fi
+
         mkdir -p "$HOME/.config/gcloud-aiagent"
         export CLOUDSDK_CONFIG="$HOME/.config/gcloud-aiagent"
 
@@ -97,46 +105,51 @@ in
           gcloud auth activate-service-account --key-file="$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE"
         fi
 
-        exec ${pkgs.landrun}/bin/landrun \
-          --best-effort \
-          --ro /dev,/etc,/sys,/proc \
-          --rox /nix/store,/usr \
-          --rw /dev/null,/dev/stdin,/dev/stdout,/dev/stderr,/dev/tty \
-          --rw "$HOME/.config/opencode" \
-          --rw "$HOME/.local/share/opencode" \
-          --rw "$HOME/.local/state/opencode" \
-          --rw "$HOME/.cache/opencode" \
-          --ro "$HOME/.agents" \
-          --rw "$HOME/.cache/helix" \
-          --rw "$HOME/.config/gcloud-aiagent" \
-          --ro "$HOME/.config/gh" \
-          --rw "$HOME/go" \
-          --rw "$HOME/.npm" \
-          --rwx "$HOME/.tenv" \
-          --ro "$HOME/.terraform.d" \
-          --rwx /tmp \
-          --rwx "$PWD" \
-          --unrestricted-network \
-          --env HOME \
-          --env PATH \
-          --env XDG_CONFIG_HOME \
-          --env XDG_CACHE_HOME \
-          --env XDG_STATE_HOME \
-          --env USER \
-          --env TERM \
-          --env LANG \
-          --env LC_ALL \
-          --env EDITOR \
-          --env OPENAI_API_KEY \
-          --env GOOGLEAI_API_KEY \
-          --env OPENCODE_MODEL \
-          --env OPENCODE_PLAN_MODEL \
-          --env OPENCODE_ENABLE_EXA \
-          --env CLOUDSDK_CONFIG \
-          --env GOOGLE_APPLICATION_CREDENTIALS \
-          --env CLOUDSDK_ACTIVE_CONFIG_NAME \
-          --env CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE \
-          opencode "$@"
+        exec ${pkgs.bubblewrap}/bin/bwrap \
+          --dev-bind / / \
+          --bind /dev/null ${pkgs.sops}/bin/sops \
+          --bind /dev/null ${pkgs.git-crypt}/bin/git-crypt \
+          --bind /dev/null ${pkgs.gnupg}/bin/gpg \
+          -- ${pkgs.landrun}/bin/landrun \
+            --ro /dev,/etc,/sys,/proc \
+            --rox /nix/store,/usr \
+            --rw /dev/null,/dev/stdin,/dev/stdout,/dev/stderr,/dev/tty \
+            --rw "$HOME/.config/opencode" \
+            --rw "$HOME/.local/share/opencode" \
+            --rw "$HOME/.local/state/opencode" \
+            --rw "$HOME/.cache/opencode" \
+            --ro "$HOME/.agents" \
+            --rw "$HOME/.cache/helix" \
+            --rw "$HOME/.config/gcloud-aiagent" \
+            --ro "$HOME/.config/gh" \
+            --ro "$HOME/.kube/" \
+            --rw "$HOME/go" \
+            --rw "$HOME/.npm" \
+            --rox "$HOME/.tenv" \
+            --ro "$HOME/.terraform.d" \
+            --rw /tmp \
+            --rw "$PWD" \
+            --unrestricted-network \
+            --env HOME \
+            --env PATH \
+            --env XDG_CONFIG_HOME \
+            --env XDG_CACHE_HOME \
+            --env XDG_STATE_HOME \
+            --env USER \
+            --env TERM \
+            --env LANG \
+            --env LC_ALL \
+            --env EDITOR \
+            --env OPENAI_API_KEY \
+            --env GOOGLEAI_API_KEY \
+            --env OPENCODE_MODEL \
+            --env OPENCODE_PLAN_MODEL \
+            --env OPENCODE_ENABLE_EXA \
+            --env CLOUDSDK_CONFIG \
+            --env GOOGLE_APPLICATION_CREDENTIALS \
+            --env CLOUDSDK_ACTIVE_CONFIG_NAME \
+            --env CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE \
+            opencode "$@"
       '')
     ];
 

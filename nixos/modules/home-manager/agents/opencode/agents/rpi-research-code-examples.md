@@ -1,8 +1,8 @@
 ---
 name: RPI-Research-Code-Examples
 description: Research public code examples
-color: primary
-mode: primary
+mode: subagent
+hidden: true
 # model: "@largeModel@"
 model: "@defaultModel@"
 permission:

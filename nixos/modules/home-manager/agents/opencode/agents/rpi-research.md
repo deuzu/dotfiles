@@ -1,8 +1,8 @@
 ---
 name: RPI-Research
 description: Research and document codebase for a specific topic using parallel subagents
-color: primary
-mode: primary
+mode: subagent
+hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
 permission:

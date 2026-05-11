@@ -1,8 +1,8 @@
 ---
 name: RPI-Research-Documentation
 description: Research documentation on the web for needed tech pieces
-color: primary
-mode: primary
+mode: subagent
+hidden: true
 # model: "@largeModel@"
 model: "@defaultModel@"
 permission:

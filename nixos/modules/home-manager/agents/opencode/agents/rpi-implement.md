@@ -1,8 +1,8 @@
 ---
 name: RPI-Implement
 description: Implement an approved technical plan phase by phase with verification
-mode: primary
-color: error
+mode: subagent
+hidden: true
 # model: "@largeModel@"
 model: "@defaultModel@"
 ---

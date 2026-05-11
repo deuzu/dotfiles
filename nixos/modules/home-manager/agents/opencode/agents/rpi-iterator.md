@@ -1,8 +1,8 @@
 ---
 name: RPI-Iterator
 description: Update existing implementation plans based on feedback with thorough research
-mode: primary
-color: warning
+mode: subagent
+hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
 permission:

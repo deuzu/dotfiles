@@ -1,8 +1,8 @@
 ---
 name: RPI-Plan
 description: Create detailed implementation plans through interactive, iterative process
-mode: primary
-color: secondary
+mode: subagent
+hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
 permission:

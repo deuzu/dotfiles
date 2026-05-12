@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 let
   cfg = config.modules.vcs.jujutsu;
 in
@@ -31,6 +31,9 @@ in
         };
         git = {
           sign-on-push = true;
+        };
+        ui = {
+          pager = "${pkgs.delta}/bin/delta";
         };
       };
     };

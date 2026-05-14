@@ -3,6 +3,14 @@ let
   cfg = config.modules.agents.gooseCli;
   env = config.modules.env;
   gitEnable = config.modules.vcs.git.enable;
+
+  deployFolder = srcDir: destDir: vars:
+    builtins.listToAttrs (map
+      (file: {
+        name = "${destDir}/${file}";
+        value.text = builtins.readFile (pkgs.replaceVars (srcDir + "/${file}") vars);
+      })
+      (builtins.attrNames (lib.filterAttrs (name: type: type == "regular") (builtins.readDir srcDir))));
 in
 {
   options.modules.agents.gooseCli = with lib; {
@@ -53,23 +61,14 @@ in
       '')
     ];
 
-    home.file = (
-      {
-        ".config/goose/config.yaml" = {
-          text = builtins.readFile (pkgs.replaceVars ./config.yaml { });
-        };
-      } // builtins.listToAttrs (map
-        (file: {
-          name = ".config/goose/recipes/${file}";
-          value.text = builtins.readFile (pkgs.replaceVars ./recipes/${file} {
-            mainModelProvider = env.GOOSE_PROVIDER;
-            mainModel = env.GOOSE_MODEL;
-            largeModelProvider = env.GOOSE_PLANNER_PROVIDER;
-            largeModel = env.GOOSE_PLANNER_MODEL;
-          });
-        })
-        (builtins.attrNames (lib.filterAttrs (name: type: type == "regular") (builtins.readDir ./recipes))))
-    );
+    home.file = {
+      ".config/goose/config.yaml".text = builtins.readFile (pkgs.replaceVars ./config.yaml { });
+    } // (deployFolder ./recipes ".config/goose/recipes" {
+      mainModelProvider = env.GOOSE_PROVIDER;
+      mainModel = env.GOOSE_MODEL;
+      largeModelProvider = env.GOOSE_PLANNER_PROVIDER;
+      largeModel = env.GOOSE_PLANNER_MODEL;
+    });
 
     programs.git = lib.mkIf gitEnable {
       ignores = [

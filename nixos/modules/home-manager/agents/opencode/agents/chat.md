@@ -1,6 +1,6 @@
 ---
-name: Discuss
-description: Discuss, no acts
+name: Chat
+description: Only chat, no acts
 mode: primary
 color: info
 model: "@largeModel@"

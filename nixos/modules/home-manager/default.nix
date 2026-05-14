@@ -72,6 +72,7 @@
     ./jq.nix
     ./libreoffice.nix
     ./make.nix
+    ./obsidian.nix
     ./protonvpn.nix
     ./ripgrep.nix
     ./serpl.nix

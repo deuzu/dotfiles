@@ -9,9 +9,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.vscode = {
+    programs.vscodium = {
       enable = true;
-      package = pkgs.vscodium;
       profiles.default.extensions = with pkgs.vscode-extensions; [
         bbenoist.nix
         hashicorp.terraform

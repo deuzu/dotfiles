@@ -3,23 +3,36 @@ let
   cfg = config.modules.agents.opencode;
   env = config.modules.env.vars;
   gitEnable = config.modules.vcs.git.enable;
+  folder = srcDir: destDir: vars:
+    builtins.listToAttrs (map
+      (file: {
+        name = "${destDir}/${file}";
+        value.text = builtins.readFile (pkgs.replaceVars (srcDir + "/${file}") vars);
+      })
+      (builtins.attrNames (lib.filterAttrs (name: type: type == "regular") (builtins.readDir srcDir))));
 in
 {
   options.modules.agents.opencode = with lib; {
     enable = mkEnableOption "opencode";
+    preScripts = mkOption {
+      type = types.attrsOf types.lines;
+      default = { };
+      description = "A mapping of directory paths to shell scripts to execute before starting opencode. Useful for conditional environment setups based on $PWD.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     programs.opencode = {
       enable = true;
+      tui = {
+        keybinds = { };
+        scroll_acceleration = {
+          enabled = false;
+        };
+      };
       settings = {
         autoupdate = false;
         share = "disabled";
-        tui = {
-          scroll_acceleration = {
-            enabled = false;
-          };
-        };
         model = env.OPENCODE_MODEL;
         # small_model = "";
         provider = {
@@ -37,6 +50,14 @@ in
             options = {
               apiKey = "{env:MISTRAL_API_KEY}";
             };
+            models = {
+              "mistral-medium-3-5" = {
+                name = "Mistral Medium (3.5) High Reasoning";
+                options = {
+                  "reasoningEffort" = "high";
+                };
+              };
+            };
           };
         };
         agent = {
@@ -44,28 +65,32 @@ in
             model = env.OPENCODE_PLAN_MODEL;
           };
         };
-        keybinds = { };
         permission = {
           bash = {
-            "*" = "ask";
+            "*" = "allow";
             "env*" = "deny";
             "ssh*" = "deny";
             "sops*" = "deny";
             "git-crypt*" = "deny";
             "gpg*" = "deny";
-            "terraform fmt*" = "allow";
-            "terraform validate*" = "allow";
-            "kubectl*" = "allow";
-            "gcloud*" = "allow";
-            "jq*" = "allow";
-            "echo*" = "allow";
-            "cat*" = "allow";
-            "head*" = "allow";
-            "less*" = "allow";
-            "tail*" = "allow";
-            "ls*" = "allow";
-            "grep*" = "allow";
-            "rg*" = "allow";
+            "terraform*" = "deny";
+            # "terraform fmt*" = "allow";
+            # "terraform validate*" = "allow";
+            "git commit*" = "deny";
+            "git push*" = "deny";
+            "curl" = "ask";
+            # "kubectl*" = "allow";
+            # "gcloud*" = "allow";
+            # "jq*" = "allow";
+            # "echo*" = "allow";
+            # "cat*" = "allow";
+            # "head*" = "allow";
+            # "less*" = "allow";
+            # "tail*" = "allow";
+            # "ls*" = "allow";
+            # "find*" = "allow";
+            # "grep*" = "allow";
+            # "rg*" = "allow";
           };
         };
         # plugins = [
@@ -77,40 +102,42 @@ in
       };
     };
 
-    home.file = builtins.listToAttrs (map
-      (file: {
-        name = ".config/opencode/agents/${file}";
-        value.text = builtins.readFile (pkgs.replaceVars ./agents/${file} {
-          defaultModel = env.OPENCODE_MODEL;
-          largeModel = env.OPENCODE_PLAN_MODEL;
-        });
-      })
-      (builtins.attrNames (lib.filterAttrs (name: type: type == "regular") (builtins.readDir ./agents))))
-    ;
+    # https://github.com/matanshavit/qrspi
+    home.file = (folder ./agents ".config/opencode/agents" {
+      defaultModel = env.OPENCODE_MODEL;
+      largeModel = env.OPENCODE_PLAN_MODEL;
+    });
 
-    home.packages = [
-      (pkgs.writeShellScriptBin "ai" ''
-        # if [[ "$PWD" != "$HOME/Projects/"* ]]; then
-        #   echo "🚨 Security Error: Refusing to run opencode from $PWD."
-        #   echo "For security reasons, this agent can only be executed from within $HOME/Projects/..."
-        #   exit 1
-        # fi
+    home.packages =
+      let
+        generatedPreScripts = lib.concatStringsSep "\n" (lib.mapAttrsToList
+          (path: script: ''
+            if [[ "$PWD" == "${path}"* ]]; then
+              ${script}
+            fi
+          '')
+          cfg.preScripts);
+      in
+      [
+        (pkgs.writeShellScriptBin "ai" ''
+          # if [[ "$PWD" != "$HOME/Projects/"* ]]; then
+          #   echo "🚨 Security Error: Refusing to run opencode from $PWD."
+          #   echo "For security reasons, this agent can only be executed from within $HOME/Projects/..."
+          #   exit 1
+          # fi
 
-        mkdir -p "$HOME/.config/gcloud-aiagent"
-        export CLOUDSDK_CONFIG="$HOME/.config/gcloud-aiagent"
+          mkdir -p "$HOME/.config/gcloud-aiagent"
 
-        if [ -n "$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE" ] && [ -f "$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE" ]; then
-          export GOOGLE_APPLICATION_CREDENTIALS="$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE"
-          export CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE="$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE"
-          gcloud auth activate-service-account --key-file="$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE"
-        fi
+          ${generatedPreScripts}
 
-        exec ${pkgs.bubblewrap}/bin/bwrap \
-          --dev-bind / / \
-          --bind /dev/null ${pkgs.sops}/bin/sops \
-          --bind /dev/null ${pkgs.git-crypt}/bin/git-crypt \
-          --bind /dev/null ${pkgs.gnupg}/bin/gpg \
-          -- ${pkgs.landrun}/bin/landrun \
+          export CLOUDSDK_CONFIG="$HOME/.config/gcloud-aiagent"
+          if [ -n "$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE" ] && [ -f "$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE" ]; then
+            export GOOGLE_APPLICATION_CREDENTIALS="$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE"
+            export CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE="$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE"
+            gcloud auth activate-service-account --key-file="$CLOUDSDK_SERVICE_ACCOUNT_KEY_FILE"
+          fi
+
+          exec ${pkgs.landrun}/bin/landrun \
             --ro /dev,/etc,/sys,/proc \
             --rox /nix/store,/usr \
             --rw /dev/null,/dev/stdin,/dev/stdout,/dev/stderr,/dev/tty \
@@ -124,6 +151,11 @@ in
             --ro "$HOME/.config/gh" \
             --ro "$HOME/.kube/" \
             --rw "$HOME/go" \
+            --rw "$HOME/.cache/go" \
+            --rw "$HOME/.cache/go-build" \
+            --rw "$HOME/.cache/gopls" \
+            --rw "$HOME/.cache/golangci-lint" \
+            --rw "$HOME/.cache/goimports" \
             --rw "$HOME/.npm" \
             --rox "$HOME/.tenv" \
             --ro "$HOME/.terraform.d" \
@@ -142,6 +174,7 @@ in
             --env EDITOR \
             --env OPENAI_API_KEY \
             --env GOOGLEAI_API_KEY \
+            --env MISTRAL_API_KEY \
             --env OPENCODE_MODEL \
             --env OPENCODE_PLAN_MODEL \
             --env OPENCODE_ENABLE_EXA \
@@ -150,8 +183,8 @@ in
             --env CLOUDSDK_ACTIVE_CONFIG_NAME \
             --env CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE \
             opencode "$@"
-      '')
-    ];
+        '')
+      ];
 
     programs.git = lib.mkIf gitEnable {
       ignores = [

@@ -1,12 +1,15 @@
 ---
 name: rpi-2-research
 description: Objective codebase research driven by questions — facts only, no opinions
-mode: subagent
+mode: primary
 hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
 permission:
   "*": deny
+  glob: allow
+  grep: allow
+  lsp: allow
   read: allow
   edit: allow
   task:
@@ -14,9 +17,6 @@ permission:
    codebase-analyzer: allow
    codebase-locator: allow
    codebase-pattern-finder: allow
-  bash:
-   "*": deny
-   "mkdir -p .agents/thoughts/rpi/*": allow
 ---
 
 # Research — Answer the Questions

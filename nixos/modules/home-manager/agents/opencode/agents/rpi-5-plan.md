@@ -1,12 +1,15 @@
 ---
 name: rpi-5-plan
 description: Tactical implementation plan — the agent's working document
-mode: subagent
+mode: primary
 hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
 permission:
   "*": deny
+  glob: allow
+  grep: allow
+  lsp: allow
   read: allow
   edit: allow
   bash:

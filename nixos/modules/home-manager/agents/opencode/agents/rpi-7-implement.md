@@ -1,7 +1,7 @@
 ---
 name: rpi-7-implement
 description: Execute the plan phase by phase with verification checkpoints
-mode: subagent
+mode: primary
 hidden: true
 # model: "@largeModel@"
 model: "@defaultModel@"
@@ -10,7 +10,6 @@ model: "@defaultModel@"
 # Implement — Execute the Plan
 
 Implement the plan one phase at a time, verifying each phase before proceeding. Update the plan's checkboxes as you go — they are your progress tracker and context-recovery mechanism.
-   "*": deny
 
 ## Input
 

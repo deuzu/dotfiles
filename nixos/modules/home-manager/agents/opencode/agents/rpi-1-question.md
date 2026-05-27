@@ -1,17 +1,20 @@
 ---
 name: rpi-1-question
 description: Decompose a task into neutral research questions
-mode: subagent
+mode: primary
 hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
 permission:
   "*": deny
+  glob: allow
+  grep: allow
+  lsp: allow
   read: allow
   edit: allow
-  bash:
+  task:
    "*": deny
-   "mkdir -p .agents/thoughts/rpi/*": allow
+   codebase-locator: allow
 ---
 
 # Question — Decompose the Task
@@ -20,7 +23,9 @@ Transform a task description into 3-7 specific, neutral research questions. Thes
 
 ## Input
 
-The caller (Orchestrator or User) provides a task description, ticket file path, or issue reference directly in the task prompt.
+The Orchestrator provides:
+1. A task description, ticket file path, or issue reference.
+2. The artifact directory path (e.g., `.agents/thoughts/rpi/YYYY-MM-DD-.../`).
 
 ## Process
 
@@ -39,15 +44,9 @@ The caller (Orchestrator or User) provides a task description, ticket file path,
    Good: "What patterns exist for database migrations, and how are they tested?"
    Bad: "How should we add a new migration for the users table?"
 
-4. **Determine the artifact directory**:
-   - With ticket number: `.agents/thoughts/rpi/PROJ-1234-brief-description/` (use the project's ticket prefix)
-   - Without ticket: `.agents/thoughts/rpi/YYYY-MM-DD-brief-description/`
+4. **Write `task.md`** — a clean 2-3 sentence description of what's being built and why. This file persists the task context for later phases so the user doesn't have to re-explain it.
 
-5. **Create the artifact directory** if it doesn't exist (e.g., `mkdir -p .agents/thoughts/rpi/<id>/`).
-
-6. **Write `task.md`** — a clean 2-3 sentence description of what's being built and why. This file persists the task context for later phases so the user doesn't have to re-explain it.
-
-7. **Write `questions.md`** to the artifact directory:
+5. **Write `questions.md`** to the artifact directory:
 
    ```markdown
    # Research Questions
@@ -62,11 +61,11 @@ The caller (Orchestrator or User) provides a task description, ticket file path,
    ...
    ```
 
-8. **Present questions to the user** and wait for approval or edits before finalizing.
+6. **Present questions to the user** and wait for approval or edits before finalizing.
 
 ## Output
 
-Tell the Orchestrator the generated artifact directory path (e.g., `.agents/thoughts/rpi/<id>/`) and that they should proceed to the next phase.
+Inform the Orchestrator that the questions have been generated in the artifact directory and they should proceed to the next phase.
 
 ## Rules
 

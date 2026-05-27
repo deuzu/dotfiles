@@ -1,12 +1,14 @@
 ---
 name: rpi-8-pr
 description: Create a pull request with context from the design discussion
-mode: subagent
+mode: primary
 hidden: true
 # model: "@largeModel@"
 model: "@defaultModel@"
 permission:
   "*": deny
+  glob: allow
+  grep: allow
   read: allow
   bash:
    "*": deny

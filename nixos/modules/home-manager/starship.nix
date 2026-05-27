@@ -1,6 +1,7 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.modules.starship;
+  jjCfg = config.modules.vcs.jujutsu;
 in
 {
   options.modules.starship = with lib; {
@@ -25,7 +26,32 @@ in
           format = "[$indicator]($style)";
         };
 
-        git_branch.format = "[$symbol$branch]($style) ";
+        git_branch = {
+          format = "[$symbol$branch]($style) ";
+        };
+
+        # custom = {
+        #   jj = lib.mkIf jjCfg.enable {
+        #     symbol = "🥋 ";
+        #     command = ''
+        #       jj log --revisions @ --no-graph --ignore-working-copy --color always --limit 1 --template '
+        #         separate(" ",
+        #           concat(
+        #             if(conflict, "💥"),
+        #             if(divergent, "🚧"),
+        #             if(hidden, "👻"),
+        #             if(immutable, "🔒"),
+        #           ),
+        #           change_id.shortest(4),
+        #           bookmarks
+        #         )
+        #       '
+        #     '';
+        #     when = "jj --ignore-working-copy root";
+        #     shell = [ "sh" "--norc" "--noprofile" ];
+        #   };
+        # };
+
         nix_shell.format = "[$symbol]($style)";
         aws.format = "[$symbol$profile]($style)";
 

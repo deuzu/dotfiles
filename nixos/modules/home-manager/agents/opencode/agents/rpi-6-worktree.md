@@ -1,12 +1,14 @@
 ---
 name: rpi-6-worktree
 description: Create an isolated git worktree for implementation
-mode: subagent
+mode: primary
 hidden: true
 # model: "@largeModel@"
 model: "@defaultModel@"
 permission:
   "*": deny
+  glob: allow
+  grep: allow
   read: allow
   bash:
    "*": deny

@@ -1,12 +1,15 @@
 ---
 name: rpi-4-structure
 description: Structure outline — vertical slices with test checkpoints
-mode: subagent
+mode: primary
 hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
 permission:
   "*": deny
+  glob: allow
+  grep: allow
+  lsp: allow
   read: allow
   edit: allow
   bash:

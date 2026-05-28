@@ -15,9 +15,6 @@ permission:
    "*": deny
    codebase-analyzer: allow
    codebase-pattern-finder: allow
-  bash:
-   "*": deny
-   "mkdir -p .agents/thoughts/rpi/*": allow
 ---
 
 # Design — Where Are We Going?
@@ -36,7 +33,7 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
 
 3. **Present open questions and wait for answers.** Before writing anything, you MUST:
    - List 3-5 design questions that require human judgment
-   - Present options with trade-offs for each, grounded in what the research found
+   - Use the question tools to present options with trade-offs for each, grounded in what the research found
    - Wait for the user to respond
 
    Example:

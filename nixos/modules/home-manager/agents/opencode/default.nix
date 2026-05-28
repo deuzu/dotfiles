@@ -142,6 +142,7 @@ in
             --ro /dev,/etc,/sys,/proc \
             --rox /nix/store,/usr \
             --rw /dev/null,/dev/stdin,/dev/stdout,/dev/stderr,/dev/tty \
+            --rw "$HOME/.cache/nix" \
             --rw "$HOME/.config/opencode" \
             --rw "$HOME/.local/share/opencode" \
             --rw "$HOME/.local/state/opencode" \

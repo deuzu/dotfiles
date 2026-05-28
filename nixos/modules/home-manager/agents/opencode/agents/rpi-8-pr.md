@@ -12,12 +12,13 @@ permission:
   read: allow
   bash:
    "*": deny
-   "git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@": allow
-   "git diff*": allow
-   "git log*": allow
-   "gh pr create*": allow
+   "git symbolic-ref *": allow
+   "git diff *": allow
+   "git log *": allow
+   "git branch *": allow
+   "git add *": allow
+   "gh pr create *": allow
    "gh pr edit*": allow
-   "git push*": allow
 ---
 
 # PR — Create the Pull Request
@@ -36,10 +37,10 @@ Read `design.md` for context from the artifact directory provided by the caller.
    - `git log <base>...HEAD --oneline` — commit history
    - Read `design.md` for the "why" behind the changes
 
-2. **Create the PR** using `gh pr create`:
+2. **Create the PR** using `git commit` and `git push`:
 
    ```
-   gh pr create --title "<concise title under 70 chars>" --body "$(cat <<'EOF'
+   git commit --no-gpg-sign --message "<conventional commit under 70 chars>" --message "$(cat <<'EOF'
    ## Summary
    [2-3 bullets: what this PR does and why, drawn from design.md]
 
@@ -58,18 +59,18 @@ Read `design.md` for context from the artifact directory provided by the caller.
    - Plan: plan.md
    EOF
    )"
+
+   git push -u origin/<branch>
    ```
 
 3. **Report the PR URL** to the Orchestrator.
 
 ## Output
 
-PR created on GitHub. Tell the Orchestrator the PR URL.
+PR created. Tell the Orchestrator the PR URL.
 
 ## Rules
 
 - Title under 70 chars.
 - The summary should explain WHY, not just WHAT.
 - Reference the design and plan docs.
-- If the branch isn't pushed yet, push it first with `git push -u origin <branch>`.
-- If a PR already exists for this branch, update it with `gh pr edit` instead of creating a new one.

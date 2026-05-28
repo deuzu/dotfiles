@@ -12,9 +12,7 @@ permission:
   lsp: allow
   read: allow
   edit: allow
-  bash:
-   "*": deny
-   "mkdir -p .agents/thoughts/rpi/*": allow
+  bash: allow
 ---
 
 # Plan — Tactical Implementation Details
@@ -90,7 +88,7 @@ Tell the Orchestrator that the implementation plan is complete and `plan.md` has
 - Include code snippets for anything non-obvious. Skip boilerplate.
 - Checkboxes (`- [ ]`) are mandatory for all verification steps — they track progress during implementation.
 - No open questions in the final plan. Resolve or ask before writing.
-- Use the project's existing test/lint/build commands for verification. Check CLAUDE.md, Makefile, or package.json for the right commands.
+- Use the project's existing test/lint/build commands for verification. Check AGENTS.md, Makefile, or package.json for the right commands.
 - Aim for a plan that's proportional to the work — roughly 1 line of plan per 1-2 lines of code expected.
 - Only include changes described in `design.md` and `structure.md`. Do not add refactoring, cleanup, or improvements to adjacent code.
 

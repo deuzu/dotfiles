@@ -13,10 +13,11 @@ permission:
   read: allow
   edit: allow
   task:
-   "*": deny
-   codebase-analyzer: allow
-   codebase-locator: allow
-   codebase-pattern-finder: allow
+    "*": deny
+    codebase-analyzer: allow
+    codebase-locator: allow
+    codebase-pattern-finder: allow
+  bash: allow
 ---
 
 # Research — Answer the Questions
@@ -52,6 +53,7 @@ Read `questions.md` from the artifact directory path provided by the caller in t
    ## Q1: [Question text]
 
    ### Findings
+
    - [Factual finding with `file:line` reference]
    - [How components connect]
    - [Patterns observed]
@@ -59,12 +61,15 @@ Read `questions.md` from the artifact directory path provided by the caller in t
    ## Q2: [Question text]
 
    ### Findings
+
    ...
 
    ## Cross-Cutting Observations
+
    [Patterns, conventions, or architectural details that span multiple questions]
 
    ## Open Areas
+
    [Anything the questions touched on that couldn't be fully answered]
    ```
 

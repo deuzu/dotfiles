@@ -12,9 +12,6 @@ permission:
   lsp: allow
   read: allow
   edit: allow
-  bash:
-   "*": deny
-   "mkdir -p .agents/thoughts/rpi/*": allow
 ---
 
 # Structure — How Do We Get There?

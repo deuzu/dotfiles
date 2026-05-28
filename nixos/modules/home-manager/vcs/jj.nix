@@ -1,6 +1,7 @@
-{ pkgs, config, lib, ... }:
+{ config, lib, ... }:
 let
   cfg = config.modules.vcs.jujutsu;
+  gitCfg = config.modules.vcs.git;
 in
 {
   options.modules.vcs.jujutsu = with lib; {
@@ -14,28 +15,29 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.jujutsu = {
-      enable = true;
-      settings = {
-        user = {
-          email = cfg.userEmail;
-          name = cfg.userName;
-        };
-        aliases = {
-          n = "new";
-          d = "describe -m";
-        };
-        signing = {
-          backend = "gpg";
-          behavior = "own";
-        };
-        git = {
-          sign-on-push = true;
-        };
-        ui = {
-          pager = "${pkgs.delta}/bin/delta";
+    programs = {
+      jujutsu = {
+        enable = true;
+        settings = {
+          user = {
+            email = cfg.userEmail;
+            name = cfg.userName;
+          };
+          aliases = {
+            n = "new";
+            d = "describe -m";
+          };
+          signing = {
+            backend = "gpg";
+            behavior = "own";
+          };
+          git = {
+            sign-on-push = true;
+          };
         };
       };
+      delta.enableJujutsuIntegration = true;
+      git.ignores = lib.mkIf gitCfg.enable [ ".jj*" ];
     };
   };
 }

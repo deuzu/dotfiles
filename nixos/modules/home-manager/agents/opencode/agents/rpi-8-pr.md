@@ -17,8 +17,9 @@ permission:
    "git log *": allow
    "git branch *": allow
    "git add *": allow
-   "gh pr create *": allow
-   "gh pr edit*": allow
+   "git commit *": allow
+   "git push": allow
+   "git push *": allow
 ---
 
 # PR — Create the Pull Request

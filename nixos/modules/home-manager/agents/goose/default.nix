@@ -1,16 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, myLib, ... }:
 let
   cfg = config.modules.agents.gooseCli;
   env = config.modules.env;
   gitEnable = config.modules.vcs.git.enable;
-
-  deployFolder = srcDir: destDir: vars:
-    builtins.listToAttrs (map
-      (file: {
-        name = "${destDir}/${file}";
-        value.text = builtins.readFile (pkgs.replaceVars (srcDir + "/${file}") vars);
-      })
-      (builtins.attrNames (lib.filterAttrs (name: type: type == "regular") (builtins.readDir srcDir))));
 in
 {
   options.modules.agents.gooseCli = with lib; {
@@ -21,49 +13,39 @@ in
     home.packages = with pkgs; [
       goose-cli
 
-      (pkgs.writeShellScriptBin "aig" ''
-        mkdir -p "$HOME/.config/goose"
-
-        exec ${pkgs.landrun}/bin/landrun \
-          --best-effort \
-          --ro /dev,/etc,/sys,/proc \
-          --rox /nix/store,/usr \
-          --rw /dev/null,/dev/stdin,/dev/stdout,/dev/stderr,/dev/tty \
-          --rw "$HOME/.config/goose" \
-          --rw "$HOME/.local/share/goose" \
-          --rw "$HOME/.local/state/goose" \
-          --rw "$HOME/.cache/goose" \
-          --rw "$HOME/go" \
-          --rwx /tmp \
-          --rwx "$PWD" \
-          --unrestricted-network \
-          --env HOME \
-          --env PATH \
-          --env XDG_CONFIG_HOME \
-          --env XDG_CACHE_HOME \
-          --env XDG_STATE_HOME \
-          --env USER \
-          --env TERM \
-          --env LANG \
-          --env LC_ALL \
-          --env DBUS_SESSION_BUS_ADDRESS \
-          --env GOOSE_PROVIDER \
-          --env GOOSE_MODEL \
-          --env GOOSE_PLANNER_PROVIDER \
-          --env GOOSE_PLANNER_MODEL \
-          --env GOOSE_EDITOR_API_KEY \
-          --env GOOSE_EDITOR_HOST \
-          --env GOOSE_EDITOR_MODEL \
-          --env OPENAI_API_KEY \
-          --env GOOGLEAI_API_KEY \
-          --env MISTRAL_API_KEY \
-          ${pkgs.goose-cli}/bin/goose "$@"
-      '')
+      (myLib.mkBwrap pkgs {
+        name = "aig";
+        executable = "${pkgs.goose-cli}/bin/goose";
+        bestEffort = true;
+        preScripts = ''
+          mkdir -p "$HOME/.config/goose"
+        '';
+        extraRw = [
+          "$HOME/.config/goose"
+          "$HOME/.local/share/goose"
+          "$HOME/.local/state/goose"
+          "$HOME/.cache/goose"
+        ];
+        extraRwx = [
+          "/tmp"
+          "$PWD"
+        ];
+        extraEnv = [
+          "DBUS_SESSION_BUS_ADDRESS"
+          "GOOSE_PROVIDER"
+          "GOOSE_MODEL"
+          "GOOSE_PLANNER_PROVIDER"
+          "GOOSE_PLANNER_MODEL"
+          "GOOSE_EDITOR_API_KEY"
+          "GOOSE_EDITOR_HOST"
+          "GOOSE_EDITOR_MODEL"
+        ];
+      })
     ];
 
     home.file = {
       ".config/goose/config.yaml".text = builtins.readFile (pkgs.replaceVars ./config.yaml { });
-    } // (deployFolder ./recipes ".config/goose/recipes" {
+    } // (myLib.folder pkgs ./recipes ".config/goose/recipes" {
       mainModelProvider = env.GOOSE_PROVIDER;
       mainModel = env.GOOSE_MODEL;
       largeModelProvider = env.GOOSE_PLANNER_PROVIDER;

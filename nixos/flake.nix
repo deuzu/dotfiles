@@ -57,9 +57,10 @@
       nixosConfigurations =
         let
           system = "x86_64-linux";
+          myLib = import ./lib { inherit (nixpkgs) lib; };
           mkHost = host: user: extraModules: nixpkgs.lib.nixosSystem {
             inherit system;
-            specialArgs = { inherit inputs system; };
+            specialArgs = { inherit inputs system myLib; };
             modules = [
               ./hosts/${host}
               ./overlays.nix
@@ -70,7 +71,7 @@
                   useGlobalPkgs = true;
                   useUserPackages = true;
                   backupFileExtension = "backup";
-                  extraSpecialArgs = { inherit inputs system; };
+                  extraSpecialArgs = { inherit inputs system myLib; };
                   users.${user} = import ./hosts/${host}/users/${user}.nix;
                   sharedModules = [ sops-nix.homeManagerModules.sops agent-skills.homeManagerModules.default ];
 

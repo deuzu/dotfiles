@@ -28,9 +28,6 @@ in
         format = "openpgp";
       };
 
-      # ignores = [
-      # ];
-
       settings = {
         user = {
           name = cfg.userName;

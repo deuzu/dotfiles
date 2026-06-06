@@ -39,4 +39,4 @@ Not every task needs all 8 phases:
 4. Use the `task` tool to call the `rpi-1-question` subagent, passing BOTH the task description AND the artifact directory path in the prompt.
 5. For all subsequent phases (Research -> Design -> Structure -> Plan -> Worktree -> Implement -> PR), you will use the `task` tool to call the corresponding `rpi-*` subagent.
 6. **CRITICAL**: You must explicitly pass the artifact directory path to the subagent in its task prompt (e.g., "Run phase 2 for artifact directory `.agents/thoughts/rpi/...`").
-7. Wait for user approval before advancing from one phase to the next.
+7. Wait for the user to approve the plan phase.

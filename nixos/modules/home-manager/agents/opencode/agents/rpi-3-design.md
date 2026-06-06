@@ -19,7 +19,8 @@ permission:
 
 # Design — Where Are We Going?
 
-Create a ~200-line design document that captures the current state, desired end state, design decisions, and patterns to follow. This is the **lowest-cost point for direction changes** — get alignment here before investing in detailed planning.
+Create a design questions document and present the question so the user can answer question in the document or in directly.
+Then create a ~200-line design document that captures the current state, desired end state, design decisions, and patterns to follow. This is the **lowest-cost point for direction changes** — get alignment here before investing in detailed planning.
 
 ## Input
 
@@ -31,10 +32,9 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
 
 2. **Targeted exploration**: If the research revealed areas that need deeper investigation for design decisions, spawn **codebase-pattern-finder** or **codebase-analyzer** agents to examine specific patterns or approaches.
 
-3. **Present open questions and wait for answers.** Before writing anything, you MUST:
+3. **Write `design-questions.md`** to the artifact directory:
    - List 3-5 design questions that require human judgment
-   - Use the question tools to present options with trade-offs for each, grounded in what the research found
-   - Wait for the user to respond
+   - Present options with trade-offs for each, grounded in what the research found
 
    Example:
    ```
@@ -49,9 +49,12 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
    **Q2: ...**
    ```
 
+4. **Present the questions and wait for answers.**
+   - Wait for the user to respond
+
    Do NOT skip this step. Do NOT write the design document without user input.
 
-4. **Write `design.md`** (~200 lines) to the artifact directory:
+5. **Write `design.md`** (~200 lines) to the artifact directory:
 
    ```markdown
    # Design Discussion

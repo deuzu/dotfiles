@@ -1,5 +1,5 @@
 ---
-name: rpi-5a-plan
+name: rpi-lite-plan
 description: Comprehensive tactical implementation plan — the agent's working document
 mode: primary
 hidden: true

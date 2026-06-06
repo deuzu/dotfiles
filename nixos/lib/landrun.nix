@@ -32,6 +32,7 @@
         "TERM"
         "LANG"
         "LC_ALL"
+        "EDITOR"
       ];
 
       allRo = baseRo ++ extraRo;

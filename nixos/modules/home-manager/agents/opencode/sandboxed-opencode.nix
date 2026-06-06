@@ -28,9 +28,10 @@ myLib.mkBwrap pkgs {
   '';
   extraRo = [
     "$HOME/.agents"
-    "$HOME/.config/gh"
+    "$HOME/.config/helix"
     "$HOME/.kube/"
-    "$HOME/.terraform.d"
+  ];
+  extraRox = [
   ];
   extraRw = [
     "$HOME/.config/opencode"
@@ -45,9 +46,10 @@ myLib.mkBwrap pkgs {
     "$HOME/.cache/golangci-lint"
     "$HOME/.cache/goimports"
     "$HOME/.npm"
+    "$HOME/.terraform.d"
     "$PWD"
   ];
-  extraRox = [
+  extraRwx = [
     "$HOME/.tenv"
   ];
   extraTmp = [
@@ -55,7 +57,6 @@ myLib.mkBwrap pkgs {
     # "$HOME/.config"
   ];
   extraEnv = [
-    "EDITOR"
     "OPENCODE_MODEL"
     "OPENCODE_PLAN_MODEL"
     "OPENCODE_ENABLE_EXA"

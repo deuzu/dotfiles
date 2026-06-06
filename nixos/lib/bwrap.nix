@@ -54,6 +54,7 @@
         "TERM"
         "LANG"
         "LC_ALL"
+        "EDITOR"
       ];
       baseTmp = [ "/tmp" ];
 

@@ -11,10 +11,13 @@ permission:
   grep: allow
   read: allow
   bash:
-   "*": deny
-   "basename $(git rev-parse --show-toplevel)": allow
-   "git worktree add ~/wt/*": allow
-   "cp -r * ~/wt/*": allow
+    "*": deny
+    "basename $(git rev-parse --show-toplevel)": allow
+    "git worktree add ../*": allow
+    "mkdir -p ../*": allow
+    "cp -r * ../*": allow
+  external_directory:
+    "../**": allow
 ---
 
 # Worktree — Isolate the Implementation
@@ -30,18 +33,20 @@ The artifact directory path is provided by the caller in the prompt.
 1. **Determine identifiers** from the artifact directory name:
    - Branch name: derive from the directory name (e.g., `ENG-1234-description` or `2026-03-29-new-feature`)
    - Repo name: detect from `basename $(git rev-parse --show-toplevel)`
-   - Worktree path: `~/wt/<repo-name>/<branch-name>`
+   - Worktree path: `../<branch-name>`
 
 2. **Create the worktree:**
+
    ```
-   git worktree add ~/wt/<repo-name>/<branch-name> -b <branch-name>
+   git worktree add ../<branch-name> -b <branch-name>
    ```
 
 3. **Confirm with the user** before executing:
+
    ```
    Ready to create worktree:
 
-   Worktree: ~/wt/<repo-name>/<branch-name>
+   Worktree: ../<branch-name>
    Branch: <branch-name>
    Plan: [artifact-directory]/plan.md
 
@@ -52,12 +57,13 @@ The artifact directory path is provided by the caller in the prompt.
 
 5. **Copy rpi artifacts** to the worktree. Untracked files from the main tree do not appear in worktrees:
    ```
-   cp -r <artifact-directory> ~/wt/<repo-name>/<branch-name>/<artifact-directory>
+   mkdir -p ../<branch-name>/<artifacts-directory>
+   cp -r <artifact-directory> ../<branch-name>/<artifact-directory>
    ```
 
 ## Output
 
-Tell the Orchestrator that the worktree is created at `~/wt/<repo-name>/<branch-name>` and rpi artifacts have been copied.
+Tell the Orchestrator that the worktree is created at `../<branch-name>` and rpi artifacts have been copied.
 
 ## Rules
 

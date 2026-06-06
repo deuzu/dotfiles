@@ -31,11 +31,9 @@ Read `plan.md` from the artifact directory provided by the caller. That is your 
    - Fix any failures before proceeding
    - Check off automated items in `plan.md` using Edit: `- [ ]` becomes `- [x]`
 
-5. **Commit the phase** after automated verification passes. Each phase should be a separate commit. Use a descriptive message like `"Phase N: [phase name from plan]"`.
+5. **Pause for manual verification** (unless told to continue through multiple phases).
 
-6. **Pause for manual verification** (unless told to continue through multiple phases).
-
-7. **Repeat** for each phase until the plan is complete.
+6. **Repeat** for each phase until the plan is complete.
 
 ## Resuming After Context Reset
 

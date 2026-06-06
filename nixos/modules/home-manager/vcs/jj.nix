@@ -23,6 +23,7 @@ in
             email = cfg.userEmail;
             name = cfg.userName;
           };
+          ui.default-command = "status";
           aliases = {
             n = "new";
             d = "describe -m";

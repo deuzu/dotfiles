@@ -8,8 +8,8 @@ let
   # launcher = "pidof wofi || wofi --show drun";
   # lock = "${lib.getExe pkgs.hyprlock} --immediate";
   # suspend = "systemctl suspend";
-  # terminal = lib.getExe pkgs.ghostty;
-  terminal = "wezterm";
+  terminal = lib.getExe pkgs.ghostty;
+  # terminal = "wezterm";
   # fileManager = "${terminal} --initial-command=${lib.getExe pkgs.yazi}";
   # brightnessUp = "${lib.getExe pkgs.brightnessctl} set +10%";
   # brightnessDown = "${lib.getExe pkgs.brightnessctl} set 10%-";

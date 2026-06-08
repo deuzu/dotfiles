@@ -50,9 +50,11 @@
       url = "github:anthropics/skills";
       flake = false;
     };
+    neru.url = "github:y3owk1n/neru";
+    ponos.url = "git+ssh://git@codeberg.org/Deuzu/ponos-bot.git";
   };
 
-  outputs = { nixpkgs, flake-utils, home-manager, nixos-wsl, sops-nix, agent-skills, ... } @inputs:
+  outputs = { nixpkgs, flake-utils, home-manager, nixos-wsl, sops-nix, agent-skills, neru, ponos, ... } @inputs:
     {
       nixosConfigurations =
         let
@@ -73,7 +75,12 @@
                   backupFileExtension = "backup";
                   extraSpecialArgs = { inherit inputs system myLib; };
                   users.${user} = import ./hosts/${host}/users/${user}.nix;
-                  sharedModules = [ sops-nix.homeManagerModules.sops agent-skills.homeManagerModules.default ];
+                  sharedModules = [
+                    sops-nix.homeManagerModules.sops
+                    agent-skills.homeManagerModules.default
+                    neru.homeManagerModules.default
+                    ponos.homeManagerModules.default
+                  ];
 
                 };
               }

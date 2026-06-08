@@ -72,7 +72,9 @@
     ./jq.nix
     ./libreoffice.nix
     ./make.nix
+    ./neru.nix
     ./obsidian.nix
+    ./ponos.nix
     ./protonvpn.nix
     ./ripgrep.nix
     ./serpl.nix
@@ -86,6 +88,7 @@
     ./wget.nix
     ./which.nix
     ./whisper.nix
+    ./wl-kbptr.nix
     ./yazi.nix
     ./yt-dlp.nix
   ];

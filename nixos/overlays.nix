@@ -12,5 +12,6 @@
         config.allowUnfree = true;
       }).anytype;
     })
+    inputs.neru.overlays.default
   ];
 }

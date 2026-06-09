@@ -9,7 +9,7 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
-      nodejs_25
+      nodejs_26
     ];
   };
 }

@@ -13,5 +13,5 @@
     ./ftouya.secrets.nix
   ];
 
-  gtk.gtk4.theme = null;
+  # gtk.gtk4.theme = null;
 }

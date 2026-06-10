@@ -30,7 +30,7 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
 
 1. **Read all three artifacts fully.** `task.md` tells you what we're building. `research.md` tells you what exists. Understand both before proceeding.
 
-2. **Targeted exploration**: If the research revealed areas that need deeper investigation for design decisions, spawn **codebase-pattern-finder** or **codebase-analyzer** agents to examine specific patterns or approaches.
+2. **Targeted exploration**: If the research revealed areas that need deeper investigation for design decisions, spawn **codebase-pattern-finder** or **codebase-analyzer** non-interactive agents to examine specific patterns or approaches.
 
 3. **Write `design-questions.md`** to the artifact directory:
    - List 3-5 design questions that require human judgment

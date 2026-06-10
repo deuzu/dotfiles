@@ -8,7 +8,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    nixGL.vulkan.enable = true;
+    targets.genericLinux.nixGL.vulkan.enable = true;
     programs.zed-editor = {
       enable = true;
       extensions = [

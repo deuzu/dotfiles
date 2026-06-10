@@ -11,7 +11,9 @@ permission:
   grep: allow
   lsp: allow
   read: allow
-  edit: allow
+  edit:
+    "*": deny
+    ".agents/thoughts/**": allow
   bash: allow
   task:
     "*": deny

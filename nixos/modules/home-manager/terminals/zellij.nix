@@ -56,6 +56,24 @@ in
 
     home.file =
       let
+        ponosInstances = config.modules.ponos.instances or { };
+        enabledPonosInstances = lib.filterAttrs (n: v: v.enable or false) ponosInstances;
+
+        ponosTab = if enabledPonosInstances == { } then "" else ''
+          tab name="ponos-bots" {
+            pane size=1 borderless=true {
+              plugin location="zellij:compact-bar"
+            }
+            ${lib.concatStringsSep "\n      " (lib.mapAttrsToList (name: instance: ''
+              pane {
+                command "bash"
+                args "-c" "export RUST_LOG=info GH_PROMPT_DISABLED=1; while true; do ponos-${name}; sleep 3; done"
+                cwd "${instance.settings.main_repo}"
+              }
+            '') enabledPonosInstances)}
+          }
+        '';
+
         value = ''
           layout {
             default_tab_template {
@@ -76,6 +94,8 @@ in
             }
 
             ${lib.concatStringsSep "\n  " (map (c: "code name=\"${c.name}\" cwd=\"${c.cwd}\"") cfg.initialCodeTabs)}
+
+            ${ponosTab}
 
             tab_template name="ui" {
                pane size=1 borderless=true {

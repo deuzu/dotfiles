@@ -8,24 +8,11 @@ in
     instances = lib.mkOption {
       default = { };
       description = "Ponos instances configuration";
-      type = lib.types.attrsOf (lib.types.submodule {
-        options = {
-          enable = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-            description = "Enable this ponos instance";
-          };
-          settings = lib.mkOption {
-            type = lib.types.attrsOf lib.types.anything;
-            default = { };
-            description = "Settings for the ponos instance";
-          };
-        };
-      });
+      type = lib.types.attrsOf lib.types.anything;
     };
   };
 
   config = {
-    services.ponos.instances = cfg.instances;
+    programs.ponos.instances = cfg.instances;
   };
 }

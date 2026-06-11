@@ -12,6 +12,36 @@ in
       default = { };
       description = "Shell pre-scripts per folder";
     };
+    sandboxExtraRo = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Read only files or folders available inside the sandbox";
+    };
+    sandboxExtraRox = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Read only executable files or folders available inside the sandbox";
+    };
+    sandboxExtraRw = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Read write files or folders available inside the sandbox";
+    };
+    sandboxExtraRwx = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Read write executable files or folders available inside the sandbox";
+    };
+    sandboxExtraTmp = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Tmpfs temporary files or folders available inside the sandbox";
+    };
+    sandboxExtraEnv = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Env vars available inside the sandbox";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -35,7 +65,8 @@ in
           };
         };
         permission = import ./permission.nix;
-        # plugins = [
+        # plugin = [
+        #   "@simonwjackson/opencode-direnv"
         #   "@mohak34/opencode-notifier@latest"
         # ];
         server = {

@@ -56,11 +56,6 @@ in
           name = "DejaVu Serif";
         };
       };
-
-      # Removes warnings but prevents home-manager to restart
-      # targets.firefox.profileNames = [ "default" ];
-      # targets.librewolf.profileNames = [ "default" ];
-      targets.zen-browser.profileNames = lib.mkIf config.modules.browser.zen.enable [ "default" ];
     };
 
     # Needed for WSL

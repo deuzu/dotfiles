@@ -1,4 +1,4 @@
-#define COMBO_COUNT 5
+#define COMBO_COUNT 4
 
 #ifdef CAPS_WORD_ENABLE
 // #   define BOTH_SHIFTS_TURNS_ON_CAPS_WORD

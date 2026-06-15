@@ -39,6 +39,7 @@
         "/usr"
         "/etc"
         "/nix/store"
+        "/nix/var/nix/db"
         "/run/current-system/sw/bin"
         "/run/current-system/sw/etc"
         "$HOME/.config/git/config"

@@ -5,6 +5,34 @@ in
 {
   options.modules.browser.zen = with lib; {
     enable = mkEnableOption "Zen Internet Browser";
+    containers = mkOption {
+      type = types.attrs;
+      default = { };
+    };
+    settings = mkOption {
+      type = types.attrs;
+      default = { };
+    };
+    policies = mkOption {
+      type = types.attrs;
+      default = { };
+    };
+    spaces = mkOption {
+      type = types.attrs;
+      default = { };
+    };
+    search = mkOption {
+      type = types.attrs;
+      default = { };
+    };
+    pins = mkOption {
+      type = types.attrs;
+      default = { };
+    };
+    mods = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+    };
   };
 
   imports = [
@@ -16,93 +44,21 @@ in
     programs.zen-browser = {
       enable = true;
       nativeMessagingHosts = [ pkgs.firefoxpwa ];
-      policies = {
-        AutofillAddressEnabled = false;
-        AutofillCreditCardEnabled = false;
-        DisableAppUpdate = true;
-        DisableFeedbackCommands = true;
-        DisableFirefoxStudies = true;
-        DisablePocket = true;
-        DisableTelemetry = true;
-        DontCheckDefaultBrowser = true;
-        NoDefaultBookmarks = true;
-        OfferToSaveLogins = false;
+      policies = cfg.policies;
+      profiles.default = {
+        name = "Default";
+        isDefault = true;
+        containers = { };
+        spacesForce = true;
+        spaces = cfg.spaces;
+        search = cfg.search;
+        settings = cfg.settings;
+        pins = cfg.pins;
+        mods = cfg.mods;
+        # keyboardShortcuts = [];
       };
-      # search = {
-      #   force = true;
-      #   default = "todo";
-      #   engines =
-      #     let
-      #       nixSnowflakeIcon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-      #     in
-      #     {
-      #       "Nix Packages" = {
-      #         urls = [
-      #           {
-      #             template = "https://search.nixos.org/packages";
-      #             params = [
-      #               {
-      #                 name = "type";
-      #                 value = "packages";
-      #               }
-      #               {
-      #                 name = "channel";
-      #                 value = "unstable";
-      #               }
-      #               {
-      #                 name = "query";
-      #                 value = "{searchTerms}";
-      #               }
-      #             ];
-      #           }
-      #         ];
-      #         icon = nixSnowflakeIcon;
-      #         definedAliases = [ "np" ];
-      #       };
-      #       "Nix Options" = {
-      #         urls = [
-      #           {
-      #             template = "https://search.nixos.org/options";
-      #             params = [
-      #               {
-      #                 name = "channel";
-      #                 value = "unstable";
-      #               }
-      #               {
-      #                 name = "query";
-      #                 value = "{searchTerms}";
-      #               }
-      #             ];
-      #           }
-      #         ];
-      #         icon = nixSnowflakeIcon;
-      #         definedAliases = [ "nop" ];
-      #       };
-      #       "Home Manager Options" = {
-      #         urls = [
-      #           {
-      #             template = "https://home-manager-options.extranix.com/";
-      #             params = [
-      #               {
-      #                 name = "query";
-      #                 value = "{searchTerms}";
-      #               }
-      #               {
-      #                 name = "release";
-      #                 value = "master"; # unstable
-      #               }
-      #             ];
-      #           }
-      #         ];
-      #         icon = nixSnowflakeIcon;
-      #         definedAliases = [ "hmop" ];
-      #       };
-      #     };
-      # };
-      # profile.default = {
-      #   isDefault = true;
-      #   settings = {};
-      # };
     };
+
+    stylix.targets.zen-browser.profileNames = lib.mkIf config.modules.browser.zen.enable [ "default" ];
   };
 }

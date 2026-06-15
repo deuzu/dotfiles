@@ -38,14 +38,12 @@ enum custom_keycodes {
     UD_TILD,
 };
 
-const uint16_t PROGMEM escape[] = { KC_BSPC, KC_TAB, COMBO_END };
 const uint16_t PROGMEM gaming_on[] = { KC_F, KC_K, COMBO_END };
 const uint16_t PROGMEM gaming_off[] = { KC_T, KC_Y, COMBO_END };
 const uint16_t PROGMEM qwerty_on[] = { KC_H, KC_Z, COMBO_END };
 const uint16_t PROGMEM qwerty_off[] = { KC_Y, KC_U, COMBO_END };
 
 combo_t key_combos[COMBO_COUNT] = {
-  COMBO(escape, KC_ESC),
   COMBO(gaming_on, PDF(_GAM)),
   COMBO(gaming_off, PDF(_ERGA)),
   COMBO(qwerty_on, PDF(_QWER)),
@@ -67,21 +65,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * activate QWERTY  by pressing H + Z
      *
      *                ┌────────┬────────┬────────┬────────┬────────┬────────┐                ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     *                │ ^      │ Y      │ magic  │ O      │ F      │ K      │                │ V      │ P      │ L      │ C      │ Q      │ ´      │
+     *                │ ^      │ Y      │ Esc    │ O      │ F      │ K      │                │ V      │ P      │ L      │ C      │ Q      │ ´      │
      *                ├────────┼────────┼────────┼────────┼────────┼────────┤                ├────────┼────────┼────────┼────────┼────────┼────────┤
      *                │ - _    │ Gui(I) │ Alt(A) │ Sft(E) │ Ctl(U) │ ; :    │                │ G      │ Ctl(T) │ Sft(N) │ Alt(S) │ Gui(R) │ ' "    │
      *                ├────────┼────────┼────────┼────────┼────────┼────────┤                ├────────┼────────┼────────┼────────┼────────┼────────┤
      *                │ ¨      │ J      │ . ,    │ / ?    │ H      │ Z      │                │ B      │ D      │ M      │ W      │ X      │ `      │
      *                └────────┴────────┴────────┴────────┴────────┴────────┘                └────────┴────────┴────────┴────────┴────────┴────────┘
      *                         ┌──────────────┐                                                                            ┌──────────────┐
-     *                         │ Bsp Del *Esc ├──────────────┐                                              ┌──────────────┤ Tab *Esc     │
+     *                         │ Bsp Del      ├──────────────┐                                              ┌──────────────┤ Tab          │
      *                         └──────────────┤ MO(FUN)      ├──────────────┐                ┌──────────────┤ MO(SYM)      ├──────────────┘
      *                                        └──────────────┤ LT(NAV, Spc) │                │ LT(NUM, Ent) ├──────────────┘
      *                                                       └──────────────┘                └──────────────┘
      */
     [_ERGA] = LAYOUT_split_3x6_3(
         //-------------------------------------------------------------------                -------------------------------------------------------------------//
-        US_DCIR, KC_Y,         KC_MAGI,      KC_O,         KC_F,         KC_K,               KC_V,    KC_P,         KC_L,         KC_C,         KC_Q,         US_ACUT,
+        US_DCIR, KC_Y,         KC_ESC,       KC_O,         KC_F,         KC_K,               KC_V,    KC_P,         KC_L,         KC_C,         KC_Q,         US_ACUT,
         //-------------------------------------------------------------------                -------------------------------------------------------------------//
         KC_MINS, LGUI_T(KC_I), LALT_T(KC_A), LSFT_T(KC_E), LCTL_T(KC_U), KC_SCLN,            KC_G,    RCTL_T(KC_T), RSFT_T(KC_N), RALT_T(KC_S), RGUI_T(KC_R), UD_QUOT,
         //-------------------------------------------------------------------                -------------------------------------------------------------------//

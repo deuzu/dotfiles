@@ -19,6 +19,7 @@
         # "slack-gif-creator"
         # "adr-generator"
         "github-code-search"
+        "slopifycator"
       ];
       explicit = {
         # git clone https://github.com/coleam00/excalidraw-diagram-skill excalidraw-diagram" && rm excalidraw-diagram/.git -rf

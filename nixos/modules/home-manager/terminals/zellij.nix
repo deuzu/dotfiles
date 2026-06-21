@@ -59,20 +59,38 @@ in
         ponosInstances = config.modules.ponos.instances or { };
         enabledPonosInstances = lib.filterAttrs (n: v: v.enable or false) ponosInstances;
 
-        ponosTab = if enabledPonosInstances == { } then "" else ''
-          tab name="ponos-bots" {
-            pane size=1 borderless=true {
-              plugin location="zellij:compact-bar"
-            }
-            ${lib.concatStringsSep "\n      " (lib.mapAttrsToList (name: instance: ''
+        ponosTab = if enabledPonosInstances == { } then "" else
+          let
+            instancesList = lib.mapAttrsToList (name: instance: { inherit name instance; }) enabledPonosInstances;
+            numInstances = builtins.length instancesList;
+            halfLen = (numInstances + 1) / 2;
+            firstHalf = lib.take halfLen instancesList;
+            secondHalf = lib.drop halfLen instancesList;
+            mkPane = { name, instance }: ''
               pane {
                 command "bash"
                 args "-c" "export RUST_LOG=info GH_PROMPT_DISABLED=1; while true; do ponos-${name}; sleep 3; done"
                 cwd "${instance.settings.main_repo}"
               }
-            '') enabledPonosInstances)}
-          }
-        '';
+            '';
+          in
+          ''
+            tab name="ponos-bots" {
+              pane size=1 borderless=true {
+                plugin location="zellij:compact-bar"
+              }
+              ${if numInstances > 2 then ''
+              pane split_direction="vertical" {
+                pane split_direction="horizontal" {
+                  ${lib.concatStringsSep "\n                  " (map mkPane firstHalf)}
+                }
+                pane split_direction="horizontal" {
+                  ${lib.concatStringsSep "\n                  " (map mkPane secondHalf)}
+                }
+              }'' else ''
+              ${lib.concatStringsSep "\n              " (map mkPane instancesList)}''}
+            }
+          '';
 
         value = ''
           layout {

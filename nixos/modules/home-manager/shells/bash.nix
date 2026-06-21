@@ -21,7 +21,6 @@ in
     };
 
     programs = {
-      atuin.enableBashIntegration = true;
       carapace.enableBashIntegration = true;
       direnv.enableBashIntegration = true;
       starship.enableBashIntegration = true;

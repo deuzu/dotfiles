@@ -8,7 +8,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # Enable sound.
     # hardware.pulseaudio.enable = true;
     # OR
     services.pipewire = {

@@ -62,7 +62,7 @@ in
       ];
       settings = {
         editor = {
-          insecure = true;
+          # insecure = true;
           color-modes = true;
           cursorline = true;
           bufferline = "multiple";

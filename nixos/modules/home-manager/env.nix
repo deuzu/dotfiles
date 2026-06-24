@@ -1,8 +1,8 @@
 { config, lib, ... }:
 let
   cfg = config.modules.env;
-  bashEnabled = config.modules.shells.bash.enable;
-  # nushellEnabled = config.modules.shells.nushell.enable;
+  bashEnabled = config.modules.shell.bash.enable;
+  # nushellEnabled = config.modules.shell.nushell.enable;
 in
 {
   options.modules.env = with lib; {

@@ -10,7 +10,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.atuin = {
       enable = true;
-      enableBashIntegration = lib.mkIf config.modules.shells.bash.enable true;
+      enableBashIntegration = lib.mkIf config.modules.shell.bash.enable true;
     };
   };
 }

@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.modules.shells.nushell;
+  cfg = config.modules.shell.nushell;
 in
 {
-  options.modules.shells.nushell = with lib; {
+  options.modules.shell.nushell = with lib; {
     enable = mkEnableOption "NuShell";
 
     isDefault = mkEnableOption "Is the default shell";

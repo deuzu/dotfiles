@@ -2,13 +2,13 @@
   imports = [
     ./age.nix
     ./bluetooth.nix
+    ./dankgreeter.nix
     ./eternal-terminal.nix
     ./gnome.nix
+    ./gnome-keyring.nix
     ./i18n.nix
     ./mosh.nix
     ./networking.nix
-    ./nixos.nix
-    ./overlays.nix
     ./printing.nix
     ./sops.nix
     ./sound.nix

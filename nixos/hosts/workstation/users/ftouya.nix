@@ -10,7 +10,7 @@
   imports = [
     ../../../modules/home-manager
     ./ftouya.sops.nix
-    ./ftouya.secrets.nix
+    ./ftouya.config.nix
   ];
 
   # gtk.gtk4.theme = null;

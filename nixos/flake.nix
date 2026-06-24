@@ -50,8 +50,24 @@
       url = "github:anthropics/skills";
       flake = false;
     };
+
     neru.url = "github:y3owk1n/neru";
     ponos.url = "git+ssh://git@codeberg.org/Deuzu/ponos-bot.git";
+
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell/stable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    dms-plugin-registry = {
+      url = "github:AvengeMedia/dms-plugin-registry";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    dgop = {
+      url = "github:AvengeMedia/dgop";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { nixpkgs, flake-utils, home-manager, nixos-wsl, sops-nix, agent-skills, neru, ponos, ... } @inputs:

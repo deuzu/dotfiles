@@ -12,6 +12,7 @@
         config.allowUnfree = true;
       }).anytype;
     })
+    inputs.niri.overlays.niri
     inputs.neru.overlays.default
   ];
 }

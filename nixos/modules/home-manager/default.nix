@@ -58,7 +58,7 @@
     ./bat.nix
     ./bottom.nix
     ./btop.nix
-    # ./calibre.nix # build fails
+    ./calibre.nix
     ./carapace.nix
     ./curl.nix
     ./direnv.nix

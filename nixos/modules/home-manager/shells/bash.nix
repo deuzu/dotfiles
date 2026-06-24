@@ -1,9 +1,9 @@
 { config, lib, ... }:
 let
-  cfg = config.modules.shells.bash;
+  cfg = config.modules.shell.bash;
 in
 {
-  options.modules.shells.bash = with lib; {
+  options.modules.shell.bash = with lib; {
     enable = mkEnableOption "Bash Shell";
 
     isDefault = mkEnableOption "Is the default shell";

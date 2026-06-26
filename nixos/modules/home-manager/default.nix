@@ -9,11 +9,7 @@
     ./browsers/librewolf.nix
     ./browsers/zen-browser.nix
 
-    ./dev/go.nix
-    ./dev/nodejs.nix
     ./dev/postman.nix
-    ./dev/python.nix
-    ./dev/rust.nix
 
     ./devops/ansible.nix
     ./devops/awscli.nix
@@ -28,8 +24,8 @@
 
     ./display/stylix.nix
     ./display/gnome.nix
+    ./display/niri
     ./display/hyprland.nix
-    ./display/niri.nix
     ./display/hypridle.nix
     ./display/hyprlock.nix
     ./display/dunst.nix

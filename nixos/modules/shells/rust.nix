@@ -8,7 +8,6 @@ mkShell {
     rustPackages.clippy
     rustc
     rustfmt
-    # dependencies
     openssl
     pkg-config
   ];

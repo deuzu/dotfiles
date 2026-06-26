@@ -70,7 +70,7 @@
     };
   };
 
-  outputs = { nixpkgs, flake-utils, home-manager, nixos-wsl, sops-nix, agent-skills, neru, ponos, ... } @inputs:
+  outputs = { self, nixpkgs, flake-utils, home-manager, nixos-wsl, sops-nix, agent-skills, neru, ponos, ... } @inputs:
     {
       nixosConfigurations =
         let
@@ -108,8 +108,16 @@
           home-wsl = mkHost "home-wsl" "ftouya" [ nixos-wsl.nixosModules.default ];
         };
     } // flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in
       {
-        devShells = { };
+        devShells = {
+          rust = pkgs.callPackage ./modules/shells/rust.nix { };
+          go = pkgs.callPackage ./modules/shells/go.nix { };
+          nodejs = pkgs.callPackage ./modules/shells/nodejs.nix { };
+          python = pkgs.callPackage ./modules/shells/python.nix { };
+        };
       }
     );
 }

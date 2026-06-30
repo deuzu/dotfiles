@@ -10,6 +10,8 @@ in
   config = lib.mkIf cfg.enable {
     programs.carapace = {
       enable = true;
+      enableBashIntegration = config.modules.shell.bash.enable;
+      enableNushellIntegration = config.modules.shell.nushell.enable;
     };
   };
 }

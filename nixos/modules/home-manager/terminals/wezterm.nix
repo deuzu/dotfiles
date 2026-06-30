@@ -10,6 +10,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.wezterm = {
       enable = true;
+      enableBashIntegration = config.modules.shell.bash.enable;
       extraConfig = ''
         config.hide_tab_bar_if_only_one_tab = true
         config.window_close_confirmation = 'NeverPrompt'

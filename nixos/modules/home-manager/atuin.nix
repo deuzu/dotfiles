@@ -11,6 +11,7 @@ in
     programs.atuin = {
       enable = true;
       enableBashIntegration = lib.mkIf config.modules.shell.bash.enable true;
+      enableNushellIntegration = lib.mkIf config.modules.shell.nushell.enable true;
     };
   };
 }

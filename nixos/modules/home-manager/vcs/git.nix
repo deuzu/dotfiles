@@ -16,8 +16,10 @@ in
   config = lib.mkIf cfg.enable {
     programs.difftastic = {
       enable = true;
-      git.enable = true;
-      git.diffToolMode = true;
+      git = {
+        enable = true;
+        mode = "both";
+      };
     };
 
     programs.git = {

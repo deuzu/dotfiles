@@ -10,6 +10,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.ghostty = {
       enable = true;
+      enableBashIntegration = config.modules.shell.bash.enable;
     };
   };
 }

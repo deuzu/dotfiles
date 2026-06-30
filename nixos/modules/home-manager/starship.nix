@@ -11,6 +11,8 @@ in
   config = lib.mkIf cfg.enable {
     programs.starship = {
       enable = true;
+      enableBashIntegration = config.modules.shell.bash.enable;
+      enableNushellIntegration = lib.mkIf config.modules.shell.nushell.enable true;
       settings = {
         format = "$username$hostname$localip$shlvl$shell$nix_shell$all$kubernetes$line_break$jobs$character";
 

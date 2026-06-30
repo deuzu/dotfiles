@@ -11,6 +11,8 @@ in
   config = lib.mkIf cfg.enable {
     programs.direnv = {
       enable = true;
+      enableBashIntegration = config.modules.shell.bash.enable;
+      enableNushellIntegration = lib.mkIf config.modules.shell.nushell.enable true;
       nix-direnv.enable = true;
     };
 

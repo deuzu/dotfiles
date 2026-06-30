@@ -6,8 +6,6 @@ in
   options.modules.shell.nushell = with lib; {
     enable = mkEnableOption "NuShell";
 
-    isDefault = mkEnableOption "Is the default shell";
-
     aliases = mkOption {
       type = types.attrsOf types.str;
       default = { };
@@ -23,17 +21,10 @@ in
       };
     };
 
-    programs = {
-      atuin.enableNushellIntegration = true;
-      carapace.enableNushellIntegration = true;
-      direnv.enableNushellIntegration = true;
-      starship.enableNushellIntegration = true;
-      yazi.enableNushellIntegration = true;
-      # zellij.enableNushellIntegration = cfg.isDefault;
-      zellij.settings.default_shell = lib.mkIf cfg.isDefault(lib.getExe pkgs.nushell);
-      # ghostty.enableNushellIntegration = cfg.isDefault;
-      ghostty.settings.command = lib.mkIf cfg.isDefault(lib.getExe pkgs.nushell);
-      # wezterm.enableNushellIntegration = cfg.isDefault;
+    # To switch on bash if needed
+    programs.bash = {
+      enable = true;
+      shellAliases = cfg.aliases;
     };
   };
 }

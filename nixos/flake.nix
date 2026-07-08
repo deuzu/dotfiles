@@ -117,6 +117,7 @@
           go = pkgs.callPackage ./modules/shells/go.nix { };
           nodejs = pkgs.callPackage ./modules/shells/nodejs.nix { };
           python = pkgs.callPackage ./modules/shells/python.nix { };
+          plakar = pkgs.callPackage ./modules/shells/plakar.nix { };
         };
       }
     );

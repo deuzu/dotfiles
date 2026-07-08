@@ -38,7 +38,7 @@ in
         alias = {
           f = "fetch";
           st = "status -sb";
-          br = "branch";
+          br = "branch --sort=-committerdate";
           ci = "commit";
           cm = "commit -m";
           ame = "commit --amend";

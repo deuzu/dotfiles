@@ -10,12 +10,23 @@ in
       type = types.attrsOf types.str;
       default = { };
     };
+
+    bashScripts = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      description = "Bash scripts/functions to inject into bash";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     programs.bash = {
       enable = true;
       shellAliases = cfg.aliases;
+      initExtra = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: body: ''
+        ${name}() {
+          ${body}
+        }
+      '') cfg.bashScripts);
     };
   };
 }

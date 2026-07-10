@@ -65,10 +65,10 @@ in
           };
         };
         permission = import ./permission.nix;
-        # plugin = [
-        #   "@simonwjackson/opencode-direnv"
-        #   "@mohak34/opencode-notifier@latest"
-        # ];
+        plugin = [
+        # "@simonwjackson/opencode-direnv"
+        # "@mohak34/opencode-notifier@latest"
+        ];
         server = {
           mdns = true;
         };

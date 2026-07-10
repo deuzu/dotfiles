@@ -14,6 +14,7 @@ permission:
   bash:
     "*": deny
     "git *": allow
+    "git add*": deny
     "git remote*": deny
     "git commit*": deny
     "git push*": deny
@@ -22,7 +23,7 @@ permission:
 
 # PR — Create Commit Message File
 
-Create a commit message file with a description grounded in the design document and/or the actual diff.
+Your only task is to create a commit message file with a description grounded in the design document and/or the actual diff.
 
 ## Input
 
@@ -46,14 +47,17 @@ Read `design.md` for context from the artifact directory provided by the caller 
    <how-to-verify-manualy-checkboxes>
    ```
 
-3. **Report the PR URL** to the Orchestrator.
+3. **Report the commit message** to the Orchestrator.
 
 ## Output
 
-PR created. Tell the Orchestrator the PR URL.
+Commit message file created at `<artifact_directory>/commit-message.txt`: <commit_message_content>
 
 ## Rules
 
 - Title under 70 chars.
 - The summary should explain WHY, not just WHAT.
 - Reference the design and plan docs.
+- Do not add files
+- Do not commit
+- Do not push

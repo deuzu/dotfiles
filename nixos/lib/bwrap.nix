@@ -42,9 +42,12 @@
         "/nix/var/nix/db"
         "/run/current-system/sw/bin"
         "/run/current-system/sw/etc"
+        "/run/current-system/sw/lib/locale/locale-archive"
         "$HOME/.config/git/config"
       ];
-      baseRwx = [ ];
+      baseRwx = [
+        "/nix/var/nix/daemon-socket"
+      ];
       baseEnv = [
         "HOME"
         "PATH"
@@ -56,6 +59,7 @@
         "LANG"
         "LC_ALL"
         "LC_TIME"
+        "LOCALE_ARCHIVE"
         "EDITOR"
       ];
       baseTmp = [ "/tmp" ];
@@ -78,6 +82,7 @@
         "--chdir ${chdir}"
         "--proc /proc"
         "--dev /dev"
+        "--setenv NIX_REMOTE daemon"
       ]
       ++ lib.optional unrestrictedNetwork "--share-net"
       ++ mkArgsRox allRox

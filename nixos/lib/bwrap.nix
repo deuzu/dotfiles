@@ -43,7 +43,6 @@
         "/run/current-system/sw/bin"
         "/run/current-system/sw/etc"
         "/run/current-system/sw/lib/locale/locale-archive"
-        "$HOME/.config/git/config"
       ];
       baseRwx = [
         "/nix/var/nix/daemon-socket"

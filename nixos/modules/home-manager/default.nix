@@ -2,7 +2,9 @@
   imports = [
     ./agents/goose
     ./agents/opencode
+    ./agents/ai-proxy.nix
     ./agents/skills
+    ./agents/agentsmd.nix
 
     ./browsers/chromium.nix
     ./browsers/firefox.nix

@@ -73,6 +73,17 @@
       mkArgsRwx = paths: lib.concatMap (p: [ "--bind-try ${p} ${p}" ]) paths;
       mkArgsTmp = paths: lib.concatMap (p: [ "--tmpfs ${p}" ]) paths;
 
+      mkEnvArg = e:
+        if lib.hasInfix "=" e then
+          let
+            parts = lib.splitString "=" e;
+            name = lib.head parts;
+            value = lib.concatStringsSep "=" (lib.tail parts);
+          in
+          "--setenv ${name} \"${value}\""
+        else
+          "--setenv ${e} \"\$${e}\"";
+
       args = [
         "--unshare-pid"
         "--unshare-uts"
@@ -88,7 +99,7 @@
       ++ mkArgsRox allRox
       ++ mkArgsRwx allRwx
       ++ mkArgsTmp allTmp
-      ++ map (e: "--setenv ${e} \"\$${e}\"") allEnv;
+      ++ map mkEnvArg allEnv;
 
       argsStr = lib.concatStringsSep " \\\n    " args;
     in

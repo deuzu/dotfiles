@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   programs.agent-skills = {
     enable = true;
@@ -8,10 +8,6 @@
         path = ./skills;
         filter.maxDepth = 1;
       };
-      # anthropic = {
-      #   input = "anthropic-skills";
-      #   subdir = "skills";
-      # };
     };
 
     skills = {

@@ -87,6 +87,7 @@ in
       OPENAI_BASE_URL = "http://127.0.0.1:4000/openai/v1";
       MISTRAL_BASE_URL = "http://127.0.0.1:4000/mistral/v1";
       GOOGLEAI_BASE_URL = "http://127.0.0.1:4000/google/v1beta";
+      OPENROUTER_BASE_URL = "http://127.0.0.1:4000/openrouter/api/v1/";
     };
   };
 }

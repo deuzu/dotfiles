@@ -2,6 +2,7 @@
 name: add-nix-package
 description: Add a Nix package to the system or user environment. Use when asked to install, add, or configure a new package or application.
 ---
+# Adding a Nix Package
 
 Follow these steps to add a new package:
 
@@ -28,7 +29,3 @@ Follow these steps to add a new package:
 3. **Enable the Module**:
    - Ensure the module is imported and enabled in the host configuration (`nixos/hosts/<hostname>/secrets.nix`) or the relevant user configuration (e.g., `nixos/hosts/<hostname>/users/secrets.nix`).
    - Add `modules.<package_name>.enable = true;`.
-
-4. **Validate your Work**:
-  - Do not run Nix commands yourself
-  - Ask the user to add files not known to git and run the following commands `sudo nixos-rebuild build --flake $HOME/.config/dotfiles/nixos#<hostname>`

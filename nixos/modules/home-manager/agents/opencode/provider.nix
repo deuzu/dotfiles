@@ -1,3 +1,11 @@
+let
+  privacyRouting = {
+    provider = {
+      data_collection = "deny";
+      zdr = true;
+    };
+  };
+in
 {
   google = {
     options = {
@@ -22,6 +30,16 @@
         options = {
           "reasoningEffort" = "high";
         };
+      };
+    };
+  };
+  openrouter = {
+    options = {
+      baseURL = "{env:OPENROUTER_BASE_URL}";
+    };
+    models = {
+      "moonshotai/kimi-k3" = {
+        options = privacyRouting;
       };
     };
   };

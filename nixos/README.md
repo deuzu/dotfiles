@@ -11,9 +11,8 @@ or
 ```shell
 nix-shell -p git git-crypt gnupg pinentry-tty age sops ssh-to-age
 
-mkdir -p ~/.config
-git clone https://github.com/deuzu/dotfiles.git ~/.config/dotfiles
-cd ~/.config/dotfiles
+git clone https://github.com/deuzu/dotfiles.git ~/dotfiles
+cd ~/dotfiles
 
 mkdir ~/.gnupg
 echo "pinentry-program $(which pinentry-tty)" > ~/.gnupg/gpg-agent.conf
@@ -24,5 +23,11 @@ git-crypt unlock
 mkdir -p ~/.config/sops/age
 cp <path/to/age/keys.txt> ~/.config/sops/age/keys.txt
 
-sudo nixos-rebuild switch --flake ~/.config/dotfiles/nixos#<host>
+sudo nixos-rebuild switch --flake ~/dotfiles/nixos#<host>
+```
+
+## NixOS Infect
+
+```sh
+curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=scaleway NIX_CHANNEL=nixos-unstable bash 2>&1 | tee /tmp/infect.log
 ```

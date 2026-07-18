@@ -48,7 +48,7 @@ in
       profiles.default = {
         name = "Default";
         isDefault = true;
-        containers = { };
+        containers = cfg.containers;
         spacesForce = true;
         spaces = cfg.spaces;
         search = cfg.search;

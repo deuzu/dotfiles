@@ -21,7 +21,7 @@ permission:
     "git config*": deny
 ---
 
-# PR — Create Commit Message File
+# Create Commit Message File
 
 Your only task is to create a commit message file with a description grounded in the design document and/or the actual diff.
 
@@ -31,7 +31,7 @@ Read `design.md` for context from the artifact directory provided by the caller 
 
 ## Process
 
-1. **Detect the base branch** and **gather PR information:**
+1. **Detect the base branch** and **gather changes information:**
    - Detect base branch: `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'` (falls back to `main`)
    - `git diff <base>...HEAD` — the full diff
    - `git log <base>...HEAD --oneline` — commit history
@@ -42,9 +42,7 @@ Read `design.md` for context from the artifact directory provided by the caller 
    ```txt
    <type>(<optional-scope>): <description-under-70-chars>
 
-   <2-3-bullets-on-the-what-and-why-from-design.md>
-
-   <how-to-verify-manualy-checkboxes>
+   <if-not-redundant-2-3-bullets-on-the-what-and-why-from-design.md>
    ```
 
 3. **Report the commit message** to the Orchestrator.

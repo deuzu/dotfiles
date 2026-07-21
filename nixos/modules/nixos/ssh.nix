@@ -10,7 +10,7 @@ in
   config = lib.mkIf cfg.enable {
     services.openssh = {
       enable = true;
-      ports = [ 22 ];
+      ports = [ 22 443 ];
       settings = {
         PermitRootLogin = "no"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
         PasswordAuthentication = false;

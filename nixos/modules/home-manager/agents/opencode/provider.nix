@@ -1,11 +1,3 @@
-let
-  privacyRouting = {
-    provider = {
-      data_collection = "deny";
-      zdr = true;
-    };
-  };
-in
 {
   google = {
     options = {
@@ -33,14 +25,28 @@ in
       };
     };
   };
-  openrouter = {
-    options = {
-      baseURL = "{env:OPENROUTER_BASE_URL}";
-    };
-    models = {
-      "moonshotai/kimi-k3" = {
-        options = privacyRouting;
+  openrouter =
+    let
+      privacyRouting = {
+        provider = {
+          data_collection = "deny";
+          zdr = true;
+        };
       };
+      allowedModels = [
+        "moonshotai/kimi-k3"
+        "z-ai/glm-5.2"
+        "mistralai/mistral-medium-3-5"
+      ];
+      models = builtins.listToAttrs (
+        map (id: { name = id; value = { options = privacyRouting; }; }) allowedModels
+      );
+    in
+    {
+      options = {
+        baseURL = "{env:OPENROUTER_BASE_URL}";
+      };
+      inherit models;
+      whitelist = allowedModels;
     };
-  };
 }

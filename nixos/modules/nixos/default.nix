@@ -11,6 +11,7 @@
     ./i18n.nix
     ./mosh.nix
     ./networking.nix
+    ./power-management.nix
     ./printing.nix
     ./sops.nix
     ./sound.nix

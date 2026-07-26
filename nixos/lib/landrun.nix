@@ -11,29 +11,26 @@
     , extraRox ? [ ]
     , extraRwx ? [ ]
     , extraEnv ? [ ]
-    , bestEffort ? false
+    , extraTmp ? [ ]
     , unrestrictedNetwork ? true
     }:
     let
-      baseRo = [ "/dev,/etc,/sys,/proc" ];
-      baseRox = [ "/nix/store,/usr" ];
-      baseRw = [
-        "/dev/null,/dev/stdin,/dev/stdout,/dev/stderr,/dev/tty"
-        "$HOME/go"
+      sandboxBase = import ./sandbox-base-profile.nix { inherit lib; };
+      basePreScripts = sandboxBase.mkGitWorktreePreScript {
+        argArrayName = "DYNAMIC_SANDBOX_ARGS";
+        bindFlag = "--rwx";
+      };
+      baseRo = sandboxBase.baseRo ++ [ "/dev" "/sys" "/proc" ];
+      baseRox = sandboxBase.baseRox;
+      baseRw = sandboxBase.baseRw ++ [
+        "/dev/null"
+        "/dev/stdin"
+        "/dev/stdout"
+        "/dev/stderr"
+        "/dev/tty"
       ];
-      baseRwx = [ ];
-      baseEnv = [
-        "HOME"
-        "PATH"
-        "XDG_CONFIG_HOME"
-        "XDG_CACHE_HOME"
-        "XDG_STATE_HOME"
-        "USER"
-        "TERM"
-        "LANG"
-        "LC_ALL"
-        "EDITOR"
-      ];
+      baseRwx = sandboxBase.baseRwx;
+      baseEnv = sandboxBase.baseEnv;
 
       allRo = baseRo ++ extraRo;
       allRw = baseRw ++ extraRw;
@@ -41,22 +38,25 @@
       allRwx = baseRwx ++ extraRwx;
       allEnv = baseEnv ++ extraEnv;
 
-      args = [ ]
-        ++ lib.optional bestEffort "--best-effort"
-        ++ lib.optional unrestrictedNetwork "--unrestricted-network"
-        ++ map (p: "--ro ${p}") allRo
-        ++ map (p: "--rox ${p}") allRox
-        ++ map (p: "--rw ${p}") allRw
-        ++ map (p: "--rwx ${p}") allRwx
-        ++ map (e: "--env ${e}") allEnv;
+      args = [
+        "--best-effort"
+      ]
+      ++ lib.optional unrestrictedNetwork "--unrestricted-network"
+      ++ map (p: "--ro ${p}") allRo
+      ++ map (p: "--rox ${p}") allRox
+      ++ map (p: "--rw ${p}") allRw
+      ++ map (p: "--rwx ${p}") allRwx
+      ++ map (e: "--env ${e}") allEnv;
 
       argsStr = lib.concatStringsSep " \\\n    " args;
     in
     pkgs.writeShellScriptBin name ''
+      ${basePreScripts}
       ${preScripts}
 
       exec ${pkgs.landrun}/bin/landrun \
         ${argsStr} \
+        "''${DYNAMIC_SANDBOX_ARGS[@]}" \
         ${executable} "$@"
     '';
 }

@@ -11,8 +11,7 @@ let
 in
 myLib.mkBwrap pkgs {
   name = "ai";
-  executable = "opencode";
-  chdir = "$PWD";
+  executable = "${pkgs.opencode}/bin/opencode";
   preScripts = generatedPreScripts;
   extraRo = cfg.sandboxExtraRo;
   extraRox = cfg.sandboxExtraRox;

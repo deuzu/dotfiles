@@ -5,7 +5,6 @@
     pkgs:
     { name
     , executable
-    , chdir ? "~/"
     , preScripts ? ""
     , extraRo ? [ ]
     , extraRw ? [ ]
@@ -16,55 +15,21 @@
     , unrestrictedNetwork ? false
     }:
     let
-      basePreScripts = ''
-        DYNAMIC_BWRAP_ARGS=()
-        # If git worktree detected, adds bind to the main repo 
-        if [ -f "$PWD/.git" ]; then
-          GIT_DIR_LINE=$(head -n 1 "$PWD/.git")
-          if [[ "$GIT_DIR_LINE" == "gitdir: "* ]]; then
-            GIT_DIR_PATH="''${GIT_DIR_LINE#gitdir: }"
-            # Convert relative path to absolute path
-            if [[ "$GIT_DIR_PATH" != /* ]]; then
-              GIT_DIR_PATH="$PWD/$GIT_DIR_PATH"
-            fi
-            # from /path/to/repo/.git/worktree/wkrtr-name to /path/to/repo/.git
-            MAIN_REPO_GIT_DIR=$(dirname "$(dirname "$GIT_DIR_PATH")")
-            if [ -d "$MAIN_REPO_GIT_DIR" ]; then
-              DYNAMIC_BWRAP_ARGS+=("--bind-try" "$MAIN_REPO_GIT_DIR" "$MAIN_REPO_GIT_DIR")
-            fi
-          fi
-        fi
-      '';
-      baseRox = [
-        "/usr"
-        "/etc"
-        "/nix/store"
-        "/nix/var/nix/db"
-        "/run/current-system/sw/bin"
-        "/run/current-system/sw/etc"
-        "/run/current-system/sw/lib/locale/locale-archive"
-      ];
-      baseRwx = [
-        "/nix/var/nix/daemon-socket"
-      ];
-      baseEnv = [
-        "HOME"
-        "PATH"
-        "XDG_CONFIG_HOME"
-        "XDG_CACHE_HOME"
-        "XDG_STATE_HOME"
-        "USER"
-        "TERM"
-        "LANG"
-        "LC_ALL"
-        "LC_TIME"
-        "LOCALE_ARCHIVE"
-        "EDITOR"
-      ];
-      baseTmp = [ "/tmp" ];
+      sandboxBase = import ./sandbox-base-profile.nix { inherit lib; };
+      basePreScripts = sandboxBase.mkGitWorktreePreScript {
+        argArrayName = "DYNAMIC_SANDBOX_ARGS";
+        bindFlag = "--bind-try";
+        isBwrap = true;
+      };
+      baseRox = sandboxBase.baseRox;
+      baseRwx = sandboxBase.baseRwx;
+      baseRo = sandboxBase.baseRo;
+      baseRw = sandboxBase.baseRw;
+      baseEnv = sandboxBase.baseEnv;
+      baseTmp = sandboxBase.baseTmp;
 
-      allRox = baseRox ++ extraRo ++ extraRox;
-      allRwx = baseRwx ++ extraRw ++ extraRwx;
+      allRox = baseRox ++ baseRo ++ extraRo ++ extraRox;
+      allRwx = baseRwx ++ baseRw ++ extraRw ++ extraRwx;
       allEnv = baseEnv ++ extraEnv;
       allTmp = baseTmp ++ extraTmp;
 
@@ -89,10 +54,9 @@
         "--unshare-ipc"
         "--clearenv"
         "--die-with-parent"
-        "--chdir ${chdir}"
+        "--chdir $PWD"
         "--proc /proc"
         "--dev /dev"
-        "--setenv NIX_REMOTE daemon"
       ]
       ++ lib.optional unrestrictedNetwork "--share-net"
       ++ mkArgsRox allRox
@@ -108,7 +72,7 @@
 
       exec ${pkgs.bubblewrap}/bin/bwrap \
         ${argsStr} \
-        "''${DYNAMIC_BWRAP_ARGS[@]}" \
+        "''${DYNAMIC_SANDBOX_ARGS[@]}" \
         ${executable} "$@"
     '';
 }

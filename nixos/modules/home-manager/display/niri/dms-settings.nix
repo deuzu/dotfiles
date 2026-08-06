@@ -1,4 +1,7 @@
 {
+  niriLayoutGapsOverride = 0;
+  niriLayoutRadiusOverride = 0;
+
   showBattery = true;
   showWeather = false;
   weatherEnabled = false;
@@ -105,12 +108,12 @@
         "battery"
         "controlCenterButton"
       ];
-      spacing = 4;
+      spacing = 0;
       innerPadding = 4;
       bottomGap = 0;
       transparency = 1;
       widgetTransparency = 1;
-      squareCorners = false;
+      squareCorners = true;
       noBackground = false;
       gothCornersEnabled = false;
       gothCornerRadiusOverride = false;

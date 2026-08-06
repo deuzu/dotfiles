@@ -70,6 +70,7 @@
     ./jq.nix
     ./libreoffice.nix
     ./make.nix
+    ./nautilus.nix
     ./neru.nix
     ./obsidian.nix
     ./ponos.nix

@@ -6,6 +6,7 @@
     "PATH"
     "XDG_CONFIG_HOME"
     "XDG_CACHE_HOME"
+    "XDG_DATA_HOME"
     "XDG_STATE_HOME"
     "USER"
     "TERM"
@@ -26,6 +27,7 @@
   baseRo = [
     "/etc"
     "/nix/var/nix/db"
+    "/nix/var/nix/profiles"
     "/run/current-system/sw/etc"
     "/run/current-system/sw/lib/locale/locale-archive"
   ];

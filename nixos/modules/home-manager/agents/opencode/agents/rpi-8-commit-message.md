@@ -11,6 +11,11 @@ permission:
   grep: allow
   read: allow
   edit: allow
+  task:
+    "*": deny
+    codebase-analyzer: allow
+    codebase-locator: allow
+    codebase-pattern-finder: allow
   bash:
     "*": deny
     "git *": allow
@@ -23,7 +28,7 @@ permission:
 
 # Create Commit Message File
 
-Your only task is to create a commit message file with a description grounded in the design document and/or the actual diff.
+Your only task is to create a commit message file with a rich explaination in the description, grounded in the design document and/or the actual diff.
 
 ## Input
 
@@ -55,7 +60,7 @@ Commit message file created at `<artifact_directory>/commit-message.txt`: <commi
 
 - Title under 70 chars.
 - The summary should explain WHY, not just WHAT.
-- Reference the design and plan docs.
 - Do not add files
 - Do not commit
 - Do not push
+- Do not include verifications

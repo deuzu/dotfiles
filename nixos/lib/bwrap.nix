@@ -44,9 +44,11 @@
             name = lib.head parts;
             value = lib.concatStringsSep "=" (lib.tail parts);
           in
-          "--setenv ${name} \"${value}\""
+          "ENV_ARGS+=(--setenv ${lib.escapeShellArg name} ${lib.escapeShellArg value})"
         else
-          "--setenv ${e} \"\$${e}\"";
+          "if [ -n \"\${${e}+x}\" ]; then ENV_ARGS+=(--setenv ${lib.escapeShellArg e} \"\$${e}\"); fi";
+
+      envScripts = lib.concatStringsSep "\n" (map mkEnvArg allEnv);
 
       args = [
         "--unshare-pid"
@@ -61,17 +63,19 @@
       ++ lib.optional unrestrictedNetwork "--share-net"
       ++ mkArgsRox allRox
       ++ mkArgsRwx allRwx
-      ++ mkArgsTmp allTmp
-      ++ map mkEnvArg allEnv;
+      ++ mkArgsTmp allTmp;
 
       argsStr = lib.concatStringsSep " \\\n    " args;
     in
     pkgs.writeShellScriptBin name ''
       ${basePreScripts}
       ${preScripts}
+      ENV_ARGS=()
+      ${envScripts}
 
       exec ${pkgs.bubblewrap}/bin/bwrap \
         ${argsStr} \
+        "''${ENV_ARGS[@]}" \
         "''${DYNAMIC_SANDBOX_ARGS[@]}" \
         ${executable} "$@"
     '';

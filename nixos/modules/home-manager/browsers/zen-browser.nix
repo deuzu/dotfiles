@@ -33,6 +33,10 @@ in
       type = types.listOf types.str;
       default = [ ];
     };
+    keyboardShortcuts = mkOption {
+      type = types.listOf types.attrs;
+      default = [ ];
+    };
   };
 
   imports = [
@@ -55,7 +59,7 @@ in
         settings = cfg.settings;
         pins = cfg.pins;
         mods = cfg.mods;
-        # keyboardShortcuts = [];
+        keyboardShortcuts = cfg.keyboardShortcuts;
       };
     };
 

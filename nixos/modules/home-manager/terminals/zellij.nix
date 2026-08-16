@@ -185,7 +185,7 @@ in
                 pane { width "46%"; }
               }
               floating_panes max_panes=2 {
-                pane { x "3%";  width "46%"; }
+                pane { x "3%";  y "25%"; width "46%"; }
                 pane { x "50%"; y "25%"; width "46%"; }
               }
               floating_panes max_panes=3 {

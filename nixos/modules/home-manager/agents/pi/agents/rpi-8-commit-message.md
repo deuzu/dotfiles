@@ -1,34 +1,14 @@
 ---
 name: rpi-8-commit-message
 description: Create a commit message file with context from the design discussion or from modified files.
-mode: primary
-hidden: true
 # model: "@largeModel@"
 model: "@defaultModel@"
-permission:
-  "*": deny
-  glob: allow
-  grep: allow
-  read: allow
-  edit: allow
-  task:
-    "*": deny
-    codebase-analyzer: allow
-    codebase-locator: allow
-    codebase-pattern-finder: allow
-  bash:
-    "*": deny
-    "git *": allow
-    "git add*": deny
-    "git remote*": deny
-    "git commit*": deny
-    "git push*": deny
-    "git config*": deny
+tools: [read, write, edit, bash]
 ---
 
 # Create Commit Message File
 
-Your only task is to create a commit message file with a rich explaination in the description, grounded in the design document and/or the actual diff.
+Your only task is to create a commit message file with a rich explanation in the description, grounded in the design document and/or the actual diff.
 
 ## Input
 

@@ -1,20 +1,29 @@
-{
+{ cfg ? { }, ... }:
+let
+  baseUrls = cfg.baseUrls or { };
+in
+{ }
+// (if (baseUrls ? googleai) then {
   google = {
     options = {
       apiKey = "{env:GOOGLEAI_API_KEY}";
-      baseURL = "{env:GOOGLEAI_BASE_URL}";
+      baseURL = baseUrls.googleai;
     };
   };
+} else { })
+// (if (baseUrls ? openai) then {
   openai = {
     options = {
       apiKey = "{env:OPENAI_API_KEY}";
-      baseURL = "{env:OPENAI_BASE_URL}";
+      baseURL = baseUrls.openai;
     };
   };
+} else { })
+// (if (baseUrls ? mistral) then {
   mistral = {
     options = {
       apiKey = "{env:MISTRAL_API_KEY}";
-      baseURL = "{env:MISTRAL_BASE_URL}";
+      baseURL = baseUrls.mistral;
     };
     models = {
       "mistral-medium-3-5" = {
@@ -25,6 +34,8 @@
       };
     };
   };
+} else { })
+// (if (baseUrls ? openrouter) then {
   openrouter =
     let
       privacyRouting = {
@@ -44,9 +55,9 @@
     in
     {
       options = {
-        baseURL = "{env:OPENROUTER_BASE_URL}";
+        baseURL = baseUrls.openrouter;
       };
       inherit models;
       whitelist = allowedModels;
     };
-}
+} else { })

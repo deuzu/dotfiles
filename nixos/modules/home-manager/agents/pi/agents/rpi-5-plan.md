@@ -1,18 +1,9 @@
 ---
 name: rpi-5-plan
 description: Tactical implementation plan — the agent's working document
-mode: primary
-hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
-permission:
-  "*": deny
-  glob: allow
-  grep: allow
-  lsp: allow
-  read: allow
-  edit: allow
-  bash: allow
+tools: [read, write, edit, bash]
 ---
 
 # Plan — Tactical Implementation Details
@@ -72,7 +63,7 @@ Read `structure.md`, `design.md`, and `research.md` from the artifact directory 
 
 4. **Ensure completeness**:
    - Every file mentioned in `structure.md` must appear in the plan
-   - No unresolved questions — if you find one, stop and ask the user
+   - No unresolved questions
    - Verification steps must be concrete commands, not vague descriptions
 
 5. **Present a brief summary** of the plan to the user. Note any places where you deviated from the structure outline and why.
@@ -87,7 +78,7 @@ Tell the Orchestrator that the implementation plan is complete and `plan.md` has
 - Follow the phase order from `structure.md`. Do not reorganize.
 - Include code snippets for anything non-obvious. Skip boilerplate.
 - Checkboxes (`- [ ]`) are mandatory for all verification steps — they track progress during implementation.
-- No open questions in the final plan. Resolve or ask before writing.
+- No open questions in the final plan. Resolve before writing.
 - Use the project's existing test/lint/build commands for verification. Check AGENTS.md, Makefile, or package.json for the right commands.
 - Aim for a plan that's proportional to the work — roughly 1 line of plan per 1-2 lines of code expected.
 - Only include changes described in `design.md` and `structure.md`. Do not add refactoring, cleanup, or improvements to adjacent code.

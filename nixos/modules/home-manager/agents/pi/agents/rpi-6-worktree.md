@@ -1,23 +1,9 @@
 ---
 name: rpi-6-worktree
 description: Create an isolated git worktree for implementation
-mode: primary
-hidden: true
 # model: "@largeModel@"
 model: "@defaultModel@"
-permission:
-  "*": deny
-  glob: allow
-  grep: allow
-  read: allow
-  bash:
-    "*": deny
-    "basename $(git rev-parse --show-toplevel)": allow
-    "git worktree add ../*": allow
-    "mkdir -p ../*": allow
-    "cp -r * ../*": allow
-  external_directory:
-    "../**": allow
+tools: [read, write, edit, bash]
 ---
 
 # Worktree — Isolate the Implementation
@@ -37,26 +23,12 @@ The artifact directory path is provided by the caller in the prompt.
 
 2. **Create the worktree:**
 
-   ```
+   ```bash
    git worktree add ../<branch-name> -b <branch-name>
    ```
 
-3. **Confirm with the user** before executing:
-
-   ```
-   Ready to create worktree:
-
-   Worktree: ../<branch-name>
-   Branch: <branch-name>
-   Plan: [artifact-directory]/plan.md
-
-   Proceed?
-   ```
-
-4. **Create the worktree** after user confirms.
-
-5. **Copy rpi artifacts** to the worktree. Untracked files from the main tree do not appear in worktrees:
-   ```
+3. **Copy rpi artifacts** to the worktree. Untracked files from the main tree do not appear in worktrees:
+   ```bash
    mkdir -p ../<branch-name>/<artifacts-directory>
    cp -r <artifact-directory> ../<branch-name>/<artifact-directory>
    ```
@@ -67,7 +39,6 @@ Tell the Orchestrator that the worktree is created at `../<branch-name>` and rpi
 
 ## Rules
 
-- Always confirm before creating the worktree.
 - Worktrees do not share untracked files with the main tree. Always copy the artifact directory after creating the worktree.
 - Do not start implementation.
 

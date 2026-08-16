@@ -13,12 +13,9 @@ myLib.mkBwrap pkgs {
   name = cfg.binaryName;
   executable = "${pkgs.pi-coding-agent}/bin/pi";
   preScripts = ''
-    mkdir -p "$HOME/.pi/agent"
-    ${generatedPreScripts}
-  '';
-  extraRo = cfg.sandboxExtraRo ++ [
-    "$HOME/.agents"
-  ];
+    export PATH="${pkgs.pi-coding-agent}/bin:$PATH"
+  '' + generatedPreScripts;
+  extraRo = cfg.sandboxExtraRo;
   extraRox = cfg.sandboxExtraRox;
   extraRw = cfg.sandboxExtraRw;
   extraRwx = cfg.sandboxExtraRwx;

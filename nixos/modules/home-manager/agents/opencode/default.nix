@@ -7,6 +7,11 @@ in
 {
   options.modules.agents.opencode = with lib; {
     enable = mkEnableOption "opencode";
+    baseUrls = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      description = "Base URLs for LLM providers";
+    };
     preScripts = mkOption {
       type = types.attrsOf types.lines;
       default = { };
@@ -58,7 +63,7 @@ in
         share = "disabled";
         model = env.OPENCODE_MODEL;
         # small_model = "";
-        provider = import ./provider.nix;
+        provider = import ./provider.nix { inherit cfg; };
         agent = {
           plan = {
             model = env.OPENCODE_PLAN_MODEL;

@@ -1,0 +1,6 @@
+{
+  "name": "rpi",
+  "pi": {
+    "extensions": ["./index.ts"]
+  }
+}

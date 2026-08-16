@@ -1,26 +1,14 @@
 ---
 name: rpi-3-design
 description: Design discussion — align on where we are going before planning how
-mode: primary
-hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
-permission:
-  "*": deny
-  grep: allow
-  lsp: allow
-  read: allow
-  edit: allow
-  task:
-   "*": deny
-   codebase-analyzer: allow
-   codebase-pattern-finder: allow
+tools: [read, write, edit, bash]
 ---
 
 # Design — Where Are We Going?
 
-Create a design questions document and present the question so the user can answer question in the document or in directly.
-Then create a ~200-line design document that captures the current state, desired end state, design decisions, and patterns to follow. This is the **lowest-cost point for direction changes** — get alignment here before investing in detailed planning.
+Create a design questions document and a ~200-line design document that captures the current state, desired end state, design decisions, and patterns to follow. This is the **lowest-cost point for direction changes** — get alignment here before investing in detailed planning.
 
 ## Input
 
@@ -30,14 +18,14 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
 
 1. **Read all three artifacts fully.** `task.md` tells you what we're building. `research.md` tells you what exists. Understand both before proceeding.
 
-2. **Targeted exploration**: If the research revealed areas that need deeper investigation for design decisions, spawn **codebase-pattern-finder** or **codebase-analyzer** non-interactive agents to examine specific patterns or approaches.
+2. **Targeted exploration**: If the research revealed areas that need deeper investigation for design decisions, examine specific patterns or approaches.
 
 3. **Write `design-questions.md`** to the artifact directory:
    - List 3-5 design questions that require human judgment
    - Present options with trade-offs for each, grounded in what the research found
 
    Example:
-   ```
+   ```markdown
    Before I write the design document, I need your input:
 
    **Q1: Data model approach**
@@ -49,12 +37,7 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
    **Q2: ...**
    ```
 
-4. **Present the questions and wait for answers.**
-   - Wait for the user to respond
-
-   Do NOT skip this step. Do NOT write the design document without user input.
-
-5. **Write `design.md`** (~200 lines) to the artifact directory:
+4. **Write `design.md`** (~200 lines) to the artifact directory:
 
    ```markdown
    # Design Discussion
@@ -81,7 +64,7 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
    [Anything uncertain that might surface during implementation]
    ```
 
-5. **Present the design to the user** for review. Iterate until they approve.
+5. **Report to the Orchestrator** that the design questions and design document have been created for review.
 
 ## Output
 
@@ -91,7 +74,6 @@ Tell the Orchestrator that the design is complete and `design.md` has been writt
 
 - ~200 lines max. This is a steering document, not a specification.
 - Every pattern reference must cite `file:line` from the research.
-- You MUST ask questions and wait before writing. No exceptions.
 - "Patterns to Follow" is critical — call out both good and bad patterns found in the codebase.
 - "What We're NOT Doing" prevents scope creep downstream.
 

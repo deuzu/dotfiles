@@ -47,7 +47,7 @@ in
         php83Packages.psalm
         # Python
         (python3.withPackages (p: (with p; [
-          python-lsp-ruff
+          # python-lsp-ruff
           python-lsp-server
         ])))
         ruff

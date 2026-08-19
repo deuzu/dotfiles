@@ -1,5 +1,5 @@
 {
-  "name": "rpi",
+  "name": "subagents",
   "pi": {
     "extensions": ["./index.ts"]
   },

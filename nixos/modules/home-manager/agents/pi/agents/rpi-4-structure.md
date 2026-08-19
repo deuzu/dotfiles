@@ -1,17 +1,9 @@
 ---
 name: rpi-4-structure
 description: Structure outline — vertical slices with test checkpoints
-mode: primary
-hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
-permission:
-  "*": deny
-  glob: allow
-  grep: allow
-  lsp: allow
-  read: allow
-  edit: allow
+tools: [read, write, edit, bash]
 ---
 
 # Structure — How Do We Get There?
@@ -72,11 +64,7 @@ Read `design.md` and `research.md` from the artifact directory provided by the c
    [Summary of what should be true after each phase, useful for resuming if context resets]
    ```
 
-6. **Present the outline to the user** and wait for feedback. Common adjustments:
-   - Reordering phases
-   - Splitting a phase that's too large
-   - Adding a testing phase between sensitive phases
-   - Requesting more detail on a specific phase
+6. **Present the outline summary** and notify the Orchestrator that `structure.md` is complete.
 
 ## Output
 

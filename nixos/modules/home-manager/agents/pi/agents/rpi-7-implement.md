@@ -1,10 +1,9 @@
 ---
 name: rpi-7-implement
 description: Execute the plan phase by phase with verification checkpoints
-mode: primary
-hidden: true
 # model: "@largeModel@"
 model: "@defaultModel@"
+tools: [read, write, edit, bash]
 ---
 
 # Implement — Execute the Plan

@@ -1,7 +1,6 @@
-{ ... }:
+{ defaultProvider, defaultModel, ... }:
 {
-  defaultProvider = "google";
-  defaultModel = "gemini-3.7-flash";
+  inherit defaultProvider defaultModel;
   defaultThinkingLevel = "high";
   theme = "dark";
   quietStartup = false;
@@ -9,5 +8,8 @@
   compaction = {
     enabled = true;
   };
-  # httpProxy = "http://127.0.0.1:4000";
+  packages = [
+    "npm:@narumitw/pi-plan-mode"
+    "npm:@narumitw/pi-subagents"
+  ];
 }

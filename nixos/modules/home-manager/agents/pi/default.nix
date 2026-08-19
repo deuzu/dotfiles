@@ -4,10 +4,12 @@ let
   env = config.modules.env.vars;
   gitEnable = config.modules.vcs.git.enable;
 
-  rawModel = if cfg.model != null then cfg.model else (env.OPENCODE_MODEL or "google/gemini-3.7-flash");
+  rawModel = if cfg.defaultModel != null then cfg.defaultModel else (env.OPENCODE_MODEL or "google/gemini-3.7-flash");
   modelParts = lib.splitString "/" rawModel;
   defaultProvider = if (builtins.length modelParts > 1) then builtins.head modelParts else "google";
   defaultModel = if (builtins.length modelParts > 1) then lib.concatStringsSep "/" (builtins.tail modelParts) else rawModel;
+
+  extensions = import ./extensions.nix { inherit pkgs; };
 in
 {
   options.modules.agents.pi = with lib; {
@@ -17,10 +19,20 @@ in
       default = "aip";
       description = "Name of the sandboxed binary created by Bubblewrap (e.g. aip)";
     };
-    model = mkOption {
+    defaultModel = mkOption {
       type = types.nullOr types.str;
       default = null;
       description = "Default model for Pi";
+    };
+    largeModel = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Large model for Pi";
+    };
+    baseUrls = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      description = "Base URLs for LLM providers";
     };
     preScripts = mkOption {
       type = types.attrsOf types.lines;
@@ -65,12 +77,11 @@ in
     ];
 
     home.file = {
-      ".pi/agent/models.json".text = builtins.toJSON (import ./models.nix);
+      ".pi/agent/models.json".text = builtins.toJSON (import ./models.nix { inherit cfg; });
       ".pi/agent/settings.json".text = builtins.toJSON (import ./settings.nix {
         inherit defaultProvider defaultModel;
       });
-      ".pi/agent/extensions".source = ./extensions;
-      ".pi/agent/prompts".source = ./prompts;
+      ".pi/agent/extensions".source = extensions;
     }
     // (myLib.folder pkgs ./agents ".pi/agent/agents" {
       defaultModel = rawModel;

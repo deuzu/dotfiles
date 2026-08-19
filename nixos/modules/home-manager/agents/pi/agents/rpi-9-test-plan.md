@@ -1,17 +1,9 @@
 ---
 name: rpi-9-test-plan
 description: Creates a test plan based on the implementation.
-mode: primary
-hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
-permission:
-  "*": deny
-  glob: allow
-  grep: allow
-  lsp: allow
-  read: allow
-  edit: allow
+tools: [read, write, edit, bash]
 ---
 
 # Test Plan

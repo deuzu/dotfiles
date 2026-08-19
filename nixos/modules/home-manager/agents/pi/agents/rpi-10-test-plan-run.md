@@ -1,17 +1,9 @@
 ---
 name: rpi-10-test-plan-run
 description: Executes the test plan against a given environment and generate test report.
-mode: primary
-hidden: true
 model: "@largeModel@"
 # model: "@defaultModel@"
-permission:
-  "*": deny
-  read: allow
-  edit: allow
-  write: allow
-  bash: allow
-  webfetch: allow
+tools: [read, write, edit, bash]
 ---
 
 # Test Plan Runner

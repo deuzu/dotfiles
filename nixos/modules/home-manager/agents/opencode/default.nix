@@ -1,12 +1,38 @@
 { config, lib, pkgs, myLib, ... }:
 let
   cfg = config.modules.agents.opencode;
-  env = config.modules.env.vars;
   gitEnable = config.modules.vcs.git.enable;
+  defaultModel = "${cfg.defaultProvider}/${cfg.defaultModel}";
+  largeModel = "${cfg.largeProvider}/${cfg.largeModel}";
 in
 {
   options.modules.agents.opencode = with lib; {
     enable = mkEnableOption "opencode";
+    binaryName = mkOption {
+      type = types.str;
+      default = "ai";
+      description = "Name of the sandboxed binary created by the sandbox";
+    };
+    defaultProvider = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Default provider for Pi";
+    };
+    defaultModel = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Default model for Pi";
+    };
+    largeProvider = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Large provider for Pi";
+    };
+    largeModel = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Large model for Pi";
+    };
     baseUrls = mkOption {
       type = types.attrsOf types.str;
       default = { };
@@ -61,12 +87,12 @@ in
       settings = {
         autoupdate = false;
         share = "disabled";
-        model = env.OPENCODE_MODEL;
+        model = defaultModel;
         # small_model = "";
         provider = import ./provider.nix { inherit cfg; };
         agent = {
           plan = {
-            model = env.OPENCODE_PLAN_MODEL;
+            model = largeModel;
           };
         };
         permission = import ./permission.nix;
@@ -82,13 +108,19 @@ in
 
     # https://github.com/matanshavit/qrspi
     home.file = (myLib.folder pkgs ./agents ".config/opencode/agents" {
-      defaultModel = env.OPENCODE_MODEL;
-      largeModel = env.OPENCODE_PLAN_MODEL;
+      inherit defaultModel largeModel;
     });
 
     home.packages = [
       (import ./sandboxed-opencode.nix { inherit cfg pkgs lib myLib; })
     ];
+
+    home.sessionVariables = {
+        OPENCODE_ENABLE_EXA = 1;
+        OPENCODE_DISABLE_CLAUDE_CODE = 1;
+        OPENCODE_MODEL = defaultModel;
+        OPENCODE_PLAN_MODEL = largeModel;
+    };
 
     programs.git = lib.mkIf gitEnable {
       ignores = [

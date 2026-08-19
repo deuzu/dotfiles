@@ -37,7 +37,7 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
    - Present options with trade-offs for each, grounded in what the research found
 
    Example:
-   ```
+   ```markdown
    Before I write the design document, I need your input:
 
    **Q1: Data model approach**
@@ -49,10 +49,7 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
    **Q2: ...**
    ```
 
-4. **Present the questions and wait for answers.**
-   - Wait for the user to respond
-
-   Do NOT skip this step. Do NOT write the design document without user input.
+4. **Wait for the user to answer questions in the document before proceeding to the design document**
 
 5. **Write `design.md`** (~200 lines) to the artifact directory:
 
@@ -81,7 +78,7 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
    [Anything uncertain that might surface during implementation]
    ```
 
-5. **Present the design to the user** for review. Iterate until they approve.
+6. **Report to the Orchestrator** that the design questions and design document have been created for review.
 
 ## Output
 
@@ -91,9 +88,9 @@ Tell the Orchestrator that the design is complete and `design.md` has been writt
 
 - ~200 lines max. This is a steering document, not a specification.
 - Every pattern reference must cite `file:line` from the research.
-- You MUST ask questions and wait before writing. No exceptions.
 - "Patterns to Follow" is critical — call out both good and bad patterns found in the codebase.
 - "What We're NOT Doing" prevents scope creep downstream.
+- Do NOT write the design document if the design questions document has not been answered.
 
 ## When to Go Back
 

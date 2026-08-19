@@ -8,25 +8,25 @@ const DENIED_COMMANDS = [
   /^gpg(\s+.*)?$/,
   /^git\s+(add|commit|push)(\s+.*)?$/,
   /^terraform(\s+.*)?\s+(apply|destroy)(\s+.*)?$/,
-  /^terraform\s+(apply|destroy)(\s+.*)?$/,
 ];
 
 const ASK_COMMANDS = [
   /^curl(\s+.*)?$/,
   /^terraform(\s+.*)?\s+state(\s+.*)?$/,
-  /^terraform\s+state(\s+.*)?$/,
 ];
 
 export default function permissionsExtension(pi: ExtensionAPI) {
   pi.on("tool_call", async (event, ctx) => {
     if (event.toolName === "bash") {
-      const command = ((event.input as { command?: string }).command || "").trim();
+      const command = (
+        (event.input as { command?: string }).command || ""
+      ).trim();
 
       for (const pattern of DENIED_COMMANDS) {
         if (pattern.test(command)) {
           return {
             block: true,
-            reason: `Execution denied by security policy for command: ${command}`,
+            reason: `Permission denied for command: ${command}`,
           };
         }
       }
@@ -36,12 +36,12 @@ export default function permissionsExtension(pi: ExtensionAPI) {
           if (ctx.hasUI) {
             const confirmed = await ctx.ui.confirm(
               "Security Confirmation",
-              `Allow execution of potentially sensitive command: "${command}"?`
+              `Permissions required for command: "${command}"?`,
             );
             if (!confirmed) {
               return {
                 block: true,
-                reason: `Execution cancelled by user for command: ${command}`,
+                reason: `Permission rejected by user for command: ${command}`,
               };
             }
           }

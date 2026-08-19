@@ -59,7 +59,7 @@ What to look for based on request:
 - **Testing patterns**: How similar things are tested
 
 ### Step 2: Search!
-- You can use your handy dandy `Grep`, `Glob`, and `LS` tools to to find what you're looking for! You know how it's done!
+- You can use `Grep`, `Glob`, and `LS` tools to to find what you're looking for.
 
 ### Step 3: Read and Extract
 - Read files with promising patterns

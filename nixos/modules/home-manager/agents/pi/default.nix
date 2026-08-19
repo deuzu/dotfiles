@@ -1,28 +1,34 @@
 { config, lib, pkgs, myLib, ... }:
 let
   cfg = config.modules.agents.pi;
-  env = config.modules.env.vars;
   gitEnable = config.modules.vcs.git.enable;
-
-  rawModel = if cfg.defaultModel != null then cfg.defaultModel else (env.OPENCODE_MODEL or "google/gemini-3.7-flash");
-  modelParts = lib.splitString "/" rawModel;
-  defaultProvider = if (builtins.length modelParts > 1) then builtins.head modelParts else "google";
-  defaultModel = if (builtins.length modelParts > 1) then lib.concatStringsSep "/" (builtins.tail modelParts) else rawModel;
-
-  extensions = import ./extensions.nix { inherit pkgs; };
+  defaultProvider = cfg.defaultProvider;
+  defaultModel = cfg.defaultModel;
+  # largeProvider = cfg.largeProvider;
+  largeModel = cfg.largeModel;
 in
 {
   options.modules.agents.pi = with lib; {
     enable = mkEnableOption "pi";
     binaryName = mkOption {
       type = types.str;
-      default = "aip";
-      description = "Name of the sandboxed binary created by Bubblewrap (e.g. aip)";
+      default = "ai";
+      description = "Name of the sandboxed binary created by the sandbox";
+    };
+    defaultProvider = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Default provider for Pi";
     };
     defaultModel = mkOption {
       type = types.nullOr types.str;
       default = null;
       description = "Default model for Pi";
+    };
+    largeProvider = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Large provider for Pi";
     };
     largeModel = mkOption {
       type = types.nullOr types.str;
@@ -77,16 +83,24 @@ in
     ];
 
     home.file = {
+      ".pi/agent/AGENTS.md".source = ../AGENTS.md;
       ".pi/agent/models.json".text = builtins.toJSON (import ./models.nix { inherit cfg; });
       ".pi/agent/settings.json".text = builtins.toJSON (import ./settings.nix {
         inherit defaultProvider defaultModel;
       });
-      ".pi/agent/extensions".source = extensions;
+      ".pi/agent/subagents.json".text = builtins.toJSON (import ./subagents.nix { });
+      ".pi/agent/extensions".source = import ./extensions.nix { inherit pkgs; };
     }
     // (myLib.folder pkgs ./agents ".pi/agent/agents" {
-      defaultModel = rawModel;
-      largeModel = env.OPENCODE_PLAN_MODEL or rawModel;
+      inherit defaultModel largeModel;
     });
+
+    home.sessionVariables = {
+      PI_CACHE_RETENTION = "long";
+      PI_SKIP_VERSION_CHECK = 1;
+      PI_TELEMETRY = 0;
+      PI_OFFLINE = 0;
+    };
 
     programs.git = lib.mkIf gitEnable {
       ignores = [

@@ -43,6 +43,22 @@ export function parseAgentFile(filePath: string): ParsedAgentConfig | null {
             .split(",")
             .map((t) => t.trim().replace(/^["']|["']$/g, ""))
             .filter(Boolean);
+        } else if (rest.length > 0) {
+          tools = rest
+            .split(",")
+            .map((t) => t.trim().replace(/^["']|["']$/g, ""))
+            .filter(Boolean);
+        } else {
+          // Multiline YAML list
+          const listItems: string[] = [];
+          while (i + 1 < lines.length && lines[i + 1].trim().startsWith("-")) {
+            i++;
+            const item = lines[i].trim().slice(1).trim().replace(/^["']|["']$/g, "");
+            if (item) listItems.push(item);
+          }
+          if (listItems.length > 0) {
+            tools = listItems;
+          }
         }
       }
     }
@@ -64,6 +80,8 @@ export function resolveAgentConfig(cwd: string, agentName: string): ParsedAgentC
     path.join(cwd, ".pi", "agents", `${agentName}.md`),
     path.join(cwd, ".agents", `${agentName}.md`),
     path.join(os.homedir(), ".pi", "agent", "agents", `${agentName}.md`),
+    path.resolve(__dirname, "../../agents", `${agentName}.md`),
+    path.resolve(__dirname, "../agents", `${agentName}.md`),
   ];
 
   for (const p of possiblePaths) {
@@ -73,7 +91,7 @@ export function resolveAgentConfig(cwd: string, agentName: string): ParsedAgentC
 
   return {
     name: agentName,
-    tools: ["read", "write", "edit", "bash"],
+    tools: [],
   };
 }
 

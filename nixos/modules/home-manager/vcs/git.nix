@@ -60,6 +60,7 @@ in
           unignore = "update-index --no-assume-unchanged";
           ignored = "!git ls-files -v | grep \"^[[:lower:]]\"";
           squash-all = "!f(){ git reset $(git commit-tree HEAD^{tree} \"$@\");};f";
+          prwt = "!f() { num=$1; branch=\"pr-$num\"; dir=\"../pr-$num\"; git fetch origin pull/$num/head:$branch && git worktree add $dir $branch && echo \"✅ Worktree for PR #$num created at $dir\"; };f";
         };
         core = {
           autocrlf = "input";

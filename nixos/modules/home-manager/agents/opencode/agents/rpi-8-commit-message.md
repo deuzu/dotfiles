@@ -28,7 +28,7 @@ permission:
 
 # Create Commit Message File
 
-Your only task is to create a commit message file with a rich explaination in the description, grounded in the design document and/or the actual diff.
+Your only task is to create a commit message file with a rich explanation in the description, grounded in the design document and/or the actual diff.
 
 ## Input
 

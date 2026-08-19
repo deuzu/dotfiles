@@ -1,5 +1,6 @@
 {
-  "name": "subagents",
+  "name": "permissions",
+  "type": "module",
   "pi": {
     "extensions": ["./index.ts"]
   },

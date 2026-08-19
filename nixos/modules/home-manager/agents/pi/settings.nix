@@ -10,6 +10,10 @@
   };
   packages = [
     "npm:@narumitw/pi-plan-mode"
-    "npm:@narumitw/pi-subagents"
+    "npm:@tintinweb/pi-subagents"
+    "npm:@juicesharp/rpiv-todo"
+    "npm:@juicesharp/rpiv-ask-user-question"
+    "npm:@juicesharp/rpiv-btw"
+    "npm:@juicesharp/rpiv-voice"
   ];
 }

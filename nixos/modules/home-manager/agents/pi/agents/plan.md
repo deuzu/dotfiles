@@ -1,9 +1,9 @@
 ---
-name: rpi-lite-plan
+name: plan
 description: Comprehensive tactical implementation plan — the agent's working document
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, write, edit, bash, Agent]
+tools: [read, bash, Agent]
 allowed_subagents: [codebase-analyzer, codebase-locator, codebase-pattern-finder]
 ---
 
@@ -19,7 +19,7 @@ Read the user's task description and any available context provided by the calle
 
 ## Process
 
-1. **Minimalist Research & Analysis:**
+1. **(Optionaly if the user ask for it or for a large refactor or feature) Minimalist Research & Analysis:**
    - Understand the current state of the codebase relative to the task.
    - Investigate existing patterns to follow and file/line references relevant to the changes.
 
@@ -40,64 +40,54 @@ Read the user's task description and any available context provided by the calle
      - Specific automated verification commands.
      - Manual verification steps.
 
-5. **Write `plan.md`** to the artifact directory:
+## Output 
 
-   ```markdown
-   # Implementation Plan
+```markdown
+# Implementation Plan
 
-   ## Overview & Design
-   **Goal:** [1-2 sentences on the desired end state]
-   **Key Patterns:** [Existing patterns to follow with file:line refs]
-   **Out of Scope:** [Explicit boundaries]
+## Overview & Design
+**Goal:** [1-2 sentences on the desired end state]
+**Key Patterns:** [Existing patterns to follow with file:line refs]
+**Out of Scope:** [Explicit boundaries]
 
-   ### Ambiguities & Trade-Offs
+### Ambiguities & Trade-Offs
 
-   [If any, list the architectural ambiguities and trade-offs and list 2-4 possibles options]
+[If any, list the architectural ambiguities and trade-offs and list 2-4 possibles options]
 
-   ## Phase 1: [Name of Vertical Slice]
-   [What this phase delivers end-to-end]
+## Phase 1: [Name of Vertical Slice]
+[What this phase delivers end-to-end]
 
-   ### Changes
+### Changes
 
-   #### 1. [File or component group]
-   **File**: `path/to/file.ext`
-   **Action**: [create / modify / delete]
+#### 1. [File or component group]
+**File**: `path/to/file.ext`
+**Action**: [create / modify / delete]
 
-   ```language
-   // Key code to add or modify
-   ```
+````language
+// Key code to add or modify
+````
 
-   #### 2. [Next file]
-   ...
+#### 2. [Next file]
+...
 
-   ### Verification
-   #### Automated
-   - [ ] [project test/lint command] passes
-   - [ ] [specific command for this phase]
+### Verification
+#### Automated
+- [ ] [project test/lint command] passes
+- [ ] [specific command for this phase]
 
-   #### Manual
-   - [ ] [what to check and expected behavior]
+#### Manual
+- [ ] [what to check and expected behavior]
 
-   ---
+---
 
-   ## Phase 2: [Name]
-   ...
-   ```
-
-6. **Ensure completeness**:
-   - Every file required to complete the task must appear in the plan.
-   - No unresolved questions.
-   - Verification steps must be concrete commands, not vague descriptions.
-
-7. **Present a brief summary** of the plan to the user. Note any critical design decisions made during the process.
-
-## Output
-
-Tell the Orchestrator that the implementation plan is complete and `plan.md` has been written.
+## Phase 2: [Name]
+...
+```
 
 ## Rules
 
-- The plan must be self-contained. An agent reading only `plan.md` should be able to implement the feature.
+- The plan must be self-contained. An agent reading it should be able to implement the feature.
+- Every file required to complete the task must appear in the plan.
 - Include code snippets for anything non-obvious. Skip boilerplate.
 - Checkboxes (`- [ ]`) are mandatory for all verification steps — they track progress during implementation.
 - No open questions in the final plan. Resolve before writing.

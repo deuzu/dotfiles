@@ -3,7 +3,7 @@ name: rpi-4-structure
 description: Structure outline — vertical slices with test checkpoints
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, write, edit, bash]
+tools: [read, edit, bash, rpi_artifact]
 ---
 
 # Structure — How Do We Get There?

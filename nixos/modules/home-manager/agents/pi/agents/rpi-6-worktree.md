@@ -3,7 +3,7 @@ name: rpi-6-worktree
 description: Create an isolated git worktree for implementation
 # model: "@largeModel@"
 model: "@defaultModel@"
-tools: [read, write, edit, bash]
+tools: [read, edit, bash, rpi_artifact]
 ---
 
 # Worktree — Isolate the Implementation

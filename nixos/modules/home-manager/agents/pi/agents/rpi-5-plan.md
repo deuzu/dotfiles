@@ -3,7 +3,7 @@ name: rpi-5-plan
 description: Tactical implementation plan — the agent's working document
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, write, edit, bash]
+tools: [read, edit, bash, rpi_artifact]
 ---
 
 # Plan — Tactical Implementation Details

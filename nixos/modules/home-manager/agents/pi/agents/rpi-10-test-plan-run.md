@@ -3,7 +3,7 @@ name: rpi-10-test-plan-run
 description: Executes the test plan against a given environment and generate test report.
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, write, edit, bash]
+tools: [read, edit, bash, rpi_artifact]
 ---
 
 # Test Plan Runner

@@ -84,11 +84,13 @@ in
 
     home.file = {
       ".pi/agent/AGENTS.md".source = ../AGENTS.md;
+      ".pi/agent/keybindings.json".text = builtins.toJSON (import ./keybindings.nix { });
       ".pi/agent/models.json".text = builtins.toJSON (import ./models.nix { inherit cfg; });
       ".pi/agent/settings.json".text = builtins.toJSON (import ./settings.nix {
         inherit defaultProvider defaultModel;
       });
       ".pi/agent/subagents.json".text = builtins.toJSON (import ./subagents.nix { });
+      ".pi/agent/web-search.json".text = builtins.toJSON (import ./web-access.nix { });
       ".pi/agent/extensions".source = import ./extensions.nix { inherit pkgs; };
     }
     // (myLib.folder pkgs ./agents ".pi/agent/agents" {

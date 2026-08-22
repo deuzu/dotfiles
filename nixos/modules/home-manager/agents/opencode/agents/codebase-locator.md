@@ -57,14 +57,13 @@ First, think deeply about the most effective search patterns for the requested f
 - Related terms and synonyms that might be used
 
 1. Start with using your grep tool for finding keywords.
-2. Optionally, use glob for file patterns
-3. LS and Glob your way to victory as well!
+2. Optionally, use glob for file patterns and ls
 
 ### Refine by Language/Framework
 - **JavaScript/TypeScript**: Look in src/, lib/, components/, pages/, api/
 - **Python**: Look in src/, lib/, pkg/, module names matching feature
 - **Go**: Look in pkg/, internal/, cmd/
-- **General**: Check for feature-specific directories - I believe in you, you are a smart cookie :)
+- **General**: Check for feature-specific directories
 
 ### Common Patterns to Find
 - `*service*`, `*handler*`, `*controller*` - Business logic

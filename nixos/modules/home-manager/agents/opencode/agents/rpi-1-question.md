@@ -61,7 +61,7 @@ The Orchestrator provides:
    ...
    ```
 
-6. **Present questions to the user** and wait for approval or edits before finalizing.
+6. **Report completion**: Output a summary of the generated questions and notify the Orchestrator that `task.md` and `questions.md` are written in the artifact directory.
 
 ## Output
 

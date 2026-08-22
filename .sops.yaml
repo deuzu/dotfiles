@@ -19,7 +19,6 @@ creation_rules:
       - age:
         - *user_ftouya
         - *host_homewsl
-  
   - path_regex: nixos/hosts/home-wsl/users/ftouya.secrets.yaml$
     key_groups:
       - age:

@@ -46,7 +46,7 @@ in
       };
       allowedModels = [
         "moonshotai/kimi-k3"
-        "z-ai/glm-5.2"
+        "z-ai/glm-5.3"
         "mistralai/mistral-medium-3-5"
       ];
       models = builtins.listToAttrs (

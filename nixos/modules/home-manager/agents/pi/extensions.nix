@@ -20,16 +20,15 @@ pkgs.runCommand "pi-extensions"
     --external:typebox \
     --external:node:*
 
-  # Bundle subagents extension
-  esbuild src/subagents.ts \
+  # Bundle permissions extension
+  mkdir -p $out/permissions
+  esbuild src/permissions/index.ts \
     --bundle \
     --platform=node \
     --format=esm \
-    --outfile=$out/subagents.js \
+    --outfile=$out/permissions/index.js \
     --external:@earendil-works/* \
     --external:typebox \
+    --external:shell-quote \
     --external:node:*
-
-  # Copy permissions extension
-  cp src/permissions.ts $out/permissions.ts
 ''

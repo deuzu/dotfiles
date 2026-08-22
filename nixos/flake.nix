@@ -105,7 +105,7 @@
         in
         {
           workstation = mkHost "workstation" "ftouya" [ ];
-          home-wsl = mkHost "home-wsl" "ftouya" [ nixos-wsl.nixosModules.default ];
+          # home-wsl = mkHost "home-wsl" "ftouya" [ nixos-wsl.nixosModules.default ];
           dedi-sm = mkHost "dedi-sm" "ftouya" [ ];
         };
     } // flake-utils.lib.eachDefaultSystem (system:

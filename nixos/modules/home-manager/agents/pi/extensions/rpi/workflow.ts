@@ -32,31 +32,31 @@ type WorkflowState =
 export class RPIWorkflow {
   private state: WorkflowState;
   private task: string;
-  private artifactsDirectory: string; // todo change type to specific string Path
+  private artifactDirectory: string; // todo change type to specific string Path
   private currentStep: WorkflowStep;
   private stepHandlers: WorkflowStepHandlers;
-  private stepsHistory: WorkflowStep[];
+  private stepHistory: WorkflowStep[];
 
   constructor(
     state: WorkflowState,
     task: string,
-    artifactsDirectory: string,
+    artifactDirectory: string,
     currentStep: WorkflowStep,
     stepHandlers: WorkflowStepHandlers,
-    stepsHistory: WorkflowStep[] = [],
+    stepHistory: WorkflowStep[] = [],
   ) {
     this.state = state;
     this.task = task;
-    this.artifactsDirectory = artifactsDirectory;
+    this.artifactDirectory = artifactDirectory;
     this.currentStep = currentStep;
     this.stepHandlers = stepHandlers;
-    this.stepsHistory = stepsHistory;
+    this.stepHistory = stepHistory;
   }
 
   static init(
     task: string,
+    artifactDirectory: string,
     stepHandlers: WorkflowStepHandlers,
-    artifactsDirectory: string,
   ): RPIWorkflow {
     const step: WorkflowStep = {
       name: "init",
@@ -67,9 +67,9 @@ export class RPIWorkflow {
     return new RPIWorkflow(
       "init",
       task,
+      artifactDirectory,
       step,
       stepHandlers,
-      artifactsDirectory,
     );
   }
 
@@ -101,7 +101,7 @@ export class RPIWorkflow {
       case "init": {
         const agent = {
           name: "rpi-1-question",
-          prompt: `Task: ${this.task}, Artifact Directory: ${this.artifactsDirectory}`,
+          prompt: `Task: ${this.task}, Artifact Directory: ${this.artifactDirectory}`,
           sessionId: crypto.randomUUID(),
         };
         this.to({
@@ -117,7 +117,7 @@ export class RPIWorkflow {
       case "question": {
         const agent = {
           name: "rpi-1-research",
-          prompt: `Artifact Directory: ${this.artifactsDirectory}`,
+          prompt: `Artifact Directory: ${this.artifactDirectory}`,
           sessionId: crypto.randomUUID(),
         };
         this.to({
@@ -140,23 +140,23 @@ export class RPIWorkflow {
 
   to(step: WorkflowStep): void {
     this.currentStep = step;
-    this.stepsHistory.push(this.currentStep);
+    this.stepHistory.push(this.currentStep);
   }
 
   setComplete(): void {
     this.state = "completed";
-    this.stepsHistory.push(this.currentStep);
+    this.stepHistory.push(this.currentStep);
   }
 
   setError(error: Error | string): void {
     this.state = "errored";
     this.currentStep.error =
       error instanceof Error ? error.message : String(error);
-    this.stepsHistory.push(this.currentStep);
+    this.stepHistory.push(this.currentStep);
   }
 
   getArtifactsDirectory(): string {
-    return this.artifactsDirectory;
+    return this.artifactDirectory;
   }
 
   getCurrentStep(): WorkflowStep {
@@ -166,8 +166,8 @@ export class RPIWorkflow {
   toJSON() {
     return {
       state: this.state,
-      artifactsDirectory: this.artifactsDirectory,
-      stepsHistory: this.stepsHistory,
+      artifactDirectory: this.artifactDirectory,
+      stepHistory: this.stepHistory,
     };
   }
 }

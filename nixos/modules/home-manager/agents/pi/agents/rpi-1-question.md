@@ -3,7 +3,8 @@ name: rpi-1-question
 description: Decompose a task into neutral research questions
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, write, edit, bash]
+tools: [read, write, edit, bash, Agent]
+allowed_subagents: [codebase-locator]
 ---
 
 # Question — Decompose the Task
@@ -20,7 +21,7 @@ The Orchestrator provides:
 
 1. **Read any provided files fully** before doing anything else.
 
-2. **Light codebase exploration**: Find which areas of the codebase relate to the task using read and bash tools (e.g., rg, find). You need to know what exists to write good questions.
+2. **Light codebase exploration**: Spawn a **codebase-locator** agent to find which areas of the codebase relate to the task. You need to know what exists to write good questions.
 
 3. **Decompose into 3-7 research questions**:
    - Each question should cause a researcher to explore a different relevant area of the codebase

@@ -3,7 +3,8 @@ name: rpi-2-research
 description: Objective codebase research driven by questions — facts only, no opinions
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, write, edit, bash]
+tools: [read, write, edit, bash, Agent]
+allowed_subagents: [codebase-analyzer, codebase-locator, codebase-pattern-finder]
 ---
 
 # Research — Answer the Questions
@@ -20,14 +21,18 @@ Read `questions.md` from the artifact directory path provided by the caller in t
 
 1. **Read `questions.md` fully.**
 
-2. **Research the codebase to answer the questions:**
-   - Locate relevant files and components
-   - Trace how specific code works, with `file:line` references
-   - Find concrete examples of patterns mentioned in the questions
+2. **Spawn parallel agents** to answer the questions:
+   - **codebase-locator** — find where relevant files and components live
+   - **codebase-analyzer** — trace how specific code works, with `file:line` references
+   - **codebase-pattern-finder** — find concrete examples of patterns mentioned in the questions
 
-3. **Synthesize findings** into a research document. Connect findings across components.
+   Give each agent 1-2 specific questions to answer. When prompting agents, explicitly instruct them: "Describe what exists. Do not suggest improvements or propose solutions."
 
-4. **Write `research.md`** to the artifact directory (~300 lines max — prefer `file:line` references over lengthy explanation):
+3. **Wait for ALL agents to complete** before proceeding.
+
+4. **Synthesize findings** into a research document. Connect findings across components. Resolve any contradictions between agent reports by reading the code yourself.
+
+5. **Write `research.md`** to the artifact directory (~300 lines max — prefer `file:line` references over lengthy explanation):
 
    ```markdown
    # Research Findings
@@ -55,7 +60,7 @@ Read `questions.md` from the artifact directory path provided by the caller in t
    [Anything the questions touched on that couldn't be fully answered]
    ```
 
-5. **Present a brief summary** of the findings. Report to the Orchestrator that the research is complete and `research.md` has been written.
+6. **Present a brief summary** of the findings. Report to the Orchestrator that the research is complete and `research.md` has been written.
 
 ## Output
 

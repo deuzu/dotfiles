@@ -3,7 +3,8 @@ name: rpi-lite-plan
 description: Comprehensive tactical implementation plan — the agent's working document
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, write, edit, bash]
+tools: [read, write, edit, bash, Agent]
+allowed_subagents: [codebase-analyzer, codebase-locator, codebase-pattern-finder]
 ---
 
 # Plan — Tactical Implementation Details
@@ -24,7 +25,7 @@ Read the user's task description and any available context provided by the calle
 
 2. **Minimalist Design & Alignment:**
    - Define the desired end state.
-   - Explain if there are major architectural ambiguities or trade-offs.
+   - Use the "ask_user_question" tool if there are major architectural ambiguities or trade-offs.
    - Define clear scope boundaries (What We're NOT Doing) to prevent scope creep.
 
 3. **Structural Outline (Vertical Slices):**

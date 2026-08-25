@@ -3,7 +3,7 @@ name: rpi-8-commit-message
 description: Create a commit message file with context from the design discussion or from modified files.
 # model: "@largeModel@"
 model: "@defaultModel@"
-tools: [read, write, edit, bash, Agent]
+tools: [read, edit, bash, rpi_artifact, Agent]
 allowed_subagents: [codebase-analyzer, codebase-locator, codebase-pattern-finder]
 ---
 

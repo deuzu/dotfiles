@@ -3,7 +3,7 @@ name: rpi-9-test-plan
 description: Creates a test plan based on the implementation.
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, write, edit, bash]
+tools: [read, edit, bash, rpi_artifact]
 ---
 
 # Test Plan

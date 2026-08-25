@@ -1,0 +1,8 @@
+{ }:
+{
+  "app.editor.external" = "ctrl+e";
+  "tui.editor.cursorLineEnd" = [
+    "end"
+    "ctrl+end"
+  ];
+}

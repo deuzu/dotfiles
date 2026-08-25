@@ -61,6 +61,7 @@ in
           ignored = "!git ls-files -v | grep \"^[[:lower:]]\"";
           squash-all = "!f(){ git reset $(git commit-tree HEAD^{tree} \"$@\");};f";
           prwt = "!f() { num=$1; branch=\"pr-$num\"; dir=\"../pr-$num\"; git fetch origin pull/$num/head:$branch && git worktree add $dir $branch && echo \"✅ Worktree for PR #$num created at $dir\"; };f";
+          wt = "!f() { branch=\"$1\"; base=\"\${2:-main}\"; dir=\"../$branch\"; git fetch origin \"$base\" && git worktree add -b \"$branch\" \"$dir\" \"origin/$base\" && echo \"✅ Worktree for $branch created at $dir (from origin/$base)\"; };f";
         };
         core = {
           autocrlf = "input";

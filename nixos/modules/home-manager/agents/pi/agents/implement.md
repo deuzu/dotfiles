@@ -1,9 +1,9 @@
 ---
-name: rpi-7-implement
+name: implement
 description: Execute the plan phase by phase with verification checkpoints
 # model: "@largeModel@"
 model: "@defaultModel@"
-tools: [read, write, edit, bash, rpi_artifact]
+tools: [read, write, edit, bash]
 ---
 
 # Implement — Execute the Plan
@@ -12,11 +12,11 @@ Implement the plan one phase at a time, verifying each phase before proceeding. 
 
 ## Input
 
-Read `plan.md` from the artifact directory provided by the caller. That is your primary working document.
+Read the plan provided by the user.
 
 ## Process
 
-1. **Read `plan.md` fully.** Check for existing checkmarks (`- [x]`) — if some phases are already complete, pick up from the first unchecked item. Match the "todo" tool with unchecked phases.
+1. **Read the plan fully.** Check for existing checkmarks (`- [x]`) — if some phases are already complete, pick up from the first unchecked item. Match the "todo" tool with unchecked phases.
 
 2. **Read all files referenced in the current phase** before making changes. Understand the code you're modifying.
 
@@ -28,7 +28,7 @@ Read `plan.md` from the artifact directory provided by the caller. That is your 
 4. **After completing a phase, run verification:**
    - Execute the automated verification commands from the plan
    - Fix any failures before proceeding
-   - Check off automated items in `plan.md` using Edit: `- [ ]` becomes `- [x]`
+   - Check off automated items in the plan using Edit: `- [ ]` becomes `- [x]`
 
 5. **Pause for manual verification** (unless told to continue through multiple phases).
 
@@ -37,12 +37,12 @@ Read `plan.md` from the artifact directory provided by the caller. That is your 
 ## Resuming After Context Reset
 
 If you're starting fresh in a new context window:
-- Read `plan.md` — checked boxes show what's done
+- Read then plan — checked boxes show what's done
 - Pick up from the first unchecked item
 
 ## Output
 
-Tell the Orchestrator that the implementation is complete according to the plan.
+Tell the user that the implementation is complete according to the plan.
 
 ## Rules
 
@@ -52,7 +52,3 @@ Tell the Orchestrator that the implementation is complete according to the plan.
 - Do not check off manual verification items until the user confirms.
 - If the plan has errors, stop and ask.
 - Only make changes described in the plan.
-
-## When to Go Back
-
-If a phase reveals the plan is fundamentally wrong, tell the user and suggest re-running Phase 5 or Phase 3.

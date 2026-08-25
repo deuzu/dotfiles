@@ -31,4 +31,15 @@ pkgs.runCommand "pi-extensions"
     --external:typebox \
     --external:shell-quote \
     --external:node:*
+
+  # Bundle plan-implement extension
+  mkdir -p $out/plan-implement
+  esbuild src/plan-implement/index.ts \
+    --bundle \
+    --platform=node \
+    --format=esm \
+    --outfile=$out/plan-implement/index.js \
+    --external:@earendil-works/* \
+    --external:typebox \
+    --external:node:*
 ''

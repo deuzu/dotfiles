@@ -3,7 +3,7 @@ name: rpi-1-question
 description: Decompose a task into neutral research questions
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, edit, bash, rpi_artifact, Agent]
+tools: [read, edit, bash, rpi_artifact, Agent, get_subagent_result, steer_subagent]
 allowed_subagents: [codebase-locator]
 ---
 

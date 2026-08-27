@@ -3,7 +3,7 @@ name: rpi-3-design
 description: Design discussion — align on where we are going before planning how
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, edit, bash, rpi_artifact, Agent]
+tools: [read, edit, bash, rpi_artifact, Agent, get_subagent_result, steer_subagent]
 allowed_subagents: [codebase-analyzer, codebase-pattern-finder]
 ---
 

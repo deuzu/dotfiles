@@ -14,5 +14,6 @@ export interface ParsedAgentPrompt {
   source: "file";
   allowedSubagents?: string[];
   tools?: string[];
+  model?: string;
 }
 

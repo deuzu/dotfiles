@@ -5,14 +5,61 @@ import type {
 import {
   saveBaselineTools,
   restoreBaselineTools,
-  getReadOnlyTools,
   resetPlanState,
-  DEFAULT_FALLBACK_TOOLS,
 } from "./state.ts";
 import { resolveAgentPrompt } from "./prompt.ts";
 
 export const MODE_STATUS_KEY = "plan-mode";
 export const PLAN_MODE_STATUS_KEY = MODE_STATUS_KEY;
+
+/** Resolve and apply the model declared in an agent .md file.
+ * Returns true when the mode switch may proceed (no model declared,
+ * or model resolved and set). Returns false after notifying the user
+ * of the failure — the caller must abort the mode switch. */
+async function applyDeclaredModel(
+  ctx: ExtensionContext,
+  pi: ExtensionAPI,
+  modeLabel: string,
+  modelId: string | undefined,
+): Promise<boolean> {
+  if (!modelId) {
+    return true;
+  }
+
+  const registry = ctx.modelRegistry;
+  let model = undefined;
+  const slashIndex = modelId.indexOf("/");
+  if (slashIndex > 0) {
+    model = registry.find(
+      modelId.slice(0, slashIndex),
+      modelId.slice(slashIndex + 1),
+    );
+  }
+  if (!model) {
+    // Bare model id without provider — search all available models.
+    model = registry
+      .getAvailable()
+      .find((m) => m.id === modelId || `${m.provider}/${m.id}` === modelId);
+  }
+
+  if (!model) {
+    ctx.ui.notify(
+      `Model "${modelId}" declared in the ${modeLabel} agent file could not be resolved. ${modeLabel} mode not activated.`,
+      "error",
+    );
+    return false;
+  }
+
+  const ok = await pi.setModel(model);
+  if (!ok) {
+    ctx.ui.notify(
+      `No API key available for model "${modelId}" declared in the ${modeLabel} agent file. ${modeLabel} mode not activated.`,
+      "error",
+    );
+    return false;
+  }
+  return true;
+}
 
 export async function handleExploreCommand(
   args: string,
@@ -28,10 +75,25 @@ export async function handleExploreCommand(
     );
     return;
   }
+  if (!explorePrompt.tools || explorePrompt.tools.length === 0) {
+    ctx.ui.notify(
+      "Agent prompt for explore must declare a tools: frontmatter list.",
+      "error",
+    );
+    return;
+  }
+  if (!(await applyDeclaredModel(ctx, pi, "Explore", explorePrompt.model))) {
+    return;
+  }
 
-  saveBaselineTools(currentTools, "explore", explorePrompt.allowedSubagents ?? null);
+  saveBaselineTools(
+    currentTools,
+    "explore",
+    explorePrompt.allowedSubagents ?? null,
+    explorePrompt.tools,
+  );
 
-  const readOnlyTools = getReadOnlyTools(currentTools);
+  const readOnlyTools = explorePrompt.tools;
   pi.setActiveTools(readOnlyTools);
 
   pi.sendMessage({
@@ -45,7 +107,7 @@ export async function handleExploreCommand(
     : "Explore";
   ctx.ui.setStatus(MODE_STATUS_KEY, statusText);
   ctx.ui.notify(
-    `Explore mode enabled: Read-only toolset active (${readOnlyTools.join(", ")})`,
+    `Explore mode enabled: Read-only toolset active (${readOnlyTools.join(", ")})${explorePrompt.model ? `, model ${explorePrompt.model}` : ""}`,
     "info",
   );
 
@@ -69,10 +131,25 @@ export async function handlePlanCommand(
     );
     return;
   }
+  if (!planPrompt.tools || planPrompt.tools.length === 0) {
+    ctx.ui.notify(
+      "Agent prompt for plan must declare a tools: frontmatter list.",
+      "error",
+    );
+    return;
+  }
+  if (!(await applyDeclaredModel(ctx, pi, "Plan", planPrompt.model))) {
+    return;
+  }
 
-  saveBaselineTools(currentTools, "plan", planPrompt.allowedSubagents ?? null);
+  saveBaselineTools(
+    currentTools,
+    "plan",
+    planPrompt.allowedSubagents ?? null,
+    planPrompt.tools,
+  );
 
-  const readOnlyTools = getReadOnlyTools(currentTools);
+  const readOnlyTools = planPrompt.tools;
   pi.setActiveTools(readOnlyTools);
 
   pi.sendMessage({
@@ -86,7 +163,7 @@ export async function handlePlanCommand(
     : "Plan";
   ctx.ui.setStatus(MODE_STATUS_KEY, statusText);
   ctx.ui.notify(
-    `Plan mode enabled: Read-only toolset active (${readOnlyTools.join(", ")})`,
+    `Plan mode enabled: Read-only toolset active (${readOnlyTools.join(", ")})${planPrompt.model ? `, model ${planPrompt.model}` : ""}`,
     "info",
   );
 
@@ -109,9 +186,16 @@ export async function handleImplementCommand(
     );
     return;
   }
+  if (
+    !(await applyDeclaredModel(ctx, pi, "Implement", implementPrompt.model))
+  ) {
+    return;
+  }
 
-  const restoredTools = restoreBaselineTools() ?? DEFAULT_FALLBACK_TOOLS;
-  pi.setActiveTools(restoredTools);
+  const restoredTools = restoreBaselineTools();
+  if (restoredTools) {
+    pi.setActiveTools(restoredTools);
+  }
 
   ctx.ui.setStatus(MODE_STATUS_KEY, undefined);
 
@@ -128,7 +212,9 @@ export async function handleImplementCommand(
 
   resetPlanState();
   ctx.ui.notify(
-    `Implementation mode enabled: Tools restored (${restoredTools.join(", ")})`,
+    restoredTools
+      ? `Implementation mode enabled: Tools restored (${restoredTools.join(", ")})`
+      : "Implementation mode enabled: Tools unchanged (no baseline to restore)",
     "info",
   );
 }

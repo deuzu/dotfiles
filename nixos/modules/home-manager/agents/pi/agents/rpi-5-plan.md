@@ -66,7 +66,7 @@ Read `structure.md`, `design.md`, and `research.md` from the artifact directory 
    - No unresolved questions
    - Verification steps must be concrete commands, not vague descriptions
 
-5. **Present a brief summary** of the plan to the user. Note any places where you deviated from the structure outline and why.
+5. **Tell the Orchestrator to present a brief summary** of the plan to the user. Note any places where you deviated from the structure outline and why.
 
 ## Output
 

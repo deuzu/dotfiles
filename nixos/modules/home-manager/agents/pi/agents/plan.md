@@ -3,7 +3,7 @@ name: plan
 description: Comprehensive tactical implementation plan — the agent's working document
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, bash, Agent]
+tools: [read, bash, ask_user_question, Agent]
 allowed_subagents: [codebase-analyzer, codebase-locator, codebase-pattern-finder]
 ---
 

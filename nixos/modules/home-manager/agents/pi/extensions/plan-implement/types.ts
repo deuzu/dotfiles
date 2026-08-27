@@ -5,6 +5,7 @@ export interface PlanExtensionState {
   isPlanModeActive: boolean;
   baselineTools: string[] | null;
   allowedSubagents: string[] | null;
+  allowedTools: string[] | null;
 }
 
 export interface ParsedAgentPrompt {
@@ -12,5 +13,6 @@ export interface ParsedAgentPrompt {
   body: string;
   source: "file";
   allowedSubagents?: string[];
+  tools?: string[];
 }
 

@@ -5,9 +5,7 @@ import type {
 import {
   saveBaselineTools,
   restoreBaselineTools,
-  getReadOnlyTools,
   resetPlanState,
-  DEFAULT_FALLBACK_TOOLS,
 } from "./state.ts";
 import { resolveAgentPrompt } from "./prompt.ts";
 
@@ -28,10 +26,22 @@ export async function handleExploreCommand(
     );
     return;
   }
+  if (!explorePrompt.tools || explorePrompt.tools.length === 0) {
+    ctx.ui.notify(
+      "Agent prompt for explore must declare a tools: frontmatter list.",
+      "error",
+    );
+    return;
+  }
 
-  saveBaselineTools(currentTools, "explore", explorePrompt.allowedSubagents ?? null);
+  saveBaselineTools(
+    currentTools,
+    "explore",
+    explorePrompt.allowedSubagents ?? null,
+    explorePrompt.tools,
+  );
 
-  const readOnlyTools = getReadOnlyTools(currentTools);
+  const readOnlyTools = explorePrompt.tools;
   pi.setActiveTools(readOnlyTools);
 
   pi.sendMessage({
@@ -69,10 +79,22 @@ export async function handlePlanCommand(
     );
     return;
   }
+  if (!planPrompt.tools || planPrompt.tools.length === 0) {
+    ctx.ui.notify(
+      "Agent prompt for plan must declare a tools: frontmatter list.",
+      "error",
+    );
+    return;
+  }
 
-  saveBaselineTools(currentTools, "plan", planPrompt.allowedSubagents ?? null);
+  saveBaselineTools(
+    currentTools,
+    "plan",
+    planPrompt.allowedSubagents ?? null,
+    planPrompt.tools,
+  );
 
-  const readOnlyTools = getReadOnlyTools(currentTools);
+  const readOnlyTools = planPrompt.tools;
   pi.setActiveTools(readOnlyTools);
 
   pi.sendMessage({
@@ -110,8 +132,10 @@ export async function handleImplementCommand(
     return;
   }
 
-  const restoredTools = restoreBaselineTools() ?? DEFAULT_FALLBACK_TOOLS;
-  pi.setActiveTools(restoredTools);
+  const restoredTools = restoreBaselineTools();
+  if (restoredTools) {
+    pi.setActiveTools(restoredTools);
+  }
 
   ctx.ui.setStatus(MODE_STATUS_KEY, undefined);
 
@@ -128,7 +152,9 @@ export async function handleImplementCommand(
 
   resetPlanState();
   ctx.ui.notify(
-    `Implementation mode enabled: Tools restored (${restoredTools.join(", ")})`,
+    restoredTools
+      ? `Implementation mode enabled: Tools restored (${restoredTools.join(", ")})`
+      : "Implementation mode enabled: Tools unchanged (no baseline to restore)",
     "info",
   );
 }

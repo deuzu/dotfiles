@@ -40,7 +40,7 @@ Read `task.md`, `questions.md`, and `research.md` from the artifact directory pr
    **Q2: ...**
    ```
 
-4. **Use the "ask_user_question" tool to present the questions to the user and wait for them to answer questions. Then save their answers in the `design-questions.md` document and proceed to the design document**
+4. **Tell the Orchestrator to present the questions** to the user and wait for them to answer questions. Then save their answers in the `design-questions.md` document and proceed to the design document**
 
 5. **Write `design.md`** (~200 lines) to the artifact directory:
 

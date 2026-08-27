@@ -3,7 +3,7 @@ name: rpi
 description: RPI Software Development Lifecycle Orchestrator
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, rpi_artifact, Agent]
+tools: [read, rpi_artifact, ask_user_question, Agent]
 allowed_subagents: [rpi-1-question, rpi-2-research, rpi-3-design, rpi-4-structure, rpi-5-plan, rpi-6-worktree, rpi-7-implement, rpi-8-commit-message, rpi-9-test-plan, rpi-10-test-plan-run]
 ---
 
@@ -54,3 +54,4 @@ The workflow is the same as the full workflow except it start at phase 3 Design.
 
 - **CRITICAL**: You must explicitly pass the artifact directory path to the agent in its prompt (e.g., "Run phase 2 for artifact directory `.agents/thoughts/rpi/...`").
 - When you need to create, update, or delete files in the artifact directory yourself, use the `rpi_artifact` tool (actions: create / modify / delete) instead of asking a subagent.
+- When you need to ask a question to the user, use the "ask_user_question" tool.

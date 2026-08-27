@@ -4,9 +4,30 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ParsedAgentPrompt } from "./types.ts";
 
+function parseListValue(rest: string): string[] | null {
+  if (rest.startsWith("[") && rest.endsWith("]")) {
+    return rest
+      .slice(1, -1)
+      .split(",")
+      .map((s) => s.trim().replace(/^["']|["']$/g, ""))
+      .filter(Boolean);
+  }
+  if (rest.length > 0) {
+    return rest
+      .split(",")
+      .map((s) => s.trim().replace(/^["']|["']$/g, ""))
+      .filter(Boolean);
+  }
+  return null;
+}
+
+/** Parse the frontmatter of an agent .md file. Supports `allowed_subagents`
+ * (or `allowedSubagents`) and `tools` (or `Tools`) list keys, in inline `[a, b]`,
+ * comma-separated, or YAML `- item` list form. */
 export function parseAgentFrontmatter(rawContent: string): {
   body: string;
   allowedSubagents?: string[];
+  tools?: string[];
 } {
   if (!rawContent.startsWith("---")) {
     return { body: rawContent.trim() };
@@ -20,27 +41,39 @@ export function parseAgentFrontmatter(rawContent: string): {
   const body = rawContent.slice(endIndex + 4).trim();
   const lines = frontmatterRaw.split(/\r?\n/);
   let allowedSubagents: string[] | undefined;
+  let tools: string[] | undefined;
+
+  const listKeys: Array<{
+    names: string[];
+    assign: (value: string[]) => void;
+  }> = [
+    {
+      names: ["allowed_subagents:", "allowedSubagents:"],
+      assign: (value) => {
+        allowedSubagents = value;
+      },
+    },
+    {
+      names: ["tools:", "Tools:"],
+      assign: (value) => {
+        tools = value;
+      },
+    },
+  ];
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
-    if (
-      line.startsWith("allowed_subagents:") ||
-      line.startsWith("allowedSubagents:")
-    ) {
+    for (const key of listKeys) {
+      if (!key.names.some((name) => line.startsWith(name))) {
+        continue;
+      }
       const colonIndex = line.indexOf(":");
       const rest = line.slice(colonIndex + 1).trim();
-      if (rest.startsWith("[") && rest.endsWith("]")) {
-        allowedSubagents = rest
-          .slice(1, -1)
-          .split(",")
-          .map((s) => s.trim().replace(/^["']|["']$/g, ""))
-          .filter(Boolean);
-      } else if (rest.length > 0) {
-        allowedSubagents = rest
-          .split(",")
-          .map((s) => s.trim().replace(/^["']|["']$/g, ""))
-          .filter(Boolean);
+      const inline = parseListValue(rest);
+      if (inline) {
+        key.assign(inline);
       } else {
+        // YAML list form: key followed by `- item` lines
         const listItems: string[] = [];
         while (i + 1 < lines.length && lines[i + 1].trim().startsWith("-")) {
           i++;
@@ -52,13 +85,14 @@ export function parseAgentFrontmatter(rawContent: string): {
           if (item) listItems.push(item);
         }
         if (listItems.length > 0) {
-          allowedSubagents = listItems;
+          key.assign(listItems);
         }
       }
+      break;
     }
   }
 
-  return { body, allowedSubagents };
+  return { body, allowedSubagents, tools };
 }
 
 export function parseFrontmatterBody(rawContent: string): string {
@@ -90,13 +124,14 @@ export function resolveAgentPrompt(
     try {
       if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, "utf-8");
-        const { body, allowedSubagents } = parseAgentFrontmatter(content);
+        const { body, allowedSubagents, tools } = parseAgentFrontmatter(content);
         if (body.length > 0) {
           return {
             name: agentName,
             body,
             source: "file",
             allowedSubagents,
+            tools,
           };
         }
       }

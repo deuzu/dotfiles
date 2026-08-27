@@ -35,6 +35,8 @@ export async function createArtifactDirectory(
   }
 }
 
+const ARTIFACT_ROOT_SEGMENTS = [".agents", "thoughts", "rpi"];
+
 function createArtifactDir(
   targetPath: string,
   cwd: string,
@@ -43,6 +45,19 @@ function createArtifactDir(
     const resolvedPath = path.isAbsolute(targetPath)
       ? targetPath
       : path.resolve(cwd, targetPath);
+
+    // Guard: the directory must be a strict subdirectory of
+    // <cwd>/.agents/thoughts/rpi/ — arbitrary paths (e.g. relative paths
+    // outside the artifact root) are rejected.
+    const artifactRoot = path.resolve(cwd, ...ARTIFACT_ROOT_SEGMENTS);
+    const rel = path.relative(artifactRoot, resolvedPath);
+    if (rel === "" || rel.startsWith("..") || path.isAbsolute(rel)) {
+      return {
+        success: false,
+        resolvedPath,
+        error: `"${targetPath}" is not a subdirectory of ${path.join(...ARTIFACT_ROOT_SEGMENTS)}/`,
+      };
+    }
 
     fs.mkdirSync(resolvedPath, { recursive: true });
     return { success: true, resolvedPath };
@@ -72,8 +87,6 @@ export interface ManageArtifactParams {
   /** Full file content (required for create/modify) */
   content?: string;
 }
-
-const ARTIFACT_ROOT_SEGMENTS = [".agents", "thoughts", "rpi"];
 
 /** Resolve `target` against `base` and return the resolved path, or null if it escapes `base`. */
 function resolveInside(base: string, target: string): string | null {

@@ -15,5 +15,7 @@
     "npm:@juicesharp/rpiv-btw"
     "npm:pi-mermaid"
     "npm:pi-web-access"
+    # "npm:@gotgenes/pi-permission-system"
+    # "npm:@zosmaai/pi-llm-wiki"
   ];
 }

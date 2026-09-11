@@ -179,50 +179,40 @@ in
             swap_floating_layout name="staggered" {
               floating_panes min_panes=5
             }
+
+            swap_floating_layout name="spread_tall" {
+              floating_panes exact_panes=2 {
+                pane { x  "4%"; y "3%"; width "46%"; height "90%"; }
+                pane { x "50%"; y "3%"; width "46%"; height "90%"; }
+              }
+            }
   
             swap_floating_layout name="spread" {
-              floating_panes max_panes=1 {
-                pane { width "46%"; }
+              floating_panes exact_panes=3 {
+                pane { x  "4%"; y  "3%"; width "46%"; height "47%"; }
+                pane { x "50%"; y  "3%"; width "46%"; height "47%"; }
+                pane {          y "48%"; width "46%"; height "47%"; }
               }
-              floating_panes max_panes=2 {
-                pane { x "3%";  y "25%"; width "46%"; }
-                pane { x "50%"; y "25%"; width "46%"; }
-              }
-              floating_panes max_panes=3 {
-                pane {          y "50%"; width "46%"; height "46%"; }
-                pane { x "3%";  y "2%";  width "46%"; height "46%"; }
-                pane { x "50%"; y "2%";  width "46%"; height "46%"; }
-              }
-              floating_panes max_panes=4 {
-                pane { x "3%";  y "3%";  width "46%"; height "45%"; }
-                pane { x "3%";  y "50%"; width "46%"; height "45%"; }
-                pane { x "50%"; y "3%";  width "46%"; height "45%"; }
-                pane { x "50%"; y "50%"; width "46%"; height "45%"; }
+              floating_panes exact_panes=4 {
+                pane { x  "4%"; y  "3%"; width "46%"; height "47%"; }
+                pane { x "50%"; y  "3%"; width "46%"; height "47%"; }
+                pane { x  "4%"; y "48%"; width "46%"; height "47%"; }
+                pane { x "50%"; y "48%"; width "46%"; height "47%"; }
               }
             }
 
             swap_floating_layout name="enlarged" {
               floating_panes max_panes=10 {
-                pane { x "5%"; y 1; width "90%"; height "90%"; }
-                pane { x "5%"; y 2; width "90%"; height "90%"; }
-                pane { x "5%"; y 3; width "90%"; height "90%"; }
-                pane { x "5%"; y 4; width "90%"; height "90%"; }
-                pane { x "5%"; y 5; width "90%"; height "90%"; }
-                pane { x "5%"; y 6; width "90%"; height "90%"; }
-                pane { x "5%"; y 7; width "90%"; height "90%"; }
-                pane { x "5%"; y 8; width "90%"; height "90%"; }
-                pane { x "5%"; y 9; width "90%"; height "90%"; }
-                pane { x 10; y 10; width "90%"; height "90%"; }
-              }
-            }
-
-            swap_floating_layout name="spread_tall" {
-              floating_panes max_panes=1 {
-                pane { y 1; width "46%"; height "90%"; }
-              }
-              floating_panes max_panes=2 {
-                pane { y 1; x "3%";  width "46%"; height "90%"; }
-                pane { y 1; x "50%"; width "46%"; height "90%"; }
+                pane { x "4%"; y 1;  width "90%"; height "90%"; }
+                pane { x "4%"; y 2;  width "90%"; height "90%"; }
+                pane { x "4%"; y 3;  width "90%"; height "90%"; }
+                pane { x "4%"; y 4;  width "90%"; height "90%"; }
+                pane { x "4%"; y 5;  width "90%"; height "90%"; }
+                pane { x "4%"; y 6;  width "90%"; height "90%"; }
+                pane { x "4%"; y 7;  width "90%"; height "90%"; }
+                pane { x "4%"; y 8;  width "90%"; height "90%"; }
+                pane { x "4%"; y 9;  width "90%"; height "90%"; }
+                pane { x "4%"; y 10; width "90%"; height "90%"; }
               }
             }
           }

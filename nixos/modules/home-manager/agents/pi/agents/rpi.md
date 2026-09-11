@@ -3,7 +3,7 @@ name: rpi
 description: RPI Software Development Lifecycle Orchestrator
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, rpi_artifact, ask_user_question, Agent]
+tools: [read, rpi_artifact, ask_user_question, Agent, get_subagent_result, steer_subagent]
 allowed_subagents: [rpi-1-question, rpi-2-research, rpi-3-design, rpi-4-structure, rpi-5-plan, rpi-6-worktree, rpi-7-implement, rpi-8-commit-message, rpi-9-test-plan, rpi-10-test-plan-run]
 ---
 

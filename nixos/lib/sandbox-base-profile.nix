@@ -59,6 +59,11 @@
         MAIN_REPO_GIT_DIR=$(dirname "$(dirname "$GIT_DIR_PATH")")
         if [ -d "$MAIN_REPO_GIT_DIR" ]; then
           ${argArrayName}+=("${bindFlag}" "$MAIN_REPO_GIT_DIR" ${lib.optionalString isBwrap "\"$MAIN_REPO_GIT_DIR\""})
+          # Bind all sibling worktrees
+          while IFS= read -r wt; do
+            [ "$wt" = "$PWD" ] && continue  # $PWD is already bound rw via baseRw
+            ${argArrayName}+=("${bindFlag}" "$wt" ${lib.optionalString isBwrap "\"$wt\""})
+          done < <(git --git-dir="$MAIN_REPO_GIT_DIR" worktree list --porcelain 2>/dev/null | awk '/^worktree /{sub(/^worktree /, ""); print}')
         fi
       fi
     fi

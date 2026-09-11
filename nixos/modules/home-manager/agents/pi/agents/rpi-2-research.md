@@ -3,7 +3,7 @@ name: rpi-2-research
 description: Objective codebase research driven by questions — facts only, no opinions
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, edit, bash, rpi_artifact, Agent]
+tools: [read, edit, bash, rpi_artifact, Agent, get_subagent_result, steer_subagent]
 allowed_subagents: [codebase-analyzer, codebase-locator, codebase-pattern-finder]
 ---
 

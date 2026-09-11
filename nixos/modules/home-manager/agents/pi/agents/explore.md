@@ -3,7 +3,7 @@ name: explore
 description: Codebase exploration and explanation mode — navigate, investigate, and explain how the code works
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, bash, Agent]
+tools: [read, bash, Agent, get_subagent_result, steer_subagent]
 allowed_subagents: [codebase-analyzer, codebase-locator, codebase-pattern-finder]
 ---
 

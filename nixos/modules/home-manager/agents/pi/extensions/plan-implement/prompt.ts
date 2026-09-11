@@ -22,12 +22,14 @@ function parseListValue(rest: string): string[] | null {
 }
 
 /** Parse the frontmatter of an agent .md file. Supports `allowed_subagents`
- * (or `allowedSubagents`) and `tools` (or `Tools`) list keys, in inline `[a, b]`,
- * comma-separated, or YAML `- item` list form. */
+ * (or `allowedSubagents`), `tools` (or `Tools`), and `model` (or `Model`) keys.
+ * List keys support inline `[a, b]`, comma-separated, or YAML `- item` form;
+ * `model` is a scalar (quotes stripped). Commented `# key:` lines are ignored. */
 export function parseAgentFrontmatter(rawContent: string): {
   body: string;
   allowedSubagents?: string[];
   tools?: string[];
+  model?: string;
 } {
   if (!rawContent.startsWith("---")) {
     return { body: rawContent.trim() };
@@ -42,6 +44,7 @@ export function parseAgentFrontmatter(rawContent: string): {
   const lines = frontmatterRaw.split(/\r?\n/);
   let allowedSubagents: string[] | undefined;
   let tools: string[] | undefined;
+  let model: string | undefined;
 
   const listKeys: Array<{
     names: string[];
@@ -61,12 +64,26 @@ export function parseAgentFrontmatter(rawContent: string): {
     },
   ];
 
+  const scalarKeys: Array<{
+    names: string[];
+    assign: (value: string) => void;
+  }> = [
+    {
+      names: ["model:", "Model:"],
+      assign: (value) => {
+        model = value;
+      },
+    },
+  ];
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
+    let matched = false;
     for (const key of listKeys) {
       if (!key.names.some((name) => line.startsWith(name))) {
         continue;
       }
+      matched = true;
       const colonIndex = line.indexOf(":");
       const rest = line.slice(colonIndex + 1).trim();
       const inline = parseListValue(rest);
@@ -90,9 +107,26 @@ export function parseAgentFrontmatter(rawContent: string): {
       }
       break;
     }
+    if (matched) {
+      continue;
+    }
+    for (const key of scalarKeys) {
+      if (!key.names.some((name) => line.startsWith(name))) {
+        continue;
+      }
+      const colonIndex = line.indexOf(":");
+      const value = line
+        .slice(colonIndex + 1)
+        .trim()
+        .replace(/^["']|["']$/g, "");
+      if (value) {
+        key.assign(value);
+      }
+      break;
+    }
   }
 
-  return { body, allowedSubagents, tools };
+  return { body, allowedSubagents, tools, model };
 }
 
 export function parseFrontmatterBody(rawContent: string): string {
@@ -124,7 +158,8 @@ export function resolveAgentPrompt(
     try {
       if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, "utf-8");
-        const { body, allowedSubagents, tools } = parseAgentFrontmatter(content);
+        const { body, allowedSubagents, tools, model } =
+          parseAgentFrontmatter(content);
         if (body.length > 0) {
           return {
             name: agentName,
@@ -132,6 +167,7 @@ export function resolveAgentPrompt(
             source: "file",
             allowedSubagents,
             tools,
+            model,
           };
         }
       }

@@ -42,4 +42,15 @@ pkgs.runCommand "pi-extensions"
     --external:@earendil-works/* \
     --external:typebox \
     --external:node:*
+
+  # Bundle hn-digest extension
+  mkdir -p $out/hn-digest
+  esbuild src/hn-digest/index.ts \
+    --bundle \
+    --platform=node \
+    --format=esm \
+    --outfile=$out/hn-digest/index.js \
+    --external:@earendil-works/* \
+    --external:typebox \
+    --external:node:*
 ''

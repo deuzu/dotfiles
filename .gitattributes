@@ -2,3 +2,4 @@ secrets.* filter=git-crypt diff=git-crypt
 *.secrets.* filter=git-crypt diff=git-crypt
 *.config*.nix filter=git-crypt diff=git-crypt
 config.nix filter=git-crypt diff=git-crypt
+nixos/hosts/dedi-sm/install/bootstrap-configuration.nix filter=git-crypt diff=git-crypt

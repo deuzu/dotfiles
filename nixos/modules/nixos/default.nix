@@ -2,6 +2,7 @@
   imports = [
     ./age.nix
     ./bluetooth.nix
+    ./crowdsec.nix
     ./dankgreeter.nix
     ./eternal-terminal.nix
     ./gnome.nix

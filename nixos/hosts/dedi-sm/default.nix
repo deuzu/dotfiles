@@ -9,6 +9,7 @@
 
   system.stateVersion = "24.11";
   nixpkgs.config.allowUnfree = true;
+  programs.nix-ld.enable = true;
 
   nix = {
     gc = {
@@ -28,4 +29,7 @@
     git
     vim
   ];
+
+  networking.firewall.allowedTCPPorts = [ 22 443 ];
+  networking.hostName = "dedi-sm";
 }

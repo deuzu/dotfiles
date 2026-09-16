@@ -7,5 +7,5 @@
   rememberAgents = false;
   outputTranscript = false;
   worktreeIsolation = false;
-  reportUsage = true;
+  # reportUsage = true;
 }

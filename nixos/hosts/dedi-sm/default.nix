@@ -20,6 +20,7 @@
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       warn-dirty = false;
+      trusted-users = [ "ftouya" ];
     };
   };
 
@@ -29,7 +30,4 @@
     git
     vim
   ];
-
-  networking.firewall.allowedTCPPorts = [ 22 443 ];
-  networking.hostName = "dedi-sm";
 }

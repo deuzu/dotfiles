@@ -63,6 +63,12 @@ User configurations are managed via Home Manager, imported directly into the Nix
 - The full set of home-manager modules is aggregated in `modules/home-manager/default.nix`.
 - Per-host user overrides live in `hosts/<host>/users/ftouya.config-*.nix` (e.g., `ftouya.config-shell.nix`, `ftouya.config-dev.nix`).
 
+## Validate Your Work
+
+```sh
+nix eval .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath
+```
+
 ## Do's and Don'ts
 
 - **DO** use the `modules.<name>.enable` pattern for new services.

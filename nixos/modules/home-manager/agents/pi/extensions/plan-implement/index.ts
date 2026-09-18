@@ -5,6 +5,7 @@ import type {
 import {
   handleExploreCommand,
   handlePlanCommand,
+  handlePlanLiteCommand,
   handleImplementCommand,
 } from "./commands.ts";
 import { getPlanState } from "./state.ts";
@@ -66,6 +67,13 @@ export default function planImplementExtension(pi: ExtensionAPI): void {
     description: "Switch to read-only planning mode and load tactical planning instructions",
     handler: async (args: string, ctx: ExtensionContext) => {
       await handlePlanCommand(args, ctx, pi);
+    },
+  });
+
+  pi.registerCommand("plan-lite", {
+    description: "Switch to read-only planning mode and load simple planning instructions",
+    handler: async (args: string, ctx: ExtensionContext) => {
+      await handlePlanLiteCommand(args, ctx, pi);
     },
   });
 

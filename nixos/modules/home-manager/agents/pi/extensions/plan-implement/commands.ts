@@ -173,6 +173,62 @@ export async function handlePlanCommand(
   }
 }
 
+export async function handlePlanLiteCommand(
+  args: string,
+  ctx: ExtensionContext,
+  pi: ExtensionAPI,
+): Promise<void> {
+  const currentTools = pi.getActiveTools();
+  const planPrompt = resolveAgentPrompt(ctx.cwd, "plan-lite");
+  if (!planPrompt) {
+    ctx.ui.notify(
+      "Failed to resolve agent prompt for plan-lite. Ensure plan-lite.md exists.",
+      "error",
+    );
+    return;
+  }
+  if (!planPrompt.tools || planPrompt.tools.length === 0) {
+    ctx.ui.notify(
+      "Agent prompt for plan-lite must declare a tools: frontmatter list.",
+      "error",
+    );
+    return;
+  }
+  if (!(await applyDeclaredModel(ctx, pi, "Plan-Lite", planPrompt.model))) {
+    return;
+  }
+
+  saveBaselineTools(
+    currentTools,
+    "plan-lite",
+    planPrompt.allowedSubagents ?? null,
+    planPrompt.tools,
+  );
+
+  const readOnlyTools = planPrompt.tools;
+  pi.setActiveTools(readOnlyTools);
+
+  pi.sendMessage({
+    customType: "plan-lite-mode-instruction",
+    content: planPrompt.body,
+    display: true,
+  });
+
+  const statusText = ctx.ui.theme?.fg
+    ? ctx.ui.theme.fg("accent", "Plan-Lite")
+    : "Plan";
+  ctx.ui.setStatus(MODE_STATUS_KEY, statusText);
+  ctx.ui.notify(
+    `Plan-Lite mode enabled: Read-only toolset active (${readOnlyTools.join(", ")})${planPrompt.model ? `, model ${planPrompt.model}` : ""}`,
+    "info",
+  );
+
+  const task = args.trim();
+  if (task.length > 0) {
+    pi.sendUserMessage(task);
+  }
+}
+
 export async function handleImplementCommand(
   args: string,
   ctx: ExtensionContext,

@@ -6,6 +6,8 @@ import {
   saveBaselineTools,
   restoreBaselineTools,
   resetPlanState,
+  hasModePromptBeenSent,
+  markModePromptSent,
 } from "./state.ts";
 import { resolveAgentPrompt } from "./prompt.ts";
 
@@ -61,6 +63,30 @@ async function applyDeclaredModel(
   return true;
 }
 
+/** Inject a mode's instruction prompt at most once per session.
+ * On re-entry (prompt already in conversation history), send a short
+ * user-message reminder instead of duplicating the full prompt. */
+function injectModeInstruction(
+  pi: ExtensionAPI,
+  modeKey: string,
+  modeLabel: string,
+  promptBody: string,
+  customType: string,
+): void {
+  if (hasModePromptBeenSent(modeKey)) {
+    pi.sendUserMessage(
+      `Re-entering ${modeLabel} mode; the ${modeLabel}-mode instructions above still apply.`,
+    );
+    return;
+  }
+  pi.sendMessage({
+    customType,
+    content: promptBody,
+    display: true,
+  });
+  markModePromptSent(modeKey);
+}
+
 export async function handleExploreCommand(
   args: string,
   ctx: ExtensionContext,
@@ -96,11 +122,13 @@ export async function handleExploreCommand(
   const readOnlyTools = explorePrompt.tools;
   pi.setActiveTools(readOnlyTools);
 
-  pi.sendMessage({
-    customType: "explore-mode-instruction",
-    content: explorePrompt.body,
-    display: true,
-  });
+  injectModeInstruction(
+    pi,
+    "explore",
+    "Explore",
+    explorePrompt.body,
+    "explore-mode-instruction",
+  );
 
   const statusText = ctx.ui.theme?.fg
     ? ctx.ui.theme.fg("accent", "Explore")
@@ -152,11 +180,13 @@ export async function handlePlanCommand(
   const readOnlyTools = planPrompt.tools;
   pi.setActiveTools(readOnlyTools);
 
-  pi.sendMessage({
-    customType: "plan-mode-instruction",
-    content: planPrompt.body,
-    display: true,
-  });
+  injectModeInstruction(
+    pi,
+    "plan",
+    "Plan",
+    planPrompt.body,
+    "plan-mode-instruction",
+  );
 
   const statusText = ctx.ui.theme?.fg
     ? ctx.ui.theme.fg("accent", "Plan")
@@ -208,11 +238,13 @@ export async function handlePlanLiteCommand(
   const readOnlyTools = planPrompt.tools;
   pi.setActiveTools(readOnlyTools);
 
-  pi.sendMessage({
-    customType: "plan-lite-mode-instruction",
-    content: planPrompt.body,
-    display: true,
-  });
+  injectModeInstruction(
+    pi,
+    "plan-lite",
+    "Plan-Lite",
+    planPrompt.body,
+    "plan-lite-mode-instruction",
+  );
 
   const statusText = ctx.ui.theme?.fg
     ? ctx.ui.theme.fg("accent", "Plan-Lite")
@@ -255,11 +287,13 @@ export async function handleImplementCommand(
 
   ctx.ui.setStatus(MODE_STATUS_KEY, undefined);
 
-  pi.sendMessage({
-    customType: "implement-mode-instruction",
-    content: implementPrompt.body,
-    display: true,
-  });
+  injectModeInstruction(
+    pi,
+    "implement",
+    "Implement",
+    implementPrompt.body,
+    "implement-mode-instruction",
+  );
 
   const taskMessage =
     args.trim() ||

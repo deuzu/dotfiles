@@ -6,6 +6,12 @@ in
   options.modules.ssh = with lib; {
     enable = mkEnableOption "SSH";
 
+    ports = mkOption {
+      type = types.listOf types.port;
+      default = [ 22 443 ]; # 443 is handy on restrictive networks; conflicts with any HTTPS server, override per-host if needed
+      description = "Ports sshd listens on. Note that 443 conflicts with web servers.";
+    };
+
     allowUsers = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null; # Allows all users by default. Can be [ "user1" "user2" ]
@@ -49,7 +55,7 @@ in
   config = lib.mkIf cfg.enable {
     services.openssh = {
       enable = true;
-      ports = [ 22 443 ];
+      ports = cfg.ports;
       settings = {
         PermitRootLogin = cfg.permitRootLogin;
         PasswordAuthentication = false;

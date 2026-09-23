@@ -26,6 +26,24 @@ in
         example = [ 51820 ];
         description = "UDP ports to open in the firewall.";
       };
+
+      allowedUDPPortRanges = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            from = mkOption {
+              type = types.port;
+              description = "Start of the range.";
+            };
+            to = mkOption {
+              type = types.port;
+              description = "End of the range.";
+            };
+          };
+        });
+        default = [ ];
+        example = [ { from = 50100; to = 50200; } ];
+        description = "UDP port ranges to open in the firewall.";
+      };
     };
 
     networkmanager = {
@@ -47,6 +65,7 @@ in
       };
       firewall = {
         inherit (cfg.firewall) allowedTCPPorts allowedUDPPorts;
+        allowedUDPPortRanges = cfg.firewall.allowedUDPPortRanges;
       };
     };
   };

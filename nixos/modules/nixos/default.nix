@@ -2,12 +2,16 @@
   imports = [
     ./age.nix
     ./bluetooth.nix
+    ./caddy.nix
     ./crowdsec.nix
     ./dankgreeter.nix
     ./eternal-terminal.nix
+    ./fail2ban.nix
     ./gnome.nix
     ./gnome-keyring.nix
     ./i18n.nix
+    ./matrix-continuwuity.nix
+    ./matrix-rtc.nix
     ./mosh.nix
     ./networking.nix
     ./power-management.nix

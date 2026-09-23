@@ -6,6 +6,9 @@ export interface PlanExtensionState {
   baselineTools: string[] | null;
   allowedSubagents: string[] | null;
   allowedTools: string[] | null;
+  /** Mode keys ("plan" | "plan-lite" | "explore" | "implement") whose
+   * full instruction prompt has already been injected this session. */
+  injectedModePrompts: Set<string>;
 }
 
 export interface ParsedAgentPrompt {

@@ -14,6 +14,7 @@
       enable = [
         # "slack-gif-creator"
         # "adr-generator"
+        "addguests-weekly-infra"
         "github-code-search"
         "slopifycator"
       ];

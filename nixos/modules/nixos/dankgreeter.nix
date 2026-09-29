@@ -5,7 +5,8 @@ let
 in
 {
   imports = [
-    inputs.dms.nixosModules.greeter
+    # inputs.dms.nixosModules.greeter
+    inputs.dank-greeter.nixosModules.default
   ];
 
   options.modules.dankgreeter = with lib; {
@@ -21,7 +22,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.dank-material-shell.greeter = {
+    programs.dms-greeter = {
       enable = true;
       compositor.name = "${cfg.compositor}";
       configHome = "/home/${cfg.username}";

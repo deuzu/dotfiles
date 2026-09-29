@@ -42,7 +42,19 @@ in
       enableClipboardPaste = true;
 
       plugins = {
-        dankBatteryAlerts.enable = true;
+        dankBatteryAlerts = {
+          enable = true;
+          # Plugin was dropped from dms-plugin-registry (rev c5c954d, 2026-09);
+          # pin it manually from the upstream monorepo (last registry-pinned rev,
+          # plugin version 1.1.2). Remove if the registry re-adds it.
+          # mkForce guards against conflicting definitions if the registry
+          # re-adds the plugin in a future update.
+          src = lib.mkForce (pkgs.fetchgit {
+            url = "https://github.com/AvengeMedia/dms-plugins";
+            rev = "cb66135b0af01eacb25f3a656dc86fb727fa02cf";
+            hash = "sha256-AOEGBhjB6Vg3L2Tm1OTtdUZGV6fjKpEzmLAZrSQjHb4=";
+          } + "/DankBatteryAlerts");
+        };
         calculator.enable = true;
         dockerManager.enable = true;
         nixPackageRunner.enable = true;

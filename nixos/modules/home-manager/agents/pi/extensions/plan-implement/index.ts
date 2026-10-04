@@ -7,8 +7,9 @@ import {
   handlePlanCommand,
   handlePlanLiteCommand,
   handleImplementCommand,
+  MODE_STATUS_KEY,
 } from "./commands.ts";
-import { getPlanState } from "./state.ts";
+import { getPlanState, resetSessionState } from "./state.ts";
 
 export * from "./types.ts";
 export * from "./state.ts";
@@ -16,6 +17,15 @@ export * from "./prompt.ts";
 export * from "./commands.ts";
 
 export default function planImplementExtension(pi: ExtensionAPI): void {
+  pi.on("session_start", async (event, ctx) => {
+    if (event.reason !== "new") {
+      return;
+    }
+
+    resetSessionState();
+    ctx.ui.setStatus(MODE_STATUS_KEY, undefined);
+  });
+
   pi.on("tool_call", async (event) => {
     const state = getPlanState();
     if (!state.isPlanModeActive) {
@@ -43,8 +53,6 @@ export default function planImplementExtension(pi: ExtensionAPI): void {
       return;
     }
 
-    // Defense in depth: enforce the mode's declared tool allowlist even if
-    // tools were re-added to the session after the mode was activated.
     if (
       state.allowedTools &&
       !state.allowedTools.some((tool) => tool.toLowerCase() === toolName)

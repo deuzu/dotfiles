@@ -12,4 +12,3 @@ allowed_subagents: [codebase-analyzer, codebase-locator, codebase-pattern-finder
 Create an actionable implementation plan based on the user's request. This plan must act as a self-contained **working document** containing everything needed for an agent to implement the solution without further context.
 
 Read the user's task description and any available context provided by the caller.
-

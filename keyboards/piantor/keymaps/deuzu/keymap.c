@@ -38,10 +38,10 @@ enum custom_keycodes {
     UD_TILD,
 };
 
-const uint16_t PROGMEM gaming_on[] = { KC_F, KC_K, COMBO_END };
-const uint16_t PROGMEM gaming_off[] = { KC_T, KC_Y, COMBO_END };
-const uint16_t PROGMEM qwerty_on[] = { KC_H, KC_Z, COMBO_END };
-const uint16_t PROGMEM qwerty_off[] = { KC_Y, KC_U, COMBO_END };
+const uint16_t PROGMEM gaming_on[] = { KC_F, KC_H, COMBO_END };
+const uint16_t PROGMEM gaming_off[] = { KC_I, KC_COMMA, COMBO_END };
+const uint16_t PROGMEM qwerty_on[] = { KC_O, KC_SLSH, COMBO_END };
+const uint16_t PROGMEM qwerty_off[] = { KC_I, KC_COMMA, COMBO_END };
 
 combo_t key_combos[COMBO_COUNT] = {
   COMBO(gaming_on, PDF(_GAM)),
@@ -60,9 +60,6 @@ const key_override_t *key_overrides[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
      * ERGLACE LAYOUT
-     *
-     * activate GAMING  by pressing F + K
-     * activate QWERTY  by pressing H + Z
      *
      *                ┌────────┬────────┬────────┬────────┬────────┬────────┐                ┌────────┬────────┬────────┬────────┬────────┬────────┐
      *                │ ^      │ Y      │ Esc    │ O      │ F      │ K      │                │ V      │ P      │ L      │ C      │ Q      │ ´      │
@@ -201,8 +198,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
      * GAMING 1 LAYOUT
      *
-     * activate ERGA by pressing T + Y
-     *
      *               ┌────────┬────────┬────────┬────────┬────────┬────────┐              ┌────────┬────────┬────────┬────────┬────────┬────────┐
      *               │ Esc    │ A      │ W      │ E      │ R      │ T      │              │ Y      │ U      │ I      │ O      │ P      │ Bspc   │
      *               ├────────┼────────┼────────┼────────┼────────┼────────┤              ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -256,8 +251,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /*
      * QWERTY LAYOUT
-     *
-     * activate ERGA by pressing Y + U
      *
      *               ┌────────┬────────┬────────┬────────┬────────┬────────┐              ┌────────┬────────┬────────┬────────┬────────┬────────┐
      *               │ ^      │ Q      │ W      │ E      │ R      │ T      │              │ Y      │ U      │ I      │ O      │ P      │ - _    │

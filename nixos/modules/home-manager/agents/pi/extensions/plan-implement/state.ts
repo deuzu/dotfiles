@@ -44,12 +44,6 @@ export function resetPlanState(): void {
   state.baselineTools = null;
   state.allowedSubagents = null;
   state.allowedTools = null;
-  // NOTE: injectedModePrompts is intentionally NOT cleared here (nor in
-  // restoreBaselineTools/saveBaselineTools). Mode prompts live in the
-  // conversation history for the whole session, so re-entering a mode —
-  // even after /implement resets the mode state — must not re-inject them.
-  // The set resets naturally per session because pi rebinds extension
-  // modules on session switch (new/resume/fork).
 }
 
 export function hasModePromptBeenSent(mode: string): boolean {
@@ -58,5 +52,10 @@ export function hasModePromptBeenSent(mode: string): boolean {
 
 export function markModePromptSent(mode: string): void {
   state.injectedModePrompts.add(mode);
+}
+
+export function resetSessionState(): void {
+  resetPlanState();
+  state.injectedModePrompts.clear();
 }
 

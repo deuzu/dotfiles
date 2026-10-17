@@ -50,6 +50,7 @@
     ./vcs/jj.nix
 
     ./acli.nix
+    ./agent-browser.nix
     ./anytype.nix
     ./arandr.nix
     ./at.nix
@@ -61,6 +62,7 @@
     ./carapace.nix
     ./curl.nix
     ./direnv.nix
+    ./diffle.nix
     ./dua.nix
     ./env.nix
     ./gcc.nix

@@ -46,12 +46,9 @@
     };
 
     agent-skills.url = "github:Kyure-A/agent-skills-nix";
-    anthropic-skills = {
-      url = "github:anthropics/skills";
-      flake = false;
-    };
 
     neru.url = "github:y3owk1n/neru";
+    diffle.url = "github:moritzwilksch/diffle";
     ponos.url = "git+ssh://git@codeberg.org/Deuzu/ponos-bot.git";
 
     dms = {

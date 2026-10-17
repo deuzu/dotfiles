@@ -11,5 +11,11 @@ in
     home.packages = with pkgs; [
       obsidian
     ];
+
+    programs.git = lib.mkIf config.modules.vcs.git.enable {
+      ignores = [
+        ".obsidian/"
+      ];
+    };
   };
 }

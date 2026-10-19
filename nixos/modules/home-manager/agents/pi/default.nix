@@ -108,6 +108,7 @@ in
       ignores = [
         ".pi/"
         ".piignore"
+        ".agents/thoughts"
       ];
     };
   };

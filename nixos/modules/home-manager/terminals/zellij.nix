@@ -19,6 +19,26 @@ in
       });
       default = [ ];
     };
+
+    agents.enable = mkEnableOption "zj-agents Zellij plugins (engine + floating sidebar)";
+
+    agents.version = mkOption {
+      type = types.str;
+      default = "v0.1.0";
+      description = "Pinned zj-agents GitHub release tag (wasm assets + hashes below must match).";
+    };
+
+    agents.notify = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Desktop notifications when agents block/finish (engine config).";
+    };
+
+    agents.sidebarKeybind = mkOption {
+      type = types.str;
+      default = "Alt a";
+      description = "Key to open/focus the zj-agents sidebar (normal + locked modes).";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -37,6 +57,25 @@ in
           hide_session_name = true;
         };
 
+        # zj-agents plugin aliases — stable file: paths so permission grants
+        # survive rebuilds (never point at the /nix/store path directly)
+        plugins = lib.mkIf cfg.agents.enable {
+          zj-agents-engine = {
+            _props.location = "file:~/.config/zellij/plugins/zj-agents-engine.wasm";
+          };
+          zj-agents-sidebar = {
+            _props.location = "file:~/.config/zellij/plugins/zj-agents-sidebar.wasm";
+          };
+        };
+
+        # Auto-load the background engine with the session; the sidebar is
+        # launched on demand via the keybind below.
+        load_plugins = lib.mkIf cfg.agents.enable {
+          zj-agents-engine.notify = {
+            _args = [ cfg.agents.notify ];
+          };
+        };
+
         keybinds = {
           shared = {
             "bind \"Alt home\"" = { PreviousSwapLayout = { }; };
@@ -49,6 +88,17 @@ in
             "bind \"Alt Down\"" = { MoveFocus = "Down"; };
             "bind \"Alt Up\"" = { MoveFocus = "Up"; };
             "bind \"Alt n\"" = { NewPane = {}; };
+            "bind \"${cfg.agents.sidebarKeybind}\"" = {
+              LaunchOrFocusPlugin = {
+                _args = [ "zj-agents-sidebar" ];
+                floating = {
+                  _args = [ true ];
+                };
+                move_to_focused_tab = {
+                  _args = [ true ];
+                };
+              };
+            };
           };
         };
       };
@@ -218,8 +268,50 @@ in
           }
         '';
       in
-      {
-        ".config/zellij/layouts/code.kdl".text = value;
-      };
+      lib.mkMerge [
+        {
+          ".config/zellij/layouts/code.kdl".text = value;
+        }
+        (lib.mkIf cfg.agents.enable {
+          # Pinned release assets (hashes cross-checked against the release's
+          # SHA256SUMS); bump agents.version and these hashes together.
+          ".config/zellij/plugins/zj-agents-engine.wasm".source = pkgs.fetchurl {
+            url = "https://github.com/kaankoken/zj-agents/releases/download/${cfg.agents.version}/zj-agents-engine.wasm";
+            hash = "sha256-iXWSFXFwMRsPgqsB22OZI4ZO1nNPPgy3M1PvEXIfwqk=";
+          };
+          ".config/zellij/plugins/zj-agents-sidebar.wasm".source = pkgs.fetchurl {
+            url = "https://github.com/kaankoken/zj-agents/releases/download/${cfg.agents.version}/zj-agents-sidebar.wasm";
+            hash = "sha256-aWg0HCnVk+/lpJhHQfitQkn+vtFqQMwfZ3NTr6nnJUA=";
+          };
+        })
+        (lib.mkIf (cfg.agents.enable && config.modules.agents.pi.enable) {
+          # zj-agents cannot see "pi" as the pane process: the sandboxed
+          # binary (ai) execs bwrap, so the pane's foreground argv[0] is
+          # ".../bin/bwrap" and the pi store path only appears deeper in
+          # argv. Override the bundled pi manifest to match on bwrap +
+          # the "pi-coding-agent" store-path substring (stable across
+          # pi version bumps). Replaces the bundled Pi manifest; other
+          # bundled agents (claude/codex/grok/omp) are unaffected.
+          ".config/zellij/zj-agents/agent-detection/pi.toml".text = ''
+            schema = 1
+            name = "pi"
+            label = "Pi"
+            scan_lines = 40
+            fallback = "idle"
+
+            [detect]
+            process = [ "bwrap" ]
+            argv_any = [ "pi-coding-agent" ]
+
+            [[rule]]
+            state = "blocked"
+            pattern = "(?i)Permissions Required"
+
+            [[rule]]
+            state = "working"
+            pattern = "[⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏] Working"
+          '';
+        })
+      ];
   };
 }

@@ -1,4 +1,4 @@
-export type ActiveMode = "plan" | "plan-lite" | "explore" | null;
+export type ActiveMode = "plan" | "plan-lite" | "explore" | "design" | null;
 
 export interface PlanExtensionState {
   activeMode: ActiveMode;

@@ -1,6 +1,12 @@
-{ defaultProvider, defaultModel, ... }:
+{ defaultProvider, defaultModel, largeModel, ... }:
+let
+  enabledModels =
+    if (defaultModel != null && largeModel != null)
+    then [ defaultModel largeModel ]
+    else [ ];
+in
 {
-  inherit defaultProvider defaultModel;
+  inherit defaultProvider defaultModel enabledModels;
   defaultThinkingLevel = "high";
   theme = "dark";
   quietStartup = false;

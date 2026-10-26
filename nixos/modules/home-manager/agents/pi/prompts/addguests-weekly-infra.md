@@ -1,17 +1,13 @@
 ---
-name: addguests-weekly-infra
-description: Convert a raw weekly infra meeting draft into a clean, structured document. Use when asked to clean up, restructure, or finalize addguests weekly infra notes.
+description: Convert a raw weekly infra meeting draft into a clean, structured English document
+argument-hint: "<raw-draft>"
 ---
 
-# Addguests Weekly Infra Notes Cleaner
+Convert the raw weekly infra meeting draft below — typically typed quickly during a meeting, mixing French and English — into a clean, structured **English** document, in a single pass.
 
-Converts a raw weekly infra draft — typically typed quickly during a meeting and mixing French and English — into a clean, structured **English** document, in a single pass.
+## Draft
 
-## Input
-
-- The draft
-
-It may contain mixed FR/EN prose, franglais, shorthand, TODOs, and side remarks.
+${ARGUMENTS:-<raw draft not provided — ask the user to paste it>}
 
 ## Process
 

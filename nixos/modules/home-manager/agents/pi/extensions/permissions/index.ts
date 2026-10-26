@@ -82,7 +82,7 @@ export default function permissionsExtension(pi: ExtensionAPI) {
     if (permission === "ask") {
       const confirmed = ctx.hasUI && await ctx.ui.confirm(
         "Permissions Required",
-        `Command: ${command}".\nSegments: \n-  ${segments.join("\n-  ")}.`,
+        `Segments: \n-  ${segments.join("\n-  ")}.`,
       );
 
       if (!confirmed) {

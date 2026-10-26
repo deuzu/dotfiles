@@ -309,3 +309,61 @@ export async function handleImplementCommand(
   );
 }
 
+export async function handleDesignCommand(
+  args: string,
+  ctx: ExtensionContext,
+  pi: ExtensionAPI,
+): Promise<void> {
+  const currentTools = pi.getActiveTools();
+  const designPrompt = resolveAgentPrompt(ctx.cwd, "design");
+  if (!designPrompt) {
+    ctx.ui.notify(
+      "Failed to resolve agent prompt for design. Ensure design.md exists.",
+      "error",
+    );
+    return;
+  }
+  if (!designPrompt.tools || designPrompt.tools.length === 0) {
+    ctx.ui.notify(
+      "Agent prompt for design must declare a tools: frontmatter list.",
+      "error",
+    );
+    return;
+  }
+  if (!(await applyDeclaredModel(ctx, pi, "Design", designPrompt.model))) {
+    return;
+  }
+
+  saveBaselineTools(
+    currentTools,
+    "design",
+    designPrompt.allowedSubagents ?? null,
+    designPrompt.tools,
+  );
+
+  const readOnlyTools = designPrompt.tools;
+  pi.setActiveTools(readOnlyTools);
+
+  injectModeInstruction(
+    pi,
+    "design",
+    "Design",
+    designPrompt.body,
+    "design-mode-instruction",
+  );
+
+  const statusText = ctx.ui.theme?.fg
+    ? ctx.ui.theme.fg("accent", "Design")
+    : "Design";
+  ctx.ui.setStatus(MODE_STATUS_KEY, statusText);
+  ctx.ui.notify(
+    `Design mode enabled: Read-only toolset active (${readOnlyTools.join(", ")})${designPrompt.model ? `, model ${designPrompt.model}` : ""}`,
+    "info",
+  );
+
+  const task = args.trim();
+  if (task.length > 0) {
+    pi.sendUserMessage(task);
+  }
+}
+

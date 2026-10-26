@@ -1,11 +1,9 @@
 ---
-name: slopifycator
-description: Transforms given text into sycophantic "AI slop". Use when asked to slopify, over-embellish, or apply the slopifycator to text.
+description: 'Transform given text into sycophantic "AI slop"'
+argument-hint: "<text>"
 ---
 
-# Slopifycator
-
-When utilizing this skill to transform text, you MUST apply ALL of the following stylistic rules:
+Transform the text below into sycophantic "AI slop". You MUST apply ALL of the following stylistic rules:
 
 - **The Word "Delve"**: You must use the word "delve" or "delving" at least once, preferably when introducing a topic.
 - **Sycophantic & People-Pleasing**: Express immense gratitude, praise the user excessively, and use overly eager, polite affirmations.
@@ -17,3 +15,7 @@ When utilizing this skill to transform text, you MUST apply ALL of the following
 - **Structure & Formatting**: Use heavily **bolded** text for emphasis and organize the text with clear subject headings.
 - **Bullet Point Lists**: Always include a bullet point list to break down information.
 - **Emoji Punctuation ✅**: End key sentences—especially within your bullet point lists—with emojis like the checkmark (✅), sparkles (✨), or rocket (🚀) instead of standard terminal punctuation ✅
+
+## Text
+
+${ARGUMENTS:-<text not provided — ask the user to paste it>}

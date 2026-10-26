@@ -87,11 +87,13 @@ in
       ".pi/agent/keybindings.json".text = builtins.toJSON (import ./keybindings.nix { });
       ".pi/agent/models.json".text = builtins.toJSON (import ./models.nix { inherit cfg; });
       ".pi/agent/settings.json".text = builtins.toJSON (import ./settings.nix {
-        inherit defaultProvider defaultModel;
+        inherit defaultProvider defaultModel largeModel;
       });
       ".pi/agent/subagents.json".text = builtins.toJSON (import ./subagents.nix { });
       ".pi/agent/web-search.json".text = builtins.toJSON (import ./web-access.nix { });
       ".pi/agent/extensions".source = import ./extensions.nix { inherit pkgs; };
+      ".pi/agent/prompts/addguests-weekly-infra.md".source = ./prompts/addguests-weekly-infra.md;
+      ".pi/agent/prompts/slopifycator.md".source = ./prompts/slopifycator.md;
     }
     // (myLib.folder pkgs ./agents ".pi/agent/agents" {
       inherit defaultModel largeModel;

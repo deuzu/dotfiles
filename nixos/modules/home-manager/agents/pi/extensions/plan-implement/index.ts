@@ -6,6 +6,7 @@ import {
   handleExploreCommand,
   handlePlanCommand,
   handlePlanLiteCommand,
+  handleDesignCommand,
   handleImplementCommand,
   MODE_STATUS_KEY,
 } from "./commands.ts";
@@ -32,7 +33,7 @@ export default function planImplementExtension(pi: ExtensionAPI): void {
       return;
     }
 
-    const modeLabel = state.activeMode === "plan" ? "plan" : "explore";
+    const modeLabel = state.activeMode ?? "explore";
     const toolName = event.toolName.toLowerCase();
 
     if (toolName === "agent") {
@@ -82,6 +83,13 @@ export default function planImplementExtension(pi: ExtensionAPI): void {
     description: "Switch to read-only planning mode and load simple planning instructions",
     handler: async (args: string, ctx: ExtensionContext) => {
       await handlePlanLiteCommand(args, ctx, pi);
+    },
+  });
+
+  pi.registerCommand("design", {
+    description: "Switch to interactive architecture-decision mode and iterate with the user on the best solution",
+    handler: async (args: string, ctx: ExtensionContext) => {
+      await handleDesignCommand(args, ctx, pi);
     },
   });
 

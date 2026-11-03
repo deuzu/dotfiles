@@ -1,6 +1,16 @@
 { inputs, config, lib, pkgs, system, ... }:
 let
   cfg = config.modules.textEditors.helix;
+
+  # Helix (master included) pins tree-sitter-perl at rev 72a08a49, whose
+  # src/tsp_unicode.h includes src/bsearch.c to define its own bsearch() helper.
+  # glibc >= 2.44 turns `bsearch` into a _Generic macro in <stdlib.h> when
+  # compiling as C23 (the default since GCC 15), breaking the build:
+  #   src/bsearch.c:69:7: error: expected identifier or '(' before '_Generic'
+  # Remove this overlay once Helix bumps the grammar.
+  treeSitterPerlBsearchFix = ''
+    sed -i 's/^void \*bsearch(const void \*key, const void \*base0, size_t nmemb, size_t size,$/#undef bsearch\nvoid *bsearch(const void *key, const void *base0, size_t nmemb, size_t size,/' src/bsearch.c
+  '';
 in
 {
   options.modules.textEditors.helix = with lib; {
@@ -22,7 +32,15 @@ in
 
     programs.helix = {
       enable = true;
-      package = inputs.helix.packages."${system}".helix;
+      package = inputs.helix.packages."${system}".helix.override {
+        grammarOverlays = [
+          (final: prev: {
+            perl = prev.perl.overrideAttrs (old: {
+              postPatch = (old.postPatch or "") + treeSitterPerlBsearchFix;
+            });
+          })
+        ];
+      };
       defaultEditor = true;
       extraPackages = with pkgs; [
         bash-language-server

@@ -16,7 +16,6 @@
   boot.initrd.luks.devices = {
     root = {
       device = "/dev/nvme0n1p2";
-      preLVM = true;
     };
   };
   # Use the systemd-boot EFI boot loader.

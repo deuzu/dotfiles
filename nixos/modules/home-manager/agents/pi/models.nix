@@ -11,8 +11,8 @@ in
       baseUrl = baseUrls.googleai;
       models = [
         {
-          id = "gemini-3.7-flash";
-          name = "Gemini 3.7 Flash";
+          id = "gemini-3.8-flash";
+          name = "Gemini 3.8 Flash";
           reasoning = true;
           input = [
             "text"
@@ -76,6 +76,12 @@ in
         {
           id = "z-ai/glm-5.3";
           name = "GLM 5.3";
+          reasoning = true;
+          input = [ "text" "image" ];
+        }
+        {
+          id = "z-ai/glm-5.3-flash";
+          name = "GLM 5.3 Flash";
           reasoning = true;
           input = [ "text" "image" ];
         }

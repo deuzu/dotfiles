@@ -78,12 +78,19 @@ in
   config = lib.mkIf cfg.enable {
     programs.opencode = {
       enable = true;
-      tui = {
-        keybinds = { };
-        scroll_acceleration = {
-          enabled = false;
-        };
+      # OpenCode 2 replaced tui.json with a single global cli.json; terminal
+      # client settings must live under `cli` now.
+      # See: https://opencode.ai/v2/docs/cli/config
+      cli = {
+        scroll.acceleration = false;
+        # Stylix still selects its theme through the now-ignored tui.json;
+        # re-select it for the terminal client under OpenCode 2.
+        theme.name = "stylix";
       };
+
+      # Stylix sets `programs.opencode.tui.theme`, ignored by OpenCode 2.
+      # Neutralize it to silence the Home-Manager migration warning.
+      tui = lib.mkForce { };
       settings = {
         autoupdate = false;
         share = "disabled";

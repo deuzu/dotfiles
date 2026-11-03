@@ -17,6 +17,13 @@ in
 
   config = lib.mkIf cfg.enable {
     stylix = with pkgs; {
+      # With home-manager.useGlobalPkgs = true, nixpkgs options are disabled in
+      # the HM context. Stylix's HM module defines nixpkgs.overlays via autoloaded
+      # target overlays (nixos-icons, gtksourceview, ...), which trips HM's
+      # assertion. These overlays had no effect under useGlobalPkgs anyway,
+      # so disable them explicitly.
+      overlays.enable = false;
+
       enable = true;
       autoEnable = true;
 

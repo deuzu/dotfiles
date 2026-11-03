@@ -22,6 +22,10 @@ in
     programs.nushell = {
       enable = true;
       shellAliases = cfg.aliases;
+      # Pin the new HM default (legacy default was `false` while
+      # home.stateVersion < 26.11). Loads home.sessionVariables into nushell
+      # via a generated env loader.
+      loadSessionVariables = true;
       settings = {
         show_banner = false;
       };

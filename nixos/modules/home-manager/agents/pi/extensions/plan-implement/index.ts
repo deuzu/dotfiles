@@ -2,6 +2,7 @@ import type {
   ExtensionAPI,
   ExtensionContext,
 } from "@earendil-works/pi-coding-agent";
+import { isAbsolute, relative, resolve } from "node:path";
 import {
   handleExploreCommand,
   handlePlanCommand,
@@ -17,6 +18,19 @@ export * from "./state.ts";
 export * from "./prompt.ts";
 export * from "./commands.ts";
 
+/** Directory (relative to the project cwd) that planning modes may manage files in. */
+export const THOUGHTS_DIR = ".agents/thoughts";
+
+/** True when target (relative or absolute) resolves inside <cwd>/.agents/thoughts/.
+ * Lexical containment: survives `..` traversal and absolute paths outside the root;
+ * does not resolve symlinks. */
+export function isInsideThoughts(cwd: string, target: string): boolean {
+  const root = resolve(cwd, THOUGHTS_DIR);
+  const abs = resolve(cwd, target);
+  const rel = relative(root, abs);
+  return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
+}
+
 export default function planImplementExtension(pi: ExtensionAPI): void {
   pi.on("session_start", async (event, ctx) => {
     if (event.reason !== "new") {
@@ -27,7 +41,7 @@ export default function planImplementExtension(pi: ExtensionAPI): void {
     ctx.ui.setStatus(MODE_STATUS_KEY, undefined);
   });
 
-  pi.on("tool_call", async (event) => {
+  pi.on("tool_call", async (event, ctx) => {
     const state = getPlanState();
     if (!state.isPlanModeActive) {
       return;
@@ -50,6 +64,20 @@ export default function planImplementExtension(pi: ExtensionAPI): void {
             reason: `Subagent type "${requestedSubagent}" is not allowed during ${modeLabel} mode. Allowed subagents: ${state.allowedSubagents.join(", ")}`,
           };
         }
+      }
+      return;
+    }
+
+    if (toolName === "write" || toolName === "edit") {
+      const target = (event.input as { path?: string }).path ?? "";
+      if (!isInsideThoughts(ctx.cwd, target)) {
+        return {
+          block: true,
+          reason:
+            `${modeLabel} mode restricts file management (write/edit) to ${THOUGHTS_DIR}/ ` +
+            `under ${ctx.cwd}. Requested path: ${target}. ` +
+            `Write your plans, notes, and artifacts under .agents/thoughts/ instead.`,
+        };
       }
       return;
     }

@@ -135,7 +135,7 @@ export async function handleExploreCommand(
     : "Explore";
   ctx.ui.setStatus(MODE_STATUS_KEY, statusText);
   ctx.ui.notify(
-    `Explore mode enabled: Read-only toolset active (${readOnlyTools.join(", ")})${explorePrompt.model ? `, model ${explorePrompt.model}` : ""}`,
+    `Explore mode enabled: toolset active (${readOnlyTools.join(", ")})${explorePrompt.model ? `, model ${explorePrompt.model}` : ""}`,
     "info",
   );
 
@@ -193,7 +193,7 @@ export async function handlePlanCommand(
     : "Plan";
   ctx.ui.setStatus(MODE_STATUS_KEY, statusText);
   ctx.ui.notify(
-    `Plan mode enabled: Read-only toolset active (${readOnlyTools.join(", ")})${planPrompt.model ? `, model ${planPrompt.model}` : ""}`,
+    `Plan mode enabled: toolset active (${readOnlyTools.join(", ")})${planPrompt.model ? `, model ${planPrompt.model}` : ""}`,
     "info",
   );
 
@@ -251,7 +251,7 @@ export async function handlePlanLiteCommand(
     : "Plan";
   ctx.ui.setStatus(MODE_STATUS_KEY, statusText);
   ctx.ui.notify(
-    `Plan-Lite mode enabled: Read-only toolset active (${readOnlyTools.join(", ")})${planPrompt.model ? `, model ${planPrompt.model}` : ""}`,
+    `Plan-Lite mode enabled: toolset active (${readOnlyTools.join(", ")})${planPrompt.model ? `, model ${planPrompt.model}` : ""}`,
     "info",
   );
 
@@ -357,7 +357,7 @@ export async function handleDesignCommand(
     : "Design";
   ctx.ui.setStatus(MODE_STATUS_KEY, statusText);
   ctx.ui.notify(
-    `Design mode enabled: Read-only toolset active (${readOnlyTools.join(", ")})${designPrompt.model ? `, model ${designPrompt.model}` : ""}`,
+    `Design mode enabled: toolset active (${readOnlyTools.join(", ")})${designPrompt.model ? `, model ${designPrompt.model}` : ""}`,
     "info",
   );
 

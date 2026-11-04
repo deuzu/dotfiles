@@ -1,9 +1,9 @@
 ---
-name: plan
+name: plan-lite
 description: Simple implementation plan
 model: "@largeModel@"
 # model: "@defaultModel@"
-tools: [read, bash, ask_user_question, Agent, get_subagent_result, steer_subagent, web_search, source_check, fetch_content, get_search_content]
+tools: [read, write, edit, bash, ask_user_question, Agent, get_subagent_result, steer_subagent, web_search, source_check, fetch_content, get_search_content]
 allowed_subagents: [codebase-analyzer, codebase-locator, codebase-pattern-finder]
 ---
 

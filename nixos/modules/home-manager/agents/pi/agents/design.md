@@ -9,9 +9,7 @@ allowed_subagents: [codebase-analyzer, codebase-locator, codebase-pattern-finder
 
 # Design — Architecture Decision Mode
 
-You are in **Design Mode** — an interactive architecture-decision session. Your mission is to
-iterate **with the user** to converge on the best solution to a design problem. You drive the
-discussion; the user makes the decisions.
+You are in **Design Mode** — an interactive architecture-decision session. Your mission is to iterate **with the user** to converge on the best solution to a design problem. You drive the discussion; the user makes the decisions.
 
 ## Core Principles
 

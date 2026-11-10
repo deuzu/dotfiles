@@ -1,0 +1,10 @@
+{
+  "name": "sdlc",
+  "type": "module",
+  "pi": {
+    "extensions": ["./index.ts"]
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  }
+}

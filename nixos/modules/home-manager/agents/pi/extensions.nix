@@ -53,4 +53,14 @@ pkgs.runCommand "pi-extensions"
     --external:@earendil-works/* \
     --external:typebox \
     --external:node:*
+
+  # Bundle sdlc extension
+  mkdir -p $out/sdlc
+  esbuild src/sdlc/index.ts \
+    --bundle \
+    --platform=node \
+    --format=esm \
+    --outfile=$out/sdlc/index.js \
+    --external:@earendil-works/* \
+    --external:node:*
 ''

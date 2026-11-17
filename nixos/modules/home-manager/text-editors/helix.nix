@@ -454,5 +454,62 @@ in
         ];
       };
     };
+
+    # hxs — open Helix in a hardened bubblewrap sandbox to review untrusted code.
+    # Read-only workspace, no network, throwaway HOME, no LSP/DAP/workspace config.
+    home.packages = [
+      (pkgs.writeShellScriptBin "hxs" ''
+        set -euo pipefail
+
+        # First non-flag arg is the workspace (dir or file); remaining args go to hx.
+        work="$PWD"
+        if [[ $# -gt 0 && "$1" != -* ]]; then
+          work="$(realpath "$1")"
+          shift
+        fi
+        if [[ ! -e "$work" ]]; then
+          echo "hxs: no such file or directory: $work" >&2
+          exit 1
+        fi
+
+        # Throwaway HOME: neither the real user config (which has keybinds spawning
+        # yazi/sops/git) nor the workspace's .helix/ config can influence this session.
+        scratch="$(mktemp -d /tmp/hxs-home.XXXXXX)"
+        trap 'rm -rf "$scratch"' EXIT
+        mkdir -p "$scratch/home/.config/helix"
+        cat > "$scratch/home/.config/helix/config.toml" <<'HXS_CONF'
+        [editor]
+        line-number = "relative"
+
+        [editor.auto-save]
+        focus-lost = false
+        after-delay.enable = false
+
+        [editor.workspace-trust]
+        level = "none"
+        prompt = false
+        HXS_CONF
+
+        # chdir target: the directory when a file is passed, else the workspace itself.
+        chdir_target="$work"
+        [[ -f "$work" ]] && chdir_target="$(dirname "$work")"
+
+        exec ${pkgs.bubblewrap}/bin/bwrap \
+          --unshare-all \
+          --die-with-parent \
+          --ro-bind / / \
+          --tmpfs /tmp \
+          --ro-bind "$work" "$work" \
+          --chdir "$chdir_target" \
+          --bind "$scratch/home" /tmp/hxs-home \
+          --dev /dev \
+          --dev-bind /dev/tty /dev/tty \
+          --proc /proc \
+          --setenv HOME /tmp/hxs-home \
+          --setenv TERM "''${TERM:-xterm-256color}" \
+          --setenv PATH /run/current-system/sw/bin \
+          -- ${config.programs.helix.package}/bin/hx "$work" "$@"
+      '')
+    ];
   };
 }
